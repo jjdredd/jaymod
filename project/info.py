@@ -29,7 +29,7 @@ def fetchRepoData():
     p = subprocess.Popen('svn info', shell=True, stdout=subprocess.PIPE)
     p.wait()
     if (p.returncode != 0):
-        print 'ERROR: command failure: svn info'
+        print('ERROR: command failure: svn info')
         sys.exit(1)
 
     data = {
@@ -249,124 +249,124 @@ class Project:
 
     def dump(this, mode):
         if (mode == 1):
-            print 'PROJECT.name           = ' + this.name
-            print 'PROJECT.namef          = ' + this.namef
-            print 'PROJECT.namex          = ' + this.namex
-            print 'PROJECT.website        = ' + this.website
-            print 'PROJECT.irc            = ' + this.irc.replace('#', '\\#')
-            print 'PROJECT.author         = ' + this.author
-            print 'PROJECT.copyright      = ' + this.copyright
-            print 'PROJECT.versionMajor   = ' + str( this.versionMajor )
-            print 'PROJECT.versionMinor   = ' + str( this.versionMinor )
-            print 'PROJECT.versionPoint   = ' + str( this.versionPoint )
-            print 'PROJECT.buildDate      = ' + this.buildDate
-            print 'PROJECT.buildStability = ' + this.buildStability
-            print 'PROJECT.buildTarget    = ' + this.buildTarget
-            print 'PROJECT.repoURL        = ' + this.repoURL
-            print 'PROJECT.repoUUID       = ' + this.repoUUID
-            print 'PROJECT.repoRev        = ' + this.repoRev
-            print 'PROJECT.repoLCRev      = ' + this.repoLCRev
-            print 'PROJECT.repoLCDate     = ' + this.repoLCDate
-            print 'PROJECT.platformName   = ' + this.platformName
-            print 'PROJECT.platformNamef  = ' + this.platformNamef
-            print 'PROJECT.title          = ' + this.title
-            print 'PROJECT.titlex         = ' + this.titlex
-            print 'PROJECT.version        = ' + this.version
-            print 'PROJECT.versionx       = ' + this.versionx
-            print 'PROJECT.packageBase    = ' + this.packageBase
-            print 'PROJECT.packageBasev   = ' + this.packageBasev
-            print 'PROJECT.pk3            = ' + this.pk3
+            print('PROJECT.name           = ' + this.name)
+            print('PROJECT.namef          = ' + this.namef)
+            print('PROJECT.namex          = ' + this.namex)
+            print('PROJECT.website        = ' + this.website)
+            print('PROJECT.irc            = ' + this.irc.replace('#', '\\#'))
+            print('PROJECT.author         = ' + this.author)
+            print('PROJECT.copyright      = ' + this.copyright)
+            print('PROJECT.versionMajor   = ' + str( this.versionMajor ))
+            print('PROJECT.versionMinor   = ' + str( this.versionMinor ))
+            print('PROJECT.versionPoint   = ' + str( this.versionPoint ))
+            print('PROJECT.buildDate      = ' + this.buildDate)
+            print('PROJECT.buildStability = ' + this.buildStability)
+            print('PROJECT.buildTarget    = ' + this.buildTarget)
+            print('PROJECT.repoURL        = ' + this.repoURL)
+            print('PROJECT.repoUUID       = ' + this.repoUUID)
+            print('PROJECT.repoRev        = ' + this.repoRev)
+            print('PROJECT.repoLCRev      = ' + this.repoLCRev)
+            print('PROJECT.repoLCDate     = ' + this.repoLCDate)
+            print('PROJECT.platformName   = ' + this.platformName)
+            print('PROJECT.platformNamef  = ' + this.platformNamef)
+            print('PROJECT.title          = ' + this.title)
+            print('PROJECT.titlex         = ' + this.titlex)
+            print('PROJECT.version        = ' + this.version)
+            print('PROJECT.versionx       = ' + this.versionx)
+            print('PROJECT.packageBase    = ' + this.packageBase)
+            print('PROJECT.packageBasev   = ' + this.packageBasev)
+            print('PROJECT.pk3            = ' + this.pk3)
 
         if (mode == 2):
-            print '#define JAYMOD_name           "' + this.name + '"'
-            print '#define JAYMOD_namef          "' + this.namef + '"'
-            print '#define JAYMOD_namex          "' + this.namex + '"'
-            print '#define JAYMOD_website        "' + this.website + '"'
-            print '#define JAYMOD_irc            "' + this.irc + '"'
-            print '#define JAYMOD_author         "' + this.author  + '"'
-            print '#define JAYMOD_copyright      "' + this.copyright + '"'
-            print '#define JAYMOD_versionMajor   "' + str( this.versionMajor ) + '"'
-            print '#define JAYMOD_versionMinor   "' + str( this.versionMinor ) + '"'
-            print '#define JAYMOD_versionPoint   "' + str( this.versionPoint ) + '"'
-            print '#define JAYMOD_versionHex     ' + this.versionHex
-            print '#define JAYMOD_buildDate      "' + this.buildDate + '"'
-            print '#define JAYMOD_buildStability "' + this.buildStability + '"'
-            print '#define JAYMOD_buildTarget    "' + this.buildTarget + '"'
-            print '#define JAYMOD_repoURL        "' + this.repoURL + '"'
-            print '#define JAYMOD_repoUUID       "' + this.repoUUID + '"'
-            print '#define JAYMOD_repoRev        "' + this.repoRev + '"'
-            print '#define JAYMOD_repoLCRev      "' + this.repoLCRev + '"'
-            print '#define JAYMOD_repoLCDate     "' + this.repoLCDate + '"'
-            print '#define JAYMOD_platformName   "' + this.platformName + '"'
-            print '#define JAYMOD_platformNamef  "' + this.platformNamef + '"'
-            print '#define JAYMOD_title          "' + this.title + '"'
-            print '#define JAYMOD_titlex         "' + this.titlex + '"'
-            print '#define JAYMOD_version        "' + this.version + '"'
-            print '#define JAYMOD_versionx       "' + this.versionx + '"'
-            print '#define JAYMOD_packageBase    "' + this.packageBase + '"'
-            print '#define JAYMOD_packageBasev   "' + this.packageBasev + '"'
-            print '#define JAYMOD_pk3            "' + this.pk3 + '"'
-            print
-            print '#define JAYMOD_' + this.platformNamef.upper()
-            print '#define JAYMOD_' + this.buildStability.upper()
+            print('#define JAYMOD_name           "' + this.name + '"')
+            print('#define JAYMOD_namef          "' + this.namef + '"')
+            print('#define JAYMOD_namex          "' + this.namex + '"')
+            print('#define JAYMOD_website        "' + this.website + '"')
+            print('#define JAYMOD_irc            "' + this.irc + '"')
+            print('#define JAYMOD_author         "' + this.author  + '"')
+            print('#define JAYMOD_copyright      "' + this.copyright + '"')
+            print('#define JAYMOD_versionMajor   "' + str( this.versionMajor ) + '"')
+            print('#define JAYMOD_versionMinor   "' + str( this.versionMinor ) + '"')
+            print('#define JAYMOD_versionPoint   "' + str( this.versionPoint ) + '"')
+            print('#define JAYMOD_versionHex     ' + this.versionHex)
+            print('#define JAYMOD_buildDate      "' + this.buildDate + '"')
+            print('#define JAYMOD_buildStability "' + this.buildStability + '"')
+            print('#define JAYMOD_buildTarget    "' + this.buildTarget + '"')
+            print('#define JAYMOD_repoURL        "' + this.repoURL + '"')
+            print('#define JAYMOD_repoUUID       "' + this.repoUUID + '"')
+            print('#define JAYMOD_repoRev        "' + this.repoRev + '"')
+            print('#define JAYMOD_repoLCRev      "' + this.repoLCRev + '"')
+            print('#define JAYMOD_repoLCDate     "' + this.repoLCDate + '"')
+            print('#define JAYMOD_platformName   "' + this.platformName + '"')
+            print('#define JAYMOD_platformNamef  "' + this.platformNamef + '"')
+            print('#define JAYMOD_title          "' + this.title + '"')
+            print('#define JAYMOD_titlex         "' + this.titlex + '"')
+            print('#define JAYMOD_version        "' + this.version + '"')
+            print('#define JAYMOD_versionx       "' + this.versionx + '"')
+            print('#define JAYMOD_packageBase    "' + this.packageBase + '"')
+            print('#define JAYMOD_packageBasev   "' + this.packageBasev + '"')
+            print('#define JAYMOD_pk3            "' + this.pk3 + '"'
+            print()
+            print('#define JAYMOD_' + this.platformNamef.upper())
+            print('#define JAYMOD_' + this.buildStability.upper())
 
         if (mode == 3):
-            print 'define(<<__name>>, <<'           + this.name                + '>>)dnl'
-            print 'define(<<__namef>>, <<'          + this.namef               + '>>)dnl'
-            print 'define(<<__website>>, <<'        + this.website             + '>>)dnl'
-            print 'define(<<__irc>>, <<'            + this.irc                 + '>>)dnl'
-            print 'define(<<__author>>, <<'         + this.author              + '>>)dnl'
-            print 'define(<<__copyright>>, <<'      + this.copyright           + '>>)dnl'
-            print 'define(<<__versionMajor>>, <<'   + str( this.versionMajor ) + '>>)dnl'
-            print 'define(<<__versionMinor>>, <<'   + str( this.versionMinor ) + '>>)dnl'
-            print 'define(<<__versionPoint>>, <<'   + str( this.versionPoint ) + '>>)dnl'
-            print 'define(<<__buildDate>>, <<'      + this.buildDate           + '>>)dnl'
-            print 'define(<<__buildStability>>, <<' + this.buildStability      + '>>)dnl'
-            print 'define(<<__buildTarget>>, <<'    + this.buildTarget         + '>>)dnl'
-            print 'define(<<__repoURL>>, <<'        + this.repoURL             + '>>)dnl'
-            print 'define(<<__repoUUID>>, <<'       + this.repoUUID            + '>>)dnl'
-            print 'define(<<__repoRev>>, <<'        + this.repoRev             + '>>)dnl'
-            print 'define(<<__repoLCRev>>, <<'      + this.repoLCRev           + '>>)dnl'
-            print 'define(<<__repoLCDate>>, <<'     + this.repoLCDate          + '>>)dnl'
-            print 'define(<<__platformName>>, <<'   + this.platformName        + '>>)dnl'
-            print 'define(<<__platformNamef>>, <<'  + this.platformNamef       + '>>)dnl'
-            print 'define(<<__title>>, <<'          + this.title               + '>>)dnl'
-            print 'define(<<__titlex>>, <<'         + this.titlex              + '>>)dnl'
-            print 'define(<<__version>>, <<'        + this.version             + '>>)dnl'
-            print 'define(<<__versionx>>, <<'       + this.versionx            + '>>)dnl'
-            print 'define(<<__packageBase>>, <<'    + this.packageBase         + '>>)dnl'
-            print 'define(<<__packageBasev>>, <<'   + this.packageBasev        + '>>)dnl'
-            print 'define(<<__pk3>>, <<'            + this.pk3                 + '>>)dnl'
+            print('define(<<__name>>, <<'           + this.name                + '>>)dnl')
+            print('define(<<__namef>>, <<'          + this.namef               + '>>)dnl')
+            print('define(<<__website>>, <<'        + this.website             + '>>)dnl')
+            print('define(<<__irc>>, <<'            + this.irc                 + '>>)dnl')
+            print('define(<<__author>>, <<'         + this.author              + '>>)dnl')
+            print('define(<<__copyright>>, <<'      + this.copyright           + '>>)dnl')
+            print('define(<<__versionMajor>>, <<'   + str( this.versionMajor ) + '>>)dnl')
+            print('define(<<__versionMinor>>, <<'   + str( this.versionMinor ) + '>>)dnl')
+            print('define(<<__versionPoint>>, <<'   + str( this.versionPoint ) + '>>)dnl')
+            print('define(<<__buildDate>>, <<'      + this.buildDate           + '>>)dnl')
+            print('define(<<__buildStability>>, <<' + this.buildStability      + '>>)dnl')
+            print('define(<<__buildTarget>>, <<'    + this.buildTarget         + '>>)dnl')
+            print('define(<<__repoURL>>, <<'        + this.repoURL             + '>>)dnl')
+            print('define(<<__repoUUID>>, <<'       + this.repoUUID            + '>>)dnl')
+            print('define(<<__repoRev>>, <<'        + this.repoRev             + '>>)dnl')
+            print('define(<<__repoLCRev>>, <<'      + this.repoLCRev           + '>>)dnl')
+            print('define(<<__repoLCDate>>, <<'     + this.repoLCDate          + '>>)dnl')
+            print('define(<<__platformName>>, <<'   + this.platformName        + '>>)dnl')
+            print('define(<<__platformNamef>>, <<'  + this.platformNamef       + '>>)dnl')
+            print('define(<<__title>>, <<'          + this.title               + '>>)dnl')
+            print('define(<<__titlex>>, <<'         + this.titlex              + '>>)dnl')
+            print('define(<<__version>>, <<'        + this.version             + '>>)dnl')
+            print('define(<<__versionx>>, <<'       + this.versionx            + '>>)dnl')
+            print('define(<<__packageBase>>, <<'    + this.packageBase         + '>>)dnl')
+            print('define(<<__packageBasev>>, <<'   + this.packageBasev        + '>>)dnl')
+            print('define(<<__pk3>>, <<'            + this.pk3                 + '>>)dnl')
 
         if (mode == 4):
-            print '<!ENTITY project:name           "' + this.name                + '">'
-            print '<!ENTITY project:namef          "' + this.namef               + '">'
-            print '<!ENTITY project:namex          "' + this.namex               + '">'
-            print '<!ENTITY project:website        "' + this.website             + '">'
-            print '<!ENTITY project:irc            "' + this.irc                 + '">'
-            print '<!ENTITY project:author         "' + this.author              + '">'
-            print '<!ENTITY project:copyright      "' + this.copyright           + '">'
-            print '<!ENTITY project:versionMajor   "' + str( this.versionMajor ) + '">'
-            print '<!ENTITY project:versionMinor   "' + str( this.versionMinor ) + '">'
-            print '<!ENTITY project:versionPoint   "' + str( this.versionPoint ) + '">'
-            print '<!ENTITY project:buildDate      "' + this.buildDate           + '">'
-            print '<!ENTITY project:buildStability "' + this.buildStability      + '">'
-            print '<!ENTITY project:buildTarget    "' + this.buildTarget         + '">'
-            print '<!ENTITY project:repoURL        "' + this.repoURL             + '">'
-            print '<!ENTITY project:repoUUID       "' + this.repoUUID            + '">'
-            print '<!ENTITY project:repoRev        "' + this.repoRev             + '">'
-            print '<!ENTITY project:repoLCRev      "' + this.repoLCRev           + '">'
-            print '<!ENTITY project:repoLCDate     "' + this.repoLCDate          + '">'
-            print '<!ENTITY project:platformName   "' + this.platformName        + '">'
-            print '<!ENTITY project:platformNamef  "' + this.platformNamef       + '">'
-            print '<!ENTITY project:title          "' + this.title               + '">'
-            print '<!ENTITY project:titlex         "' + this.titlex              + '">'
-            print '<!ENTITY project:version        "' + this.version             + '">'
-            print '<!ENTITY project:versionx       "' + this.versionx            + '">'
-            print '<!ENTITY project:packageBase    "' + this.packageBase         + '">'
-            print '<!ENTITY project:packageBasev   "' + this.packageBasev        + '">'
-            print '<!ENTITY project:pk3            "' + this.pk3                 + '">'
-
+            print('<!ENTITY project:name           "' + this.name                + '">')
+            print('<!ENTITY project:namef          "' + this.namef               + '">')
+            print('<!ENTITY project:namex          "' + this.namex               + '">')
+            print('<!ENTITY project:website        "' + this.website             + '">')
+            print('<!ENTITY project:irc            "' + this.irc                 + '">')
+            print('<!ENTITY project:author         "' + this.author              + '">')
+            print('<!ENTITY project:copyright      "' + this.copyright           + '">')
+            print('<!ENTITY project:versionMajor   "' + str( this.versionMajor ) + '">')
+            print('<!ENTITY project:versionMinor   "' + str( this.versionMinor ) + '">')
+            print('<!ENTITY project:versionPoint   "' + str( this.versionPoint ) + '">')
+            print('<!ENTITY project:buildDate      "' + this.buildDate           + '">')
+            print('<!ENTITY project:buildStability "' + this.buildStability      + '">')
+            print('<!ENTITY project:buildTarget    "' + this.buildTarget         + '">')
+            print('<!ENTITY project:repoURL        "' + this.repoURL             + '">')
+            print('<!ENTITY project:repoUUID       "' + this.repoUUID            + '">')
+            print('<!ENTITY project:repoRev        "' + this.repoRev             + '">')
+            print('<!ENTITY project:repoLCRev      "' + this.repoLCRev           + '">')
+            print('<!ENTITY project:repoLCDate     "' + this.repoLCDate          + '">')
+            print('<!ENTITY project:platformName   "' + this.platformName        + '">')
+            print('<!ENTITY project:platformNamef  "' + this.platformNamef       + '">')
+            print('<!ENTITY project:title          "' + this.title               + '">')
+            print('<!ENTITY project:titlex         "' + this.titlex              + '">')
+            print('<!ENTITY project:version        "' + this.version             + '">')
+            print('<!ENTITY project:versionx       "' + this.versionx            + '">')
+            print('<!ENTITY project:packageBase    "' + this.packageBase         + '">')
+            print('<!ENTITY project:packageBasev   "' + this.packageBasev        + '">')
+            print('<!ENTITY project:pk3            "' + this.pk3                 + '">')
+)
 ###############################################################################
 
 mode = 0
@@ -392,7 +392,7 @@ for arg in sys.argv[1:]:
     dbFileName = arg
 
 if (mode == 0):
-    print 'ERROR: mode must be specified. Expecting one of { -mk, -h, -m4, -tex }'
+    print('ERROR: mode must be specified. Expecting one of { -mk, -h, -m4, -tex }')
     sys.exit(1)
 
 ###############################################################################
@@ -401,5 +401,5 @@ try:
     p = Project(dbFileName)
     p.dump(mode)
 except (InfoException, IOError), x:
-    print str(x)
+    print(str(x))
     sys.exit(1)
