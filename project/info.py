@@ -26,35 +26,38 @@ def toBoolean(value):
 ###############################################################################
 
 def fetchRepoData():
-    p = subprocess.Popen('svn info', shell=True, stdout=subprocess.PIPE)
-    p.wait()
-    if (p.returncode != 0):
-        print('ERROR: command failure: svn info')
-        sys.exit(1)
-
     data = {
-        'URL'    : '',
-        'UUID'   : '',
-        'Rev'    : '',
-        'LCRev'  : '',
-        'LCDate' : '', }
+        'url' : '',
+        'branch' : '',
+        'commit' : '',
+        'revision' : '',
+        'date' : '', }
 
-    headerRX = re.compile('^\\s*([^:]*)\\s*:\\s*(.*)')
-    for line in p.stdout:
-        mo = headerRX.search(line.strip())
-        if (not mo):
-            continue
+    try:
+        repo_url = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).decode('ascii').strip()
+        data['url'] = repo_url
+    except subprocess.CalledProcessError as e:
+        print('BUILD ERROR: unable to retrieve git remote origin url')
 
-        if (mo.group(1) == 'URL'):
-            data['URL'] = mo.group(2)
-        elif (mo.group(1) == 'Repository UUID'):
-            data['UUID'] = mo.group(2)
-        elif (mo.group(1) == 'Revision'):
-            data['Rev'] = mo.group(2)
-        elif (mo.group(1) == 'Last Changed Rev'):
-            data['LCRev'] = mo.group(2)
-        elif (mo.group(1) == 'Last Changed Date'):
-            data['LCDate'] = mo.group(2)
+    try:
+        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip()
+        commit_hash_short = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('ascii').strip()
+        data['commit'] = commit_hash
+        data['revision'] = commit_hash_short
+    except subprocess.CalledProcessError as e:
+        print('BUILD ERROR: unable to retrieve git commit hash (revision idenifier)')
+
+    try:
+        branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii').strip()
+        data['branch'] = branch
+    except subprocess.CalledProcessError as e:
+        print('BUILD ERROR: unable to retrieve git branch name')
+
+    try:
+        date = subprocess.check_output(['git', 'show', '-s', '--format=%ci', commit_hash]).decode('ascii').strip()
+        data['date'] = date
+    except subprocess.CalledProcessError as e:
+        print('BUILD ERROR: unable to retrieve commit date from git')
 
     return data
 
@@ -71,20 +74,20 @@ class Project:
             'name'         : 'Unknown',
             'namef'        : 'unknown',
             'namex'        : 'Unknown',
-            'website'      : 'http://www.somewhere.net',
-            'irc'          : 'irc.somewhere.net #unknown',
+            'website'      : 'https://www.example.org',
+            'irc'          : 'irc.example.org #unknown',
             'author'       : 'Unknown Author',
             'copyright'    : '',
-            'versionMajor' : '0',
-            'versionMinor' : '0',
-            'versionPoint' : '0',
+            'versionMajor' : '?',
+            'versionMinor' : '?',
+            'versionPoint' : '?',
             'buildDate'    : 'disable',
             'buildRelease' : 'false',
             'repoURL'      : 'disable',
-            'repoUUID'     : 'disable',
-            'repoRev'      : 'disable',
-            'repoLCRev'    : 'disable',
-            'repoLCDate'   : 'disable',
+            'repoBranch'   : 'disable',
+            'repoCommit'   : 'disable',
+            'repoRevision' : 'disable',
+            'repoDate'     : 'disable',
             'platformName' : 'UNKNOWN', }
 
         for k in initDB.keys():
@@ -103,8 +106,8 @@ class Project:
                 this.variant += '-' + os.environ['VARIANT']
 
         this.nightly = ""
-        if ('NIGHTLY' in os.environ):
-            this.nightly = time.strftime('%Y%m%d-');
+        # if ('NIGHTLY' in os.environ):
+        #     this.nightly = time.strftime('%Y-%m-%d-');
 
         skipRX = re.compile('^\\s*#|^\\s*$')
         vmatchRX = re.compile('^\\s*::(.*)')
@@ -157,13 +160,16 @@ class Project:
             (this.versionPoint & 0xffff) )
 
         if ( toBoolean(this.buildDate) ):
-            this.buildDate = time.strftime('%a %b %d %H:%M:%S %Z %Y')
+            this.buildDate = time.strftime('%Y-%m-%d %H:%M:%S %z')
         else:
             this.buildDate = 'UNKNOWN'
 
-        if (len(this.nightly) > 0):
+
+        forRelease = toBoolean(this.buildRelease)
+
+        if ( len(this.nightly) > 0 ):
             this.buildStability = 'nightly'
-        elif ( toBoolean(this.buildRelease) ):
+        elif ( forRelease ):
             if ( this.versionMinor % 2 ):
                 this.buildStability = 'experimental'
             else:
@@ -175,33 +181,32 @@ class Project:
 
         data = fetchRepoData()
         if ( toBoolean(this.repoURL) ):
-            this.repoURL = data['URL']
+            this.repoURL = data['url']
         else:
             this.repoURL = ''
 
-        if ( toBoolean(this.repoUUID) ):
-            this.repoUUID = data['UUID']
+        if ( toBoolean(this.repoBranch) ):
+            this.repoBranch = data['branch']
         else:
-            this.repoUUID = ''
+            this.repoBranch = ''
 
-        if ( toBoolean(this.repoRev) ):
-            this.repoRev = data['Rev']
+        if ( toBoolean(this.repoCommit) ):
+            this.repoCommit = data['commit']
         else:
-            this.repoRev = '0'
+            this.repoCommit = ''
 
-        if ( toBoolean(this.repoLCRev) ):
-            this.repoLCRev = data['LCRev']
+        if ( toBoolean(this.repoRevision) ):
+            this.repoRevision = data['revision']
         else:
-            this.repoLCRev = '0'
+            this.repoRevision = 'untracked'
 
-        if ( toBoolean(this.repoLCDate) ):
-            this.repoLCDate = data['LCDate']
+        if ( toBoolean(this.repoDate) ):
+            this.repoDate = data['date']
         else:
-            this.repoLCDate = ''
+            this.repoDate = ''
 
-        this.title = "%s %s%d.%d.%d" % (
+        this.title = "%s-%d.%d.%d" % (
             this.name,
-            this.nightly,
             this.versionMajor,
             this.versionMinor,
             this.versionPoint )
@@ -240,12 +245,28 @@ class Project:
             this.versionPoint,
             this.variant )
 
-        this.pk3 = "%s-%s%d.%d.%d.pk3" % (
+        if ( not forRelease ):
+            this.title += '-' + this.repoRevision
+            this.titlex += '-' + this.repoRevision
+            this.version += '-' + this.repoRevision
+            this.versionx += '-' + this.repoRevision
+
+            this.pk3 = "%s-%d.%d.%d-%s-%s.pk3" % (
             this.namef,
-            this.nightly,
+            this.versionMajor,
+            this.versionMinor,
+            this.versionPoint,
+            time.strftime('%Y%m%d'),
+            this.repoRevision )
+        else:
+            this.pk3 = "%s-%d.%d.%d.pk3" % (
+            this.namef,
             this.versionMajor,
             this.versionMinor,
             this.versionPoint )
+        
+
+
 
     def dump(this, mode):
         if (mode == 1):
@@ -263,10 +284,10 @@ class Project:
             print('PROJECT.buildStability = ' + this.buildStability)
             print('PROJECT.buildTarget    = ' + this.buildTarget)
             print('PROJECT.repoURL        = ' + this.repoURL)
-            print('PROJECT.repoUUID       = ' + this.repoUUID)
-            print('PROJECT.repoRev        = ' + this.repoRev)
-            print('PROJECT.repoLCRev      = ' + this.repoLCRev)
-            print('PROJECT.repoLCDate     = ' + this.repoLCDate)
+            print('PROJECT.repoBranch     = ' + this.repoBranch)
+            print('PROJECT.repoCommit     = ' + this.repoCommit)
+            print('PROJECT.repoRevision   = ' + this.repoRevision)
+            print('PROJECT.repoDate       = ' + this.repoDate)
             print('PROJECT.platformName   = ' + this.platformName)
             print('PROJECT.platformNamef  = ' + this.platformNamef)
             print('PROJECT.title          = ' + this.title)
@@ -293,10 +314,10 @@ class Project:
             print('#define JAYMOD_buildStability "' + this.buildStability + '"')
             print('#define JAYMOD_buildTarget    "' + this.buildTarget + '"')
             print('#define JAYMOD_repoURL        "' + this.repoURL + '"')
-            print('#define JAYMOD_repoUUID       "' + this.repoUUID + '"')
-            print('#define JAYMOD_repoRev        "' + this.repoRev + '"')
-            print('#define JAYMOD_repoLCRev      "' + this.repoLCRev + '"')
-            print('#define JAYMOD_repoLCDate     "' + this.repoLCDate + '"')
+            print('#define JAYMOD_repoBranch     "' + this.repoBranch + '"')
+            print('#define JAYMOD_repoCommit     "' + this.repoCommit + '"')
+            print('#define JAYMOD_repoRevision   "' + this.repoRevision + '"')
+            print('#define JAYMOD_repoDate       "' + this.repoDate + '"')
             print('#define JAYMOD_platformName   "' + this.platformName + '"')
             print('#define JAYMOD_platformNamef  "' + this.platformNamef + '"')
             print('#define JAYMOD_title          "' + this.title + '"')
@@ -305,7 +326,7 @@ class Project:
             print('#define JAYMOD_versionx       "' + this.versionx + '"')
             print('#define JAYMOD_packageBase    "' + this.packageBase + '"')
             print('#define JAYMOD_packageBasev   "' + this.packageBasev + '"')
-            print('#define JAYMOD_pk3            "' + this.pk3 + '"'
+            print('#define JAYMOD_pk3            "' + this.pk3 + '"')
             print()
             print('#define JAYMOD_' + this.platformNamef.upper())
             print('#define JAYMOD_' + this.buildStability.upper())
@@ -324,10 +345,10 @@ class Project:
             print('define(<<__buildStability>>, <<' + this.buildStability      + '>>)dnl')
             print('define(<<__buildTarget>>, <<'    + this.buildTarget         + '>>)dnl')
             print('define(<<__repoURL>>, <<'        + this.repoURL             + '>>)dnl')
-            print('define(<<__repoUUID>>, <<'       + this.repoUUID            + '>>)dnl')
-            print('define(<<__repoRev>>, <<'        + this.repoRev             + '>>)dnl')
-            print('define(<<__repoLCRev>>, <<'      + this.repoLCRev           + '>>)dnl')
-            print('define(<<__repoLCDate>>, <<'     + this.repoLCDate          + '>>)dnl')
+            print('define(<<__repoBranch>>, <<'     + this.repoBranch          + '>>)dnl')
+            print('define(<<__repoCommit>>, <<'     + this.repoCommit          + '>>)dnl')
+            print('define(<<__repoRevision>>, <<'   + this.repoRevision        + '>>)dnl')
+            print('define(<<__repoDate>>, <<'       + this.repoDate            + '>>)dnl')
             print('define(<<__platformName>>, <<'   + this.platformName        + '>>)dnl')
             print('define(<<__platformNamef>>, <<'  + this.platformNamef       + '>>)dnl')
             print('define(<<__title>>, <<'          + this.title               + '>>)dnl')
@@ -353,10 +374,10 @@ class Project:
             print('<!ENTITY project:buildStability "' + this.buildStability      + '">')
             print('<!ENTITY project:buildTarget    "' + this.buildTarget         + '">')
             print('<!ENTITY project:repoURL        "' + this.repoURL             + '">')
-            print('<!ENTITY project:repoUUID       "' + this.repoUUID            + '">')
-            print('<!ENTITY project:repoRev        "' + this.repoRev             + '">')
-            print('<!ENTITY project:repoLCRev      "' + this.repoLCRev           + '">')
-            print('<!ENTITY project:repoLCDate     "' + this.repoLCDate          + '">')
+            print('<!ENTITY project:repoBranch     "' + this.repoBranch          + '">')
+            print('<!ENTITY project:repoCommit     "' + this.repoCommit          + '">')
+            print('<!ENTITY project:repoRevision   "' + this.repoRevision        + '">')
+            print('<!ENTITY project:repoDate       "' + this.repoDate            + '">')
             print('<!ENTITY project:platformName   "' + this.platformName        + '">')
             print('<!ENTITY project:platformNamef  "' + this.platformNamef       + '">')
             print('<!ENTITY project:title          "' + this.title               + '">')
@@ -366,7 +387,7 @@ class Project:
             print('<!ENTITY project:packageBase    "' + this.packageBase         + '">')
             print('<!ENTITY project:packageBasev   "' + this.packageBasev        + '">')
             print('<!ENTITY project:pk3            "' + this.pk3                 + '">')
-)
+
 ###############################################################################
 
 mode = 0
@@ -392,7 +413,7 @@ for arg in sys.argv[1:]:
     dbFileName = arg
 
 if (mode == 0):
-    print('ERROR: mode must be specified. Expecting one of { -mk, -h, -m4, -tex }')
+    print('ERROR: mode must be specified. Expecting one of { -mk, -h, -m4, -xml }')
     sys.exit(1)
 
 ###############################################################################
