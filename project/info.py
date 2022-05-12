@@ -391,7 +391,7 @@ class Project:
 ###############################################################################
 
 mode = 0
-dbFileName = 'info.db'
+dbFileName = 'infox.db'
 
 for arg in sys.argv[1:]:
     if (arg == '-mk'):
@@ -421,6 +421,6 @@ if (mode == 0):
 try:
     p = Project(dbFileName)
     p.dump(mode)
-except (InfoException, IOError), x:
-    print(str(x))
+except OSError as e:
+    print(str(e))
     sys.exit(1)
