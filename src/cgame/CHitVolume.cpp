@@ -46,52 +46,52 @@ CHitVolume::render( centity_t& ent, bool oriented )
 
                 if (flash) {
                     // YELLOW + opaqueness + alternate shader
-                    re.shaderRGBA[0] = byte(1.0f * 255.0f);
-                    re.shaderRGBA[1] = byte(1.0f * 255.0f);
-                    re.shaderRGBA[2] = byte(0.0f * 255.0f);
-                    re.shaderRGBA[3] = byte(0.8f * 255.0f);
+                    re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+                    re.shaderRGBA[1] = uint8_t(1.0f * 255.0f);
+                    re.shaderRGBA[2] = uint8_t(0.0f * 255.0f);
+                    re.shaderRGBA[3] = uint8_t(0.8f * 255.0f);
 
                     re.customShader = cgs.media.hitVolumeHitShader;
                 }
                 else {
                     // CYAN
-                    re.shaderRGBA[0] = byte(0.0f * 255.0f);
-                    re.shaderRGBA[1] = byte(1.0f * 255.0f);
-                    re.shaderRGBA[2] = byte(1.0f * 255.0f);
-                    re.shaderRGBA[3] = byte(0.6f * 255.0f);
+                    re.shaderRGBA[0] = uint8_t(0.0f * 255.0f);
+                    re.shaderRGBA[1] = uint8_t(1.0f * 255.0f);
+                    re.shaderRGBA[2] = uint8_t(1.0f * 255.0f);
+                    re.shaderRGBA[3] = uint8_t(0.6f * 255.0f);
                 }
             }
             break;
 
         case 2: // REFERENCE -> RED
-            re.shaderRGBA[0] = byte(1.0f * 255.0f);
-            re.shaderRGBA[1] = byte(0.0f * 255.0f);
-            re.shaderRGBA[2] = byte(0.0f * 255.0f);
-            re.shaderRGBA[3] = byte(0.4f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(0.0f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(0.0f * 255.0f);
+            re.shaderRGBA[3] = uint8_t(0.4f * 255.0f);
             break;
 
         case 3: // GHOST -> ( WHITE / RED )
             if (es.eFlags & HVF_HIT) {
-                re.shaderRGBA[0] = byte(1.0f * 255.0f);
-                re.shaderRGBA[1] = byte(0.0f * 255.0f);
-                re.shaderRGBA[2] = byte(0.0f * 255.0f);
-                re.shaderRGBA[3] = byte(0.4f * 255.0f);
+                re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+                re.shaderRGBA[1] = uint8_t(0.0f * 255.0f);
+                re.shaderRGBA[2] = uint8_t(0.0f * 255.0f);
+                re.shaderRGBA[3] = uint8_t(0.4f * 255.0f);
 
                 re.customShader = cgs.media.hitVolumeHitShader;
             }
             else {
-                re.shaderRGBA[0] = byte(1.0f * 255.0f);
-                re.shaderRGBA[1] = byte(1.0f * 255.0f);
-                re.shaderRGBA[2] = byte(1.0f * 255.0f);
-                re.shaderRGBA[3] = byte(0.4f * 255.0f);
+                re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+                re.shaderRGBA[1] = uint8_t(1.0f * 255.0f);
+                re.shaderRGBA[2] = uint8_t(1.0f * 255.0f);
+                re.shaderRGBA[3] = uint8_t(0.4f * 255.0f);
             }
             break;
 
         default: // UNKNOWN -> WHITE
-            re.shaderRGBA[0] = byte(1.0f * 255.0f);
-            re.shaderRGBA[1] = byte(1.0f * 255.0f);
-            re.shaderRGBA[2] = byte(1.0f * 255.0f);
-            re.shaderRGBA[3] = byte(0.5f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[3] = uint8_t(0.5f * 255.0f);
             break;
     }
 

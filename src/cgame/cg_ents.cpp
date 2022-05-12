@@ -1146,14 +1146,14 @@ void CG_Missile( centity_t *cent ) {
 				if( cent->currentState.otherEntityNum2 ) {
 					// Axis mines
 					ent.shaderRGBA[0] = 255;
-					ent.shaderRGBA[1] = byte( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
-					ent.shaderRGBA[2] = byte( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
+					ent.shaderRGBA[1] = uint8_t( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
+					ent.shaderRGBA[2] = uint8_t( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
 					ent.shaderRGBA[3] = 255;
 				}
 				else {
 					// Allies mines
-					ent.shaderRGBA[0] = byte( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
-					ent.shaderRGBA[1] = byte( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
+					ent.shaderRGBA[0] = uint8_t( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
+					ent.shaderRGBA[1] = uint8_t( 255.f*((1.f + (sin((float)(cg.time-cent->currentState.effect1Time)/500.f)))/2) );
 					ent.shaderRGBA[2] = 255;
 					ent.shaderRGBA[3] = 255;
 				}
@@ -1876,9 +1876,9 @@ void CG_Beam_2( centity_t *cent ) {
 
     vec3_t tmp;
 	VectorScale( cent->currentState.angles2, 255, tmp );
-    ent.shaderRGBA[0] = byte( tmp[0] );
-    ent.shaderRGBA[1] = byte( tmp[1] );
-    ent.shaderRGBA[2] = byte( tmp[2] );
+    ent.shaderRGBA[0] = uint8_t( tmp[0] );
+    ent.shaderRGBA[1] = uint8_t( tmp[1] );
+    ent.shaderRGBA[2] = uint8_t( tmp[2] );
 	ent.shaderRGBA[3] = 255;
 
 	// add to refresh list
@@ -1915,9 +1915,9 @@ void CG_Beam( centity_t *cent ) {
 			break;
 	}
 
-	ent.shaderRGBA[0] = byte( s1->angles2[0] * 255 );
-	ent.shaderRGBA[1] = byte( s1->angles2[1] * 255 );
-	ent.shaderRGBA[2] = byte( s1->angles2[2] * 255 );
+	ent.shaderRGBA[0] = uint8_t( s1->angles2[0] * 255 );
+	ent.shaderRGBA[1] = uint8_t( s1->angles2[1] * 255 );
+	ent.shaderRGBA[2] = uint8_t( s1->angles2[2] * 255 );
 	ent.shaderRGBA[3] = 255;
 
 	ent.renderfx = RF_NOSHADOW;

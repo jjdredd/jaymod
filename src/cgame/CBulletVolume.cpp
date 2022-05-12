@@ -20,37 +20,37 @@ CBulletVolume::render( centity_t& ent )
     re.nonNormalizedAxes = qtrue;
     re.customShader      = cgs.media.bulletVolumeShader;
 
-    re.shaderRGBA[3] = byte(es.angles2[2] * 255.0f);
+    re.shaderRGBA[3] = uint8_t(es.angles2[2] * 255.0f);
     switch (es.modelindex) {
         default: // UNKNWON -> GRAY
         case 0:
-            re.shaderRGBA[0] = byte(0.5f * 255.0f);
-            re.shaderRGBA[1] = byte(0.5f * 255.0f);
-            re.shaderRGBA[2] = byte(0.5f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(0.5f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(0.5f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(0.5f * 255.0f);
             break;
 
         case 1: // NOHIT -> BLUE
-            re.shaderRGBA[0] = byte(0.0f * 255.0f);
-            re.shaderRGBA[1] = byte(0.0f * 255.0f);
-            re.shaderRGBA[2] = byte(1.0f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(0.0f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(0.0f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(1.0f * 255.0f);
             break;
 
         case 2: // HIT -> RED
-            re.shaderRGBA[0] = byte(1.0f * 255.0f);
-            re.shaderRGBA[1] = byte(0.0f * 255.0f);
-            re.shaderRGBA[2] = byte(0.0f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(0.0f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(0.0f * 255.0f);
             break;
 
         case 3: // REFERENCE NOHIT -> GREEN
-            re.shaderRGBA[0] = byte(0.0f * 255.0f);
-            re.shaderRGBA[1] = byte(1.0f * 255.0f);
-            re.shaderRGBA[2] = byte(0.0f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(0.0f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(0.0f * 255.0f);
             break;
 
         case 4: // REFERENCE HIT -> YELLOW
-            re.shaderRGBA[0] = byte(1.0f * 255.0f);
-            re.shaderRGBA[1] = byte(1.0f * 255.0f);
-            re.shaderRGBA[2] = byte(0.0f * 255.0f);
+            re.shaderRGBA[0] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[1] = uint8_t(1.0f * 255.0f);
+            re.shaderRGBA[2] = uint8_t(0.0f * 255.0f);
             break;
     }
 

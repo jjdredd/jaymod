@@ -1031,10 +1031,10 @@ void CG_AddFadeRGB( localEntity_t *le ) {
 	c = ( le->endTime - cg.time ) * le->lifeRate;
 	c *= 0xff;
 
-	re->shaderRGBA[0] = byte( le->color[0] * c );
-	re->shaderRGBA[1] = byte( le->color[1] * c );
-	re->shaderRGBA[2] = byte( le->color[2] * c );
-	re->shaderRGBA[3] = byte( le->color[3] * c );
+	re->shaderRGBA[0] = uint8_t( le->color[0] * c );
+	re->shaderRGBA[1] = uint8_t( le->color[1] * c );
+	re->shaderRGBA[2] = uint8_t( le->color[2] * c );
+	re->shaderRGBA[3] = uint8_t( le->color[3] * c );
 
 	trap_R_AddRefEntityToScene( re );
 }
@@ -1042,10 +1042,10 @@ void CG_AddFadeRGB( localEntity_t *le ) {
 void CG_AddConstRGB( localEntity_t *le ) {
 	refEntity_t *re;
 	re = &le->refEntity;
-	re->shaderRGBA[0] = byte( le->color[0] * 255 );
-	re->shaderRGBA[1] = byte( le->color[1] * 255 );
-	re->shaderRGBA[2] = byte( le->color[2] * 255 );
-	re->shaderRGBA[3] = byte( le->color[3] * 255 );
+	re->shaderRGBA[0] = uint8_t( le->color[0] * 255 );
+	re->shaderRGBA[1] = uint8_t( le->color[1] * 255 );
+	re->shaderRGBA[2] = uint8_t( le->color[2] * 255 );
+	re->shaderRGBA[3] = uint8_t( le->color[3] * 255 );
 	trap_R_AddRefEntityToScene(re);
 }
 
@@ -1076,7 +1076,7 @@ static void CG_AddMoveScaleFade( localEntity_t *le ) {
 	// Ridah, spark
 	if ( !( le->leFlags & LEF_NOFADEALPHA ) )
 	// done.
-	re->shaderRGBA[3] = byte( 0xff * c * le->color[3] );
+	re->shaderRGBA[3] = uint8_t( 0xff * c * le->color[3] );
 
 	if ( !( le->leFlags & LEF_PUFF_DONT_SCALE ) ) {
 		c = ( le->endTime - cg.time ) * le->lifeRate;
@@ -1118,7 +1118,7 @@ static void CG_AddScaleFade( localEntity_t *le ) {
 	// fade / grow time
 	c = ( le->endTime - cg.time ) * le->lifeRate;
 
-	re->shaderRGBA[3] = byte( 0xff * c * le->color[3] );
+	re->shaderRGBA[3] = uint8_t( 0xff * c * le->color[3] );
 	if ( !( le->leFlags & LEF_PUFF_DONT_SCALE ) ) {
 		re->radius = le->radius * ( 1.0 - c ) + 8;
 	}
@@ -1157,7 +1157,7 @@ static void CG_AddFallScaleFade( localEntity_t *le ) {
 	// fade time
 	c = ( le->endTime - cg.time ) * le->lifeRate;
 
-	re->shaderRGBA[3] = byte( 0xff * c * le->color[3] );
+	re->shaderRGBA[3] = uint8_t( 0xff * c * le->color[3] );
 
 	re->origin[2] = le->pos.trBase[2] - ( 1.0 - c ) * le->pos.trDelta[2];
 
@@ -1227,7 +1227,7 @@ static void CG_AddSpriteExplosion( localEntity_t *le ) {
 	re.shaderRGBA[0] = 0xff;
 	re.shaderRGBA[1] = 0xff;
 	re.shaderRGBA[2] = 0xff;
-	re.shaderRGBA[3] = byte( 0xff * c * 0.33f );
+	re.shaderRGBA[3] = uint8_t( 0xff * c * 0.33f );
 
 	re.reType = RT_SPRITE;
 	re.radius = 42 * ( 1.0 - c ) + 30;
