@@ -1608,8 +1608,9 @@ void CG_DrawAutoMap( void ) {
 
 	mapScissor.zoomFactor = cg_mapZoom.value;
 
-    if (cg_althud.integer)
+    if (cg_althud.integer) {
         mapScissor.zoomFactor = max(mapScissor.zoomFactor * CM_ALT_SCALE, 1.0f);
+    }
 
 	mapScissor.tl[0] = mapScissor.tl[1] = 0;
 	mapScissor.br[0] = mapScissor.br[1] = -1;
