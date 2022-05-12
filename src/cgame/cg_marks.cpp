@@ -188,7 +188,7 @@ void CG_ImpactMark( qhandle_t markShader, vec3_t origin, vec4_t projection, floa
 	vec3_t			axis[3];
 	float			texCoordScale;
 	vec3_t			originalPoints[4];
-	byte			colors[4];
+	uint8_t			colors[4];
 	int				i, j;
 	int				numFragments;
 	markFragment_t	markFragments[MAX_MARK_FRAGMENTS], *mf;
@@ -343,9 +343,9 @@ void CG_AddMarks( void ) {
 				}
 			} else {
 				for ( j = 0 ; j < mp->poly.numVerts ; j++ ) {
-					mp->verts[j].modulate[0] = byte( mp->color[0] * fade );
-					mp->verts[j].modulate[1] = byte( mp->color[1] * fade );
-					mp->verts[j].modulate[2] = byte( mp->color[2] * fade );
+					mp->verts[j].modulate[0] = uint8_t( mp->color[0] * fade );
+					mp->verts[j].modulate[1] = uint8_t( mp->color[1] * fade );
+					mp->verts[j].modulate[2] = uint8_t( mp->color[2] * fade );
 				}
 			}
 		}

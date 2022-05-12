@@ -245,7 +245,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			verts[0].modulate[0] = 255;
 			verts[0].modulate[1] = 255;
 			verts[0].modulate[2] = 255;
-			verts[0].modulate[3] = byte( 255 * p->alpha );
+			verts[0].modulate[3] = uint8_t( 255 * p->alpha );
 
 			VectorMA (org, -p->height, vup, point);	
 			VectorMA (point, p->width, vright, point);	
@@ -255,7 +255,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			verts[1].modulate[0] = 255;
 			verts[1].modulate[1] = 255;
 			verts[1].modulate[2] = 255;
-			verts[1].modulate[3] = byte( 255 * p->alpha );
+			verts[1].modulate[3] = uint8_t( 255 * p->alpha );
 
 			VectorMA (org, p->height, vup, point);	
 			VectorMA (point, p->width, vright, point);	
@@ -265,7 +265,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			verts[2].modulate[0] = 255;
 			verts[2].modulate[1] = 255;
 			verts[2].modulate[2] = 255;
-			verts[2].modulate[3] = byte( 255 * p->alpha );
+			verts[2].modulate[3] = uint8_t( 255 * p->alpha );
 
 			VectorMA (org, p->height, vup, point);	
 			VectorMA (point, -p->width, vright, point);	
@@ -275,7 +275,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			verts[3].modulate[0] = 255;
 			verts[3].modulate[1] = 255;
 			verts[3].modulate[2] = 255;
-			verts[3].modulate[3] = byte( 255 * p->alpha );
+			verts[3].modulate[3] = uint8_t( 255 * p->alpha );
 		}
 		else
 		{
@@ -287,7 +287,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			TRIverts[0].modulate[0] = 255;
 			TRIverts[0].modulate[1] = 255;
 			TRIverts[0].modulate[2] = 255;
-			TRIverts[0].modulate[3] = byte( 255 * p->alpha );
+			TRIverts[0].modulate[3] = uint8_t( 255 * p->alpha );
 
 			VectorMA (org, p->height, vup, point);	
 			VectorMA (point, -p->width, vright, point);	
@@ -297,7 +297,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			TRIverts[1].modulate[0] = 255;
 			TRIverts[1].modulate[1] = 255;
 			TRIverts[1].modulate[2] = 255;
-			TRIverts[1].modulate[3] = byte( 255 * p->alpha );
+			TRIverts[1].modulate[3] = uint8_t( 255 * p->alpha );
 
 			VectorMA (org, p->height, vup, point);	
 			VectorMA (point, p->width, vright, point);	
@@ -307,7 +307,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 			TRIverts[2].modulate[0] = 255;
 			TRIverts[2].modulate[1] = 255;
 			TRIverts[2].modulate[2] = 255;
-			TRIverts[2].modulate[3] = byte( 255 * p->alpha );
+			TRIverts[2].modulate[3] = uint8_t( 255 * p->alpha );
 		}
 	
 	}
@@ -475,10 +475,10 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		VectorCopy (point, verts[0].xyz);	
 		verts[0].st[0] = 0;	
 		verts[0].st[1] = 0;	
-		verts[0].modulate[0] = byte( 255 * color[0] );
-		verts[0].modulate[1] = byte( 255 * color[1] );
-		verts[0].modulate[2] = byte( 255 * color[2] );
-		verts[0].modulate[3] = byte( 255 * invratio );
+		verts[0].modulate[0] = uint8_t( 255 * color[0] );
+		verts[0].modulate[1] = uint8_t( 255 * color[1] );
+		verts[0].modulate[2] = uint8_t( 255 * color[2] );
+		verts[0].modulate[3] = uint8_t( 255 * invratio );
 
 		if (p->rotate)
 		{
@@ -493,10 +493,10 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		VectorCopy (point, verts[1].xyz);	
 		verts[1].st[0] = 0;	
 		verts[1].st[1] = 1;	
-		verts[1].modulate[0] = byte( 255 * color[0] );
-		verts[1].modulate[1] = byte( 255 * color[1] );
-		verts[1].modulate[2] = byte( 255 * color[2] );
-		verts[1].modulate[3] = byte( 255 * invratio );
+		verts[1].modulate[0] = uint8_t( 255 * color[0] );
+		verts[1].modulate[1] = uint8_t( 255 * color[1] );
+		verts[1].modulate[2] = uint8_t( 255 * color[2] );
+		verts[1].modulate[3] = uint8_t( 255 * invratio );
 
 		if (p->rotate)
 		{
@@ -511,10 +511,10 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		VectorCopy (point, verts[2].xyz);	
 		verts[2].st[0] = 1;	
 		verts[2].st[1] = 1;	
-		verts[2].modulate[0] = byte( 255 * color[0] );
-		verts[2].modulate[1] = byte( 255 * color[1] );
-		verts[2].modulate[2] = byte( 255 * color[2] );
-		verts[2].modulate[3] = byte( 255 * invratio );
+		verts[2].modulate[0] = uint8_t( 255 * color[0] );
+		verts[2].modulate[1] = uint8_t( 255 * color[1] );
+		verts[2].modulate[2] = uint8_t( 255 * color[2] );
+		verts[2].modulate[3] = uint8_t( 255 * invratio );
 
 		if (p->rotate)
 		{
@@ -529,10 +529,10 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		VectorCopy (point, verts[3].xyz);	
 		verts[3].st[0] = 1;	
 		verts[3].st[1] = 0;	
-		verts[3].modulate[0] = byte( 255 * color[0] );
-		verts[3].modulate[1] = byte( 255 * color[1] );
-		verts[3].modulate[2] = byte( 255 * color[2] );
-		verts[3].modulate[3] = byte( 255  * invratio );
+		verts[3].modulate[0] = uint8_t( 255 * color[0] );
+		verts[3].modulate[1] = uint8_t( 255 * color[1] );
+		verts[3].modulate[2] = uint8_t( 255 * color[2] );
+		verts[3].modulate[3] = uint8_t( 255  * invratio );
 		
 	}
 	else if (p->type == P_BLEED)
@@ -566,7 +566,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		verts[0].modulate[0] = 111;
 		verts[0].modulate[1] = 19;
 		verts[0].modulate[2] = 9;
-		verts[0].modulate[3] = byte( 255 * alpha );
+		verts[0].modulate[3] = uint8_t( 255 * alpha );
 
 		VectorMA (org, -p->height, ru, point);	
 		VectorMA (point, p->width, rr, point);	
@@ -576,7 +576,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		verts[1].modulate[0] = 111;
 		verts[1].modulate[1] = 19;
 		verts[1].modulate[2] = 9;
-		verts[1].modulate[3] = byte( 255 * alpha );
+		verts[1].modulate[3] = uint8_t( 255 * alpha );
 
 		VectorMA (org, p->height, ru, point);	
 		VectorMA (point, p->width, rr, point);	
@@ -586,7 +586,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		verts[2].modulate[0] = 111;
 		verts[2].modulate[1] = 19;
 		verts[2].modulate[2] = 9;
-		verts[2].modulate[3] = byte( 255 * alpha );
+		verts[2].modulate[3] = uint8_t( 255 * alpha );
 
 		VectorMA (org, p->height, ru, point);
 		VectorMA (point, -p->width, rr, point);
@@ -596,7 +596,7 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		verts[3].modulate[0] = 111;
 		verts[3].modulate[1] = 19;
 		verts[3].modulate[2] = 9;
-		verts[3].modulate[3] = byte( 255 * alpha );
+		verts[3].modulate[3] = uint8_t( 255 * alpha );
 
 	}
 	else if (p->type == P_FLAT_SCALEUP)
@@ -630,9 +630,9 @@ void CG_AddParticleToScene (cparticle_t *p, vec3_t org, float alpha)
 		verts[0].xyz[1] -= cosR;
 		verts[0].st[0] = 0;	
 		verts[0].st[1] = 0;	
-		verts[0].modulate[0] = byte( 255 * color[0] );
-		verts[0].modulate[1] = byte( 255 * color[1] );
-		verts[0].modulate[2] = byte( 255 * color[2] );
+		verts[0].modulate[0] = uint8_t( 255 * color[0] );
+		verts[0].modulate[1] = uint8_t( 255 * color[1] );
+		verts[0].modulate[2] = uint8_t( 255 * color[2] );
 		verts[0].modulate[3] = 255;	
 
 		VectorCopy (org, verts[1].xyz);	

@@ -290,7 +290,7 @@ Chunk::process()
     Vector2Set( st[2], 1.0f, 1.0f );
     Vector2Set( st[3], 1.0f, 0.0f );
 
-    byte(*color)[4] = pbuf.color + pbuf.numVerts;
+    uint8_t(*color)[4] = pbuf.color + pbuf.numVerts;
     Vector4Set( color[0], 0, 0, 0, 128 );
     Vector4Set( color[1], 0, 0, 0, 128 );
     Vector4Set( color[2], 0, 0, 0, 128 );

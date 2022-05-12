@@ -50,7 +50,7 @@ int CG_SoundScriptPrecache( const char *name ) {
 	long hash;
 	char *s;
 	soundScript_t	*sound;
-//	byte buf[1024];
+  // byte buf[1024];
 	int i;
 
 	if( !name || !name[0] )
@@ -591,10 +591,10 @@ void CG_AddLineToScene( vec3_t start, vec3_t end, vec4_t colour )
 	re.customShader = cgs.media.railCoreShader;
 	VectorCopy( start, re.origin );
 	VectorCopy( end, re.oldorigin );
-	re.shaderRGBA[0] = byte( colour[0] * 0xff );
-	re.shaderRGBA[1] = byte( colour[1] * 0xff );
-	re.shaderRGBA[2] = byte( colour[2] * 0xff );
-	re.shaderRGBA[3] = byte( colour[3] * 0xff );
+	re.shaderRGBA[0] = uint8_t( colour[0] * 0xff );
+	re.shaderRGBA[1] = uint8_t( colour[1] * 0xff );
+	re.shaderRGBA[2] = uint8_t( colour[2] * 0xff );
+	re.shaderRGBA[3] = uint8_t( colour[3] * 0xff );
 
 	trap_R_AddRefEntityToScene( &re );
 }
@@ -677,10 +677,10 @@ static void CG_RenderScriptSpeakers( void )
 				VectorCopy( vec, re.oldorigin );
 				re.radius = 3;
 				re.customShader = cgs.media.waterBubbleShader;
-				re.shaderRGBA[0] = byte( colour[0] * 0xff );
-				re.shaderRGBA[1] = byte( colour[1] * 0xff );
-				re.shaderRGBA[2] = byte( colour[2] * 0xff );
-				re.shaderRGBA[3] = byte( colour[3] * 0xff );
+				re.shaderRGBA[0] = uint8_t( colour[0] * 0xff );
+				re.shaderRGBA[1] = uint8_t( colour[1] * 0xff );
+				re.shaderRGBA[2] = uint8_t( colour[2] * 0xff );
+				re.shaderRGBA[3] = uint8_t( colour[3] * 0xff );
 				trap_R_AddRefEntityToScene( &re );
 			}
 
