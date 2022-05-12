@@ -8562,11 +8562,11 @@ cvarTable_t		cvarTable[] = {
 	{ &ui_autoredirect, "ui_autoredirect", "0", CVAR_ARCHIVE },
 
     // Jaymod version tracking
-    { NULL, "ui_jaymod_title",       JAYMOD_title,       CVAR_ROM },
-    { NULL, "ui_jaymod_buildTarget", JAYMOD_buildTarget, CVAR_ROM },
-    { NULL, "ui_jaymod_repoLCDate",  JAYMOD_repoLCDate,  CVAR_ROM },
-    { NULL, "ui_jaymod_repoLCRev",   JAYMOD_repoLCRev,   CVAR_ROM },
-    { NULL, "ui_jaymod_repoUUID",    JAYMOD_repoUUID,    CVAR_ROM },
+    { NULL, "ui_jaymod_title",        JAYMOD_title,        CVAR_ROM },
+    { NULL, "ui_jaymod_buildTarget",  JAYMOD_buildTarget,  CVAR_ROM },
+    { NULL, "ui_jaymod_repoDate",     JAYMOD_repoDate,     CVAR_ROM },
+    { NULL, "ui_jaymod_repoRevision", JAYMOD_repoRevision, CVAR_ROM },
+ // { NULL, "ui_jaymod_repoUUID",     JAYMOD_repoUUID,     CVAR_ROM },
 };
 
 int		cvarTableSize = sizeof(cvarTable) / sizeof(cvarTable[0]);

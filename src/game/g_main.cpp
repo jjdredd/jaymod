@@ -284,11 +284,11 @@ vmCvar_t        g_warnBanLevel;
 
 cvarTable_t		gameCvarTable[] = {
     // Jaymod CVARS
-    { NULL, "g_jaymod_title",       JAYMOD_title,       CVAR_ROM },
-    { NULL, "g_jaymod_buildTarget", JAYMOD_buildTarget, CVAR_ROM },
-    { NULL, "g_jaymod_repoLCDate",  JAYMOD_repoLCDate,  CVAR_ROM },
-    { NULL, "g_jaymod_repoLCRev",   JAYMOD_repoLCRev,   CVAR_ROM },
-    { NULL, "g_jaymod_repoUUID",    JAYMOD_repoUUID,    CVAR_ROM },
+    { NULL, "g_jaymod_title",        JAYMOD_title,        CVAR_ROM },
+    { NULL, "g_jaymod_buildTarget",  JAYMOD_buildTarget,  CVAR_ROM },
+    { NULL, "g_jaymod_repoDate",     JAYMOD_repoDate,     CVAR_ROM },
+    { NULL, "g_jaymod_repoRevision", JAYMOD_repoRevision, CVAR_ROM },
+ // { NULL, "g_jaymod_repoUUID",     JAYMOD_repoUUID,     CVAR_ROM },
 
     { &sv_uptime,      "sv_uptime",      ""  , CVAR_ROM | CVAR_SERVERINFO_NOUPDATE },
     { &sv_uptimeStamp, "sv_uptimeStamp", "-1", CVAR_ROM },
