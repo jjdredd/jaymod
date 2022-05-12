@@ -330,12 +330,12 @@ typedef struct {
 	int			modificationCount;
 } cvarTable_t;
 
-cvarTable_t		cvarTable[] = {
-    { NULL, "cg_jaymod_title",       JAYMOD_title,       CVAR_ROM | CVAR_USERINFO },
-    { NULL, "cg_jaymod_buildTarget", JAYMOD_buildTarget, CVAR_ROM },
-    { NULL, "cg_jaymod_repoLCDate",  JAYMOD_repoLCDate,  CVAR_ROM },
-    { NULL, "cg_jaymod_repoLCRev",   JAYMOD_repoLCRev,   CVAR_ROM },
-    { NULL, "cg_jaymod_repoUUID",    JAYMOD_repoUUID,    CVAR_ROM },
+cvarTable_t	cvarTable[] = {
+    { NULL, "cg_jaymod_title",        JAYMOD_title,        CVAR_ROM | CVAR_USERINFO },
+    { NULL, "cg_jaymod_buildTarget",  JAYMOD_buildTarget,  CVAR_ROM },
+    { NULL, "cg_jaymod_repoDate",     JAYMOD_repoDate,     CVAR_ROM },
+    { NULL, "cg_jaymod_repoRevision", JAYMOD_repoRevision, CVAR_ROM },
+ // { NULL, "cg_jaymod_repoUUID",     JAYMOD_repoUUID,     CVAR_ROM },
 
     { &cg_console,         "cg_console",         "0", CVAR_ARCHIVE },
     { &cg_consoleShadowed, "cg_consoleShadowed", "1", CVAR_ARCHIVE },
