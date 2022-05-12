@@ -38,7 +38,7 @@ void CG_GenerateTracemap( void ) {
 	int min, max;
 	float scalefactor;
 	fileHandle_t f;
-	byte data;
+	uint8_t data;
 	static int lastDraw = 0;
 	static int tracecount = 0;
 	int ms;
@@ -366,17 +366,17 @@ void CG_GenerateTracemap( void ) {
 				continue;
 			}
 
-			data = byte( tracemap.sky[TRACEMAP_SIZE - 1 - i][j] ); trap_FS_Write( &data, sizeof(data), f );	// b
+			data = uint8_t( tracemap.sky[TRACEMAP_SIZE - 1 - i][j] ); trap_FS_Write( &data, sizeof(data), f );	// b
 			if( tracemap.skyground[TRACEMAP_SIZE - 1 - i][j] == MIN_WORLD_HEIGHT ) {
 				data = 0; trap_FS_Write( &data, sizeof(data), f );	// g
 			} else {
-				data = byte( tracemap.skyground[TRACEMAP_SIZE - 1 - i][j] ); trap_FS_Write( &data, sizeof(data), f );	// g
+				data = uint8_t( tracemap.skyground[TRACEMAP_SIZE - 1 - i][j] ); trap_FS_Write( &data, sizeof(data), f );	// g
 			}
 			if( tracemap.ground[TRACEMAP_SIZE - 1 - i][j] == MIN_WORLD_HEIGHT ) {
 				data = 0; trap_FS_Write( &data, sizeof(data), f );	// r
 				data = 0; trap_FS_Write( &data, sizeof(data), f );	// a
 			} else {
-				data = byte( tracemap.ground[TRACEMAP_SIZE - 1 - i][j] ); trap_FS_Write( &data, sizeof(data), f );	// r
+				data = uint8_t( tracemap.ground[TRACEMAP_SIZE - 1 - i][j] ); trap_FS_Write( &data, sizeof(data), f );	// r
 				data = 255; trap_FS_Write( &data, sizeof(data), f );	// a
 			}
 		}
@@ -394,7 +394,7 @@ void CG_GenerateTracemap( void ) {
 qboolean BG_LoadTraceMap( char *rawmapname, vec2_t world_mins, vec2_t world_maxs ) {
 	int i, j;
 	fileHandle_t f;
-	byte data, datablock[TRACEMAP_SIZE][4];
+	uint8_t data, datablock[TRACEMAP_SIZE][4];
 	int sky_min, sky_max;
 	int ground_min, ground_max;
 	int skyground_min, skyground_max;

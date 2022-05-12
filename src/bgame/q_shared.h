@@ -207,8 +207,8 @@ void Sys_PumpEvents( void );
 
 //=============================================================
 
-
-typedef unsigned char 		byte;
+//cake: original byte typedef left for reference
+//typedef unsigned char byte;
 
 typedef enum {qfalse, qtrue}	qboolean;
 
@@ -818,14 +818,14 @@ int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
 // implemented as a struct for qvm compatibility
 typedef struct
 {
-	byte	b0;
-	byte	b1;
-	byte	b2;
-	byte	b3;
-	byte	b4;
-	byte	b5;
-	byte	b6;
-	byte	b7;
+	uint8_t	b0;
+	uint8_t	b1;
+	uint8_t	b2;
+	uint8_t	b3;
+	uint8_t	b4;
+	uint8_t	b5;
+	uint8_t	b6;
+	uint8_t	b7;
 } qint64;
 
 //=============================================
@@ -976,9 +976,9 @@ PlaneTypeForNormal
 typedef struct cplane_s {
 	vec3_t	normal;
 	float	dist;
-	byte	type;			// for fast side tests: 0,1,2 = axial, 3 = nonaxial
-	byte	signbits;		// signx + (signy<<1) + (signz<<2), used as lookup during collision
-	byte	pad[2];
+	uint8_t	type;			// for fast side tests: 0,1,2 = axial, 3 = nonaxial
+	uint8_t	signbits;		// signx + (signy<<1) + (signz<<2), used as lookup during collision
+	uint8_t	pad[2];
 } cplane_t;
 
 #define CPLANE
@@ -1360,18 +1360,18 @@ typedef enum {
 // usercmd_t is sent to the server each client frame
 typedef struct usercmd_s {
 	int		serverTime;
-	byte	buttons;
-	byte	wbuttons;
-	byte	weapon;
-	byte	flags;
+	uint8_t	buttons;
+	uint8_t	wbuttons;
+	uint8_t	weapon;
+	uint8_t	flags;
 	int		angles[3];
 
 	signed char	forwardmove, rightmove, upmove;
-	byte	doubleTap;			// Arnout: only 3 bits used
+	uint8_t	doubleTap;			// Arnout: only 3 bits used
 
 	// rain - in ET, this can be any entity, and it's used as an array
 	// index, so make sure it's unsigned
-	byte	identClient;		// NERVE - SMF
+	uint8_t	identClient;		// NERVE - SMF
 } usercmd_t;
 
 //===================================================================

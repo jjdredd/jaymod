@@ -41,7 +41,7 @@
 typedef struct {
 	vec3_t		xyz;
 	float		st[2];
-	byte		modulate[4];
+	uint8_t		modulate[4];
 } polyVert_t;
 
 typedef struct poly_s {
@@ -312,7 +312,7 @@ typedef struct {
 typedef struct polyBuffer_s {
 	vec4_t			xyz[MAX_PB_VERTS];
 	vec2_t			st[MAX_PB_VERTS];
-	byte			color[MAX_PB_VERTS][4];
+	uint8_t			color[MAX_PB_VERTS][4];
 	int				numVerts;
 
 	int				indicies[MAX_PB_INDICIES];

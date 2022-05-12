@@ -387,26 +387,26 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle )
 	VectorCopy( finish, verts[0].xyz );	
 	verts[0].st[0] = 0.5f;
 	verts[0].st[1] = 0;
-	verts[0].modulate[0] = (byte)particle->colour[0];
-	verts[0].modulate[1] = (byte)particle->colour[1];
-	verts[0].modulate[2] = (byte)particle->colour[2];
-	verts[0].modulate[3] = (byte)(100 * dist);
+	verts[0].modulate[0] = (uint8_t)particle->colour[0];
+	verts[0].modulate[1] = (uint8_t)particle->colour[1];
+	verts[0].modulate[2] = (uint8_t)particle->colour[2];
+	verts[0].modulate[3] = (uint8_t)(100 * dist);
 
 	VectorMA( start, -particle->weight, right, verts[1].xyz );
 	verts[1].st[0] = 0;
 	verts[1].st[1] = 1;
-	verts[1].modulate[0] = (byte)particle->colour[0];
-	verts[1].modulate[1] = (byte)particle->colour[1];
-	verts[2].modulate[2] = (byte)particle->colour[2];
-	verts[1].modulate[3] = (byte)(200 * dist);
+	verts[1].modulate[0] = (uint8_t)particle->colour[0];
+	verts[1].modulate[1] = (uint8_t)particle->colour[1];
+	verts[2].modulate[2] = (uint8_t)particle->colour[2];
+	verts[1].modulate[3] = (uint8_t)(200 * dist);
 
 	VectorMA( start, particle->weight, right, verts[2].xyz );
 	verts[2].st[0] = 1;
 	verts[2].st[1] = 1;
-	verts[2].modulate[0] = (byte)particle->colour[0];
-	verts[2].modulate[1] = (byte)particle->colour[1];
-	verts[2].modulate[2] = (byte)particle->colour[2];
-	verts[2].modulate[3] = (byte)(200 * dist);
+	verts[2].modulate[0] = (uint8_t)particle->colour[0];
+	verts[2].modulate[1] = (uint8_t)particle->colour[1];
+	verts[2].modulate[2] = (uint8_t)particle->colour[2];
+	verts[2].modulate[3] = (uint8_t)(200 * dist);
 
 	CG_AddPolyToPool( *particle->effectshader, verts );
 

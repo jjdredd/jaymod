@@ -215,9 +215,9 @@ int		BigLong (int l) {return _BigLong(l);}
 qint64 	BigLong64 (qint64 l) {return _BigLong64(l);}
 float	BigFloat (float l) {return _BigFloat(l);}
 
-short   ShortSwap (short l)
+short ShortSwap (short l)
 {
-	byte    b1,b2;
+	uint8_t b1,b2;
 
 	b1 = l&255;
 	b2 = (l>>8)&255;
@@ -230,9 +230,9 @@ short	ShortNoSwap (short l)
 	return l;
 }
 
-int    LongSwap (int l)
+int LongSwap (int l)
 {
-	byte    b1,b2,b3,b4;
+	uint8_t b1,b2,b3,b4;
 
 	b1 = l&255;
 	b2 = (l>>8)&255;
@@ -249,7 +249,7 @@ int	LongNoSwap (int l)
 
 qint64 Long64Swap (qint64 ll)
 {
-	qint64	result;
+	qint64 result;
 
 	result.b0 = ll.b7;
 	result.b1 = ll.b6;
@@ -297,7 +297,7 @@ Swap_Init
 */
 void Swap_Init (void)
 {
-	byte	swaptest[2] = {1,0};
+	uint8_t	swaptest[2] = {1,0};
 
 // set the byte swapping variables in a portable manner	
 	if ( *(short *)swaptest == 1)

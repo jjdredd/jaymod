@@ -129,9 +129,9 @@ localEntity_t *CG_SmokePuff( const vec3_t p, const vec3_t vel,
 		re->shaderRGBA[2] = 0xff;
 		re->shaderRGBA[3] = 0xff;
 	} else {
-		re->shaderRGBA[0] = byte( le->color[0] * 0xff );
-		re->shaderRGBA[1] = byte( le->color[1] * 0xff );
-		re->shaderRGBA[2] = byte( le->color[2] * 0xff );
+		re->shaderRGBA[0] = uint8_t( le->color[0] * 0xff );
+		re->shaderRGBA[1] = uint8_t( le->color[1] * 0xff );
+		re->shaderRGBA[2] = uint8_t( le->color[2] * 0xff );
 		re->shaderRGBA[3] = 0xff;
 	}
 // JPW NERVE
@@ -1046,10 +1046,10 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		VectorAdd(start, coreverts[3].xyz, coreverts[3].xyz);
 
 		for(i=0;i<4;i++) {
-			coreverts[i].modulate[0] = byte( color[0]*200.0f );
-			coreverts[i].modulate[1] = byte( color[1]*200.0f );
-			coreverts[i].modulate[2] = byte( color[2]*200.0f );
-			coreverts[i].modulate[3] = byte( color[3]*200.0f );
+			coreverts[i].modulate[0] = uint8_t( color[0]*200.0f );
+			coreverts[i].modulate[1] = uint8_t( color[1]*200.0f );
+			coreverts[i].modulate[2] = uint8_t( color[2]*200.0f );
+			coreverts[i].modulate[3] = uint8_t( color[3]*200.0f );
 			if(i>1) {
 				coreverts[i].modulate[3] = 0;
 			}
@@ -1080,46 +1080,46 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		VectorCopy(start_points[i], verts[(i*4)].xyz);
 		verts[j].st[0]	= 0;
 		verts[j].st[1]	= 1;
-		verts[j].modulate[0] = byte( color[0]*255.0f );
-		verts[j].modulate[1] = byte( color[1]*255.0f );
-		verts[j].modulate[2] = byte( color[2]*255.0f );
-		verts[j].modulate[3] = byte( color[3]*255.0f );
+		verts[j].modulate[0] = uint8_t( color[0]*255.0f );
+		verts[j].modulate[1] = uint8_t( color[1]*255.0f );
+		verts[j].modulate[2] = uint8_t( color[2]*255.0f );
+		verts[j].modulate[3] = uint8_t( color[3]*255.0f );
 		j++;
 
 		VectorCopy(end_points[i], verts[j].xyz);
 		verts[j].st[0]	= 0;
 		verts[j].st[1]	= 0;
-		verts[j].modulate[0] = byte( color[0]*255.0f );
-		verts[j].modulate[1] = byte( color[1]*255.0f );
-		verts[j].modulate[2] = byte( color[2]*255.0f );
-		verts[j].modulate[3] = byte( endAlpha );
+		verts[j].modulate[0] = uint8_t( color[0]*255.0f );
+		verts[j].modulate[1] = uint8_t( color[1]*255.0f );
+		verts[j].modulate[2] = uint8_t( color[2]*255.0f );
+		verts[j].modulate[3] = uint8_t( endAlpha );
 		j++;
 
 		VectorCopy(end_points[i+1], verts[j].xyz);
 		verts[j].st[0]	= 1;
 		verts[j].st[1]	= 0;
-		verts[j].modulate[0] = byte( color[0]*255.0f );
-		verts[j].modulate[1] = byte( color[1]*255.0f );
-		verts[j].modulate[2] = byte( color[2]*255.0f );
-		verts[j].modulate[3] = byte( endAlpha );
+		verts[j].modulate[0] = uint8_t( color[0]*255.0f );
+		verts[j].modulate[1] = uint8_t( color[1]*255.0f );
+		verts[j].modulate[2] = uint8_t( color[2]*255.0f );
+		verts[j].modulate[3] = uint8_t( endAlpha );
 		j++;
 
 		VectorCopy(start_points[i+1], verts[j].xyz);
 		verts[j].st[0]	= 1;
 		verts[j].st[1]	= 1;
-		verts[j].modulate[0] = byte( color[0]*255.0f );
-		verts[j].modulate[1] = byte( color[1]*255.0f );
-		verts[j].modulate[2] = byte( color[2]*255.0f );
-		verts[j].modulate[3] = byte( color[3]*255.0f );
+		verts[j].modulate[0] = uint8_t( color[0]*255.0f );
+		verts[j].modulate[1] = uint8_t( color[1]*255.0f );
+		verts[j].modulate[2] = uint8_t( color[2]*255.0f );
+		verts[j].modulate[3] = uint8_t( color[3]*255.0f );
 
 		if(capStart) {
 			VectorCopy(start_points[i], plugVerts[i].xyz);
 			plugVerts[i].st[0]	= 0;
 			plugVerts[i].st[1]	= 0;
-			plugVerts[i].modulate[0] = byte( color[0]*255.0f );
-			plugVerts[i].modulate[1] = byte( color[1]*255.0f );
-			plugVerts[i].modulate[2] = byte( color[2]*255.0f );
-			plugVerts[i].modulate[3] = byte( color[3]*255.0f );
+			plugVerts[i].modulate[0] = uint8_t( color[0]*255.0f );
+			plugVerts[i].modulate[1] = uint8_t( color[1]*255.0f );
+			plugVerts[i].modulate[2] = uint8_t( color[2]*255.0f );
+			plugVerts[i].modulate[3] = uint8_t( color[3]*255.0f );
 		}
 	}
 
@@ -1549,7 +1549,7 @@ void CG_RenderSmokeGrenadeSmoke( centity_t *cent, const weaponInfo_t *weapon, we
 void CG_AddSmokeSprites( void ) {
 	smokesprite_t *smokesprite;
 	qhandle_t shader;
-	byte color[4];
+	uint8_t color[4];
 	polyVert_t verts[4];
 	vec3_t top, bottom;
 	vec3_t right, up, tmp;
@@ -1600,16 +1600,16 @@ void CG_AddSmokeSprites( void ) {
 		VectorMA( smokesprite->pos, halfSmokeSpriteHeight, up, top );
 		VectorMA( smokesprite->pos, -halfSmokeSpriteHeight, up, bottom );
 
-		color[0] = byte( smokesprite->colour[0] * 0xff );
-		color[1] = byte( smokesprite->colour[1] * 0xff );
-		color[2] = byte( smokesprite->colour[2] * 0xff );
-		color[3] = byte( smokesprite->colour[3] * 0xff );
+		color[0] = uint8_t( smokesprite->colour[0] * 0xff );
+		color[1] = uint8_t( smokesprite->colour[1] * 0xff );
+		color[2] = uint8_t( smokesprite->colour[2] * 0xff );
+		color[3] = uint8_t( smokesprite->colour[3] * 0xff );
 
 		// fadeout
 		if( smokesprite->dist > (radius * .5f * .8f) ) {
-			color[3] = byte( (smokesprite->colour[3] -  smokesprite->colour[3] * ((smokesprite->dist - (radius * .5f * .8f))/((radius * .5f)-(radius * .5f * .8f)))) * 0xff );
+			color[3] = uint8_t( (smokesprite->colour[3] -  smokesprite->colour[3] * ((smokesprite->dist - (radius * .5f * .8f))/((radius * .5f)-(radius * .5f * .8f)))) * 0xff );
 		} else {
-			color[3] = byte( smokesprite->colour[3] * 0xff );
+			color[3] = uint8_t( smokesprite->colour[3] * 0xff );
 		}
 
 		VectorMA( top, halfSmokeSpriteWidth, right, verts[0].xyz );

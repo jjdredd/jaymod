@@ -214,18 +214,14 @@ PM_StartWeaponAnim
 ==============
 */
 static void PM_StartWeaponAnim( int anim ) {
-	if ( pm->ps->pm_type >= PM_DEAD )
-		return;
+	if (pm->ps->pm_type >= PM_DEAD) return;
 
     // Jaybird - not while playing dead
-    if (pm->ps->eFlags & EF_PLAYDEAD)
-        return;
+    if (pm->ps->eFlags & EF_PLAYDEAD) return;
 	
-	if ( pm->pmext->weapAnimTimer > 0 )
-		return;
+	if (pm->pmext->weapAnimTimer > 0) return;
 
-	if(pm->cmd.weapon == WP_NONE)
-		return;
+	if(pm->cmd.weapon == WP_NONE) return;
 
 	pm->ps->weapAnim = ( ( pm->ps->weapAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT ) | anim;	
 }
@@ -1019,8 +1015,7 @@ static qboolean PM_CheckProne (void)
 
     // figure out correct time for delay between prone
     int proneDelay = 750;
-    if (cvars::bg_proneDelay.ivalue > 0)
-        proneDelay = 1750;
+    if (cvars::bg_proneDelay.ivalue > 0) proneDelay = 1750;
 
 	if( !(pm->ps->eFlags & EF_PRONE) ) {
 		// can't go prone on ladders
