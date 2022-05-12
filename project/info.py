@@ -391,7 +391,7 @@ class Project:
 ###############################################################################
 
 mode = 0
-dbFileName = 'infox.db'
+dbFileName = 'info.db'
 
 for arg in sys.argv[1:]:
     if (arg == '-mk'):
