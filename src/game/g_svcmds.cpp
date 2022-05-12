@@ -68,10 +68,10 @@ StringToFilter
 */
 qboolean StringToFilter( const char *s, ipFilter_t *f )
 {
-	char	num[128];
-	int		i, j;
-	byte	b[4];
-	byte	m[4];
+	char     num[128];
+	int      i, j;
+	uint8_t	 b[4];
+	uint8_t	 m[4];
 	
 	for (i=0 ; i<4 ; i++)
 	{
@@ -123,11 +123,11 @@ UpdateIPBans
 */
 static void UpdateIPBans( ipFilterList_t *ipFilterList )
 {
-	byte	b[4];
-	byte	m[4];
-	int		i,j;
-	char	iplist_final[MAX_CVAR_VALUE_STRING];
-	char	ip[64];
+	uint8_t	 b[4];
+	uint8_t	 m[4];
+	int      i,j;
+	char     iplist_final[MAX_CVAR_VALUE_STRING];
+	char     ip[64];
 
 	*iplist_final = 0;
 	for (i = 0 ; i < ipFilterList->numIPFilters ; i++)
@@ -161,7 +161,7 @@ static void UpdateIPBans( ipFilterList_t *ipFilterList )
 
 void PrintMaxLivesGUID ()
 {
-	int		i;
+	int	i;
 
 	for (i = 0 ; i < numMaxLivesFilters ; i++)
 	{
@@ -178,7 +178,7 @@ G_FilterPacket
 bool G_FilterPacket( ipFilterList_t* ipFilterList, const char* from )
 {
 	unsigned in;
-	byte m[4];
+	uint8_t m[4];
 
 	int i = 0;
 	const char* p = from;
