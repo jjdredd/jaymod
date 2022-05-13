@@ -236,28 +236,28 @@ void ByteToDir( int b, vec3_t dir ) {
 
 
 unsigned ColorBytes3 (float r, float g, float b) {
-	unsigned	i;
+	unsigned i;
 
-	( (byte *)&i )[0] = byte( r * 255 );
-	( (byte *)&i )[1] = byte( g * 255 );
-	( (byte *)&i )[2] = byte( b * 255 );
+	( (uint8_t *)&i )[0] = uint8_t( r * 255 );
+	( (uint8_t *)&i )[1] = uint8_t( g * 255 );
+	( (uint8_t *)&i )[2] = uint8_t( b * 255 );
 
 	return i;
 }
 
 unsigned ColorBytes4 (float r, float g, float b, float a) {
-	unsigned	i;
+	unsigned i;
 
-	( (byte *)&i )[0] = byte( r * 255 );
-	( (byte *)&i )[1] = byte( g * 255 );
-	( (byte *)&i )[2] = byte( b * 255 );
-	( (byte *)&i )[3] = byte( a * 255 );
+	( (uint8_t *)&i )[0] = uint8_t( r * 255 );
+	( (uint8_t *)&i )[1] = uint8_t( g * 255 );
+	( (uint8_t *)&i )[2] = uint8_t( b * 255 );
+	( (uint8_t *)&i )[3] = uint8_t( a * 255 );
 
 	return i;
 }
 
 float NormalizeColor( const vec3_t in, vec3_t out ) {
-	float	max;
+	float max;
 	
 	max = in[0];
 	if ( in[1] > max ) {

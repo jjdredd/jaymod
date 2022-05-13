@@ -112,7 +112,7 @@ SelectNearestDeathmatchSpawnPoint
 Find the spot that we DON'T want to use
 ================
 */
-#define	MAX_SPAWN_POINTS	128
+#define	MAX_SPAWN_POINTS 128
 gentity_t *SelectNearestDeathmatchSpawnPoint( const vec3_t from ) {
 	gentity_t	*spot;
 	vec3_t		delta;
@@ -144,7 +144,7 @@ SelectRandomDeathmatchSpawnPoint
 go to a random point that doesn't telefrag
 ================
 */
-#define	MAX_SPAWN_POINTS	128
+#define	MAX_SPAWN_POINTS 128
 gentity_t *SelectRandomDeathmatchSpawnPoint( void ) {
 	gentity_t	*spot;
 	int			count;
@@ -178,19 +178,19 @@ SelectSpawnPoint
 Chooses a player start, deathmatch start, etc
 ============
 */
-gentity_t *SelectSpawnPoint ( const vec3_t avoidPoint, vec3_t origin, vec3_t angles ) {
-	gentity_t	*spot;
-	gentity_t	*nearestSpot;
+gentity_t *SelectSpawnPoint( const vec3_t avoidPoint, vec3_t origin, vec3_t angles ) {
+	gentity_t *spot;
+	gentity_t *nearestSpot;
 
 	nearestSpot = SelectNearestDeathmatchSpawnPoint( avoidPoint );
 
-	spot = SelectRandomDeathmatchSpawnPoint ( );
+	spot = SelectRandomDeathmatchSpawnPoint( );
 	if ( spot == nearestSpot ) {
 		// roll again if it would be real close to point of death
-		spot = SelectRandomDeathmatchSpawnPoint ( );
+		spot = SelectRandomDeathmatchSpawnPoint( );
 		if ( spot == nearestSpot ) { 
 			// last try
-			spot = SelectRandomDeathmatchSpawnPoint ( );
+			spot = SelectRandomDeathmatchSpawnPoint( );
 		}		
 	}
 

@@ -186,7 +186,7 @@ gentity_t *G_Find (gentity_t *from, int fieldofs, const char *match)
 	for ( ; from < max ; from++) {
 		if (!from->inuse)
 			continue;
-		s = *(char **) ((byte *)from + fieldofs);
+		s = *(char **) ((uint8_t *)from + fieldofs);
 		if (!s)
 			continue;
 		if (!Q_stricmp (s, match))
