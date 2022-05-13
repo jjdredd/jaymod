@@ -131,7 +131,7 @@ g_serverEntity_t *FindServerEntity( g_serverEntity_t *from, int fieldofs, char *
 	{
 		if (!from->inuse)
 			continue;
-		s = *(char **) ((byte *)from + fieldofs);
+		s = *(char **) ((uint8_t *)from + fieldofs);
 		if (!s)
 			continue;
 		if (!Q_stricmp (s, match))

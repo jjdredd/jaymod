@@ -273,7 +273,7 @@ float FloatSwap (float f)
 	union
 	{
 		float	f;
-		byte	b[4];
+		uint8_t	b[4];
 	} dat1, dat2;
 	
 	

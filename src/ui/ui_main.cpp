@@ -5144,7 +5144,7 @@ void UI_RunMenuScript(char **args) {
 						int i;
 
 						for( i = 0; i < len; i++ ) {
-							byte b;
+							uint8_t b;
 
 							trap_FS_Read( &b, 1, f2 );
 							trap_FS_Write( &b, 1, f );
@@ -5159,7 +5159,7 @@ void UI_RunMenuScript(char **args) {
 						int i;
 
 						for( i = 0; i < len; i++ ) {
-							byte b;
+							uint8_t b;
 
 							trap_FS_Read( &b, 1, f2 );
 							trap_FS_Write( &b, 1, f );
