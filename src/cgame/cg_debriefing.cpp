@@ -1123,9 +1123,7 @@ void CG_Debriefing_ChatEdit_Draw( panel_button_t* button ) {
 
 	do {
 		offset++;
-		if( buffer + offset  == 0 ) {
-			break;
-		}
+		if( buffer[offset] == '\0' ) break;
 	} while( CG_Text_Width_Ext( buffer + offset, button->font->scalex, 0, button->font->font ) > button->rect.w );
 
 	switch( cgs.dbChatMode ) {
