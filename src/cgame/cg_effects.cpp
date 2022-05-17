@@ -573,7 +573,6 @@ void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir )
 	qboolean		foundtag;
 	clientInfo_t	*ci;
 	int				clientNum;
-	// bg_character_t	*character;
 	vec4_t			projection, color;	
 
 	// Rafael
@@ -640,7 +639,7 @@ void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir )
 			CG_Error( "Bad clientNum on player entity");
 		}
 		ci = &cgs.clientinfo[ clientNum ];
-		// character = CG_CharacterForClientinfo( ci, cent );
+		CG_CharacterForClientinfo( ci, cent );
 
 		// Ridah, fetch the various positions of the tag_gib*'s
 		// and spawn the gibs from the correct places (especially the head)

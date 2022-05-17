@@ -4633,7 +4633,7 @@ static void CG_DrawPlayerStatus( void ) {
 	}
 
 	// Draw ammo
-	// weap = CG_PlayerAmmoValue( &value, &value2, &value3 );
+	CG_PlayerAmmoValue( &value, &value2, &value3 );
 	if( value3 >= 0 ) {
 		Com_sprintf( buffer, sizeof(buffer), "%i|%i/%i", value3, value, value2 );
 		CG_Text_Paint_Ext( SCREEN_WIDTH - 22 - CG_Text_Width_Ext( buffer, .25f, 0, &cgs.media.limboFont1 ), SCREEN_HEIGHT - 1 * ( 16 + 2 ) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
