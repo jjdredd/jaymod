@@ -3927,7 +3927,7 @@ static void CG_DrawObjectiveInfo( void ) {
 	x2 = x2 + 4;
 	y2 = y - int(cg.oidPrintCharWidth * 1.5) + 4;
 
-	h = y2 - y1; // JPW NERVE
+//	h = y2 - y1; // JPW NERVE
 
 	VectorCopy( color, backColor );
 	backColor[3] = 0.5 * color[3];
