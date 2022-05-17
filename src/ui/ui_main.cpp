@@ -4335,7 +4335,7 @@ void UI_RunMenuScript(char **args) {
 	if (String_Parse(args, &name)) {
 
 		if (Q_stricmp(name, "StartServer") == 0) {
-			float	skill;
+			// float	skill;
 			int		pb_sv, pb_cl;
 
 			// DHM - Nerve
@@ -4363,7 +4363,7 @@ void UI_RunMenuScript(char **args) {
 			else
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 
-			skill = trap_Cvar_VariableValue( "g_spSkill" );
+			// skill = trap_Cvar_VariableValue( "g_spSkill" );
 
 			// NERVE - SMF - set user cvars here
 			// set timelimit
@@ -6354,8 +6354,7 @@ static const char *UI_SelectedMap(qboolean singlePlayer, int index, int *actual)
 }
 
 static const char *UI_SelectedCampaign( int index, int *actual ) {
-	int i, c;
-	c = 0;
+	int i;
 	*actual = 0;
 	for (i = 0; i < uiInfo.campaignCount; i++) {
 		if((uiInfo.campaignList[i].order == index) && uiInfo.campaignList[i].unlocked ) {
@@ -6695,10 +6694,11 @@ void UI_FeederSelection(float feederID, int index) {
 			updateModel = qtrue;
 		}
   } else if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
-		int actual, map;
+		int actual;
+		// int map;
 		int game;
 
-		map = (feederID == FEEDER_ALLMAPS) ? ui_currentNetMap.integer : ui_currentMap.integer;
+		// map = (feederID == FEEDER_ALLMAPS) ? ui_currentNetMap.integer : ui_currentMap.integer;
 		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 		/*if( game == GT_WOLF_CAMPAIGN ) {
 			if (uiInfo.campaignList[map].campaignCinematic >= 0) {
@@ -7412,7 +7412,8 @@ UI_Init
 =================
 */
 void _UI_Init( qboolean inGameLoad ) {
-	int start, x;
+	// int start;
+	int x;
 
 	//uiInfo.inGameLoad = inGameLoad;
 
@@ -7535,7 +7536,7 @@ void _UI_Init( qboolean inGameLoad ) {
 
 	uiInfo.campaignMap = trap_R_RegisterShaderNoMip( "gfx/loading/camp_map.tga" );
 
-	start = trap_Milliseconds();
+	// start = trap_Milliseconds();
 
 	uiInfo.teamCount = 0;
 	uiInfo.characterCount = 0;

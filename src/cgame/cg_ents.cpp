@@ -114,7 +114,7 @@ void CG_AddLightstyle(centity_t *cent)
 	int		r, g, b;
 	int		stringlength;
 	float	offset;
-	int		offsetwhole;
+	// int		offsetwhole;
 	int		otime;
 	int		lastch, nextch;
 
@@ -134,7 +134,7 @@ void CG_AddLightstyle(centity_t *cent)
 	cent->dl_time = cg.time;
 
 	offset = ((float)otime)/LS_FRAMETIME;
-	offsetwhole = (int)offset;
+	// offsetwhole = (int)offset;
 
 	cent->dl_backlerp += offset;
 
@@ -2683,7 +2683,7 @@ CG_AddEntityToTag
 */
 qboolean CG_AddEntityToTag( centity_t *cent ) {
 	centity_t			*centParent;
-	entityState_t		*sParent;
+	// entityState_t		*sParent;
 	refEntity_t			ent;
 
 	// event-only entities will have been dealt with already
@@ -2704,7 +2704,7 @@ qboolean CG_AddEntityToTag( centity_t *cent ) {
 	}
 
 	centParent =	&cg_entities[cent->tagParent];
-	sParent =		&centParent->currentState;
+	// sParent =		&centParent->currentState;
 
 	// if parent isn't visible, then don't draw us
 	if (!centParent->currentValid) {

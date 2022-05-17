@@ -438,16 +438,17 @@ void Team_DroppedFlagThink(gentity_t *ent) {
 
 int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 	gclient_t *cl = other->client;
-//	gentity_t* te;
-	int our_flag, enemy_flag;
+	// gentity_t* te;
+	// int our_flag;
+	// int enemy_flag;
 
-	if (cl->sess.sessionTeam == TEAM_AXIS) {
-		our_flag = PW_REDFLAG;
-		enemy_flag = PW_BLUEFLAG;
-	} else {
-		our_flag = PW_BLUEFLAG;
-		enemy_flag = PW_REDFLAG;
-	}
+	// if (cl->sess.sessionTeam == TEAM_AXIS) {
+	// 	our_flag = PW_REDFLAG;
+	// 	enemy_flag = PW_BLUEFLAG;
+	// } else {
+	// 	our_flag = PW_BLUEFLAG;
+	// 	enemy_flag = PW_REDFLAG;
+	// }
 
 	if ( ent->flags & FL_DROPPED_ITEM ) {
 		// hey, its not home.  return it by teleporting it back
@@ -680,7 +681,8 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 	gentity_t	*spot;
 	gentity_t	*spots[MAX_TEAM_SPAWN_POINTS];
 
-	int			count, closest, defendingTeam;
+	int			count, closest;
+	// int 		defendingTeam;
 	int			i = 0;
 
 	char		*classname;
@@ -689,7 +691,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 	vec3_t		target;
 	vec3_t		farthest;
 	
-	defendingTeam = -1;
+	// defendingTeam = -1;
 
 	if (team == TEAM_AXIS) {
 		classname = "team_CTF_redspawn";
@@ -1647,7 +1649,7 @@ int QDECL G_SortPlayersByXPRate( const void *a, const void *b ) {
 void G_shuffleTeams(void)
 {
 	int i, cTeam;;
-	int aTeamCount[TEAM_NUM_TEAMS];
+	// int aTeamCount[TEAM_NUM_TEAMS];
 	int cnt = 0;
 	int	sortClients[MAX_CLIENTS];
 
@@ -1656,9 +1658,9 @@ void G_shuffleTeams(void)
 	G_teamReset(TEAM_AXIS, qtrue);
 	G_teamReset(TEAM_ALLIES, qtrue);
 
-	for( i = 0; i < TEAM_NUM_TEAMS; i++ ) {
-		aTeamCount[i] = 0;
-	}
+	// for( i = 0; i < TEAM_NUM_TEAMS; i++ ) {
+	// 	aTeamCount[i] = 0;
+	// }
 
 	for( i = 0; i < level.numConnectedClients; i++ ) {
 		cl = level.clients + level.sortedClients[ i ];

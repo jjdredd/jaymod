@@ -3947,7 +3947,7 @@ CG_LastWeaponUsed_f
 ==============
 */
 void CG_LastWeaponUsed_f( void ) {
-	int lastweap;
+	// int lastweap;
 
 	//fretn - #447
 	//osp-rtcw & et pause bug
@@ -3974,7 +3974,7 @@ void CG_LastWeaponUsed_f( void ) {
 	}
 
 	if(CG_WeaponSelectable(cg.switchbackWeapon)) {
-		lastweap = cg.weaponSelect;
+		// lastweap = cg.weaponSelect;
 		CG_FinishWeaponChange(cg.weaponSelect, cg.switchbackWeapon);
 	} else {	// switchback no longer selectable, reset cycle
 		cg.switchbackWeapon = 0;
@@ -5118,8 +5118,10 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	qhandle_t		mod, mark, shader;
 	sfxHandle_t		sfx, sfx2;
 	localEntity_t	*le;
-	qboolean		isSprite, alphaFade = qfalse;
-	int				r, duration, lightOverdraw, i, j, markDuration, volume;
+	qboolean		isSprite;
+	// qboolean        alphaFade = qfalse;
+	// int             r;
+	int				duration, lightOverdraw, i, j, markDuration, volume;
 	trace_t			trace;
 	vec3_t			lightColor, tmpv, tmpv2, sprOrg, sprVel;
 	float			radius, light, sfx2range = 0;
@@ -5188,11 +5190,11 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case WP_K43_SCOPE:
 	case WP_M97:
 		// actually yeah.  meant that.  very rare.
-		r = (rand() & 3) + 1; // JPW NERVE increased spark frequency so players can tell where rounds are coming from in MP
+		// r = (rand() & 3) + 1; // JPW NERVE increased spark frequency so players can tell where rounds are coming from in MP
 
 		volume = 64;
 
-/*		if ( r == 3 ) {
+		/* if ( r == 3 ) {
 			sfx = cgs.media.sfx_ric1;
 		} else if ( r == 2 ) {
 			sfx = cgs.media.sfx_ric2;
@@ -5257,7 +5259,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 				// mark and sound can potentially use the surface for override values
 
 				mark = cgs.media.bulletMarkShader;	// default
-				alphaFade = qtrue;		// max made the bullet mark alpha (he'll make everything in the game out of 1024 textures, all with alpha blend funcs yet...)
+				// alphaFade = qtrue;		// max made the bullet mark alpha (he'll make everything in the game out of 1024 textures, all with alpha blend funcs yet...)
 				//%	radius = 1.5f + rand()%2;	// slightly larger for DM
 				radius = 1.0f + 0.5f * (rand() % 2);
 
@@ -5265,20 +5267,20 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 				if(surfFlags & SURF_METAL || surfFlags & SURF_ROOF) {
 					sfx = cgs.media.sfx_bullet_metalhit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShaderMetal;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 				} else if(surfFlags & SURF_WOOD) {
 					sfx = cgs.media.sfx_bullet_woodhit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShaderWood;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 					radius += 0.4f;	// experimenting with different mark sizes per surface
 				} else if(surfFlags & SURF_GLASS) {
 					sfx = cgs.media.sfx_bullet_glasshit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShaderGlass;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 				} else {
 					sfx = cgs.media.sfx_bullet_stonehit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShader;
-					alphaFade = qtrue;					
+					// alphaFade = qtrue;
 				}
 				
 				// ydnar: set mark duration
@@ -5852,7 +5854,7 @@ CG_Tracer
 void CG_Tracer( vec3_t source, vec3_t dest, int sparks ) {
 	float		len, begin, end;
 	vec3_t		start, finish;
-	vec3_t		midpoint;
+	// vec3_t		midpoint;
 	vec3_t		forward;
 
 	// tracer
@@ -5873,9 +5875,9 @@ void CG_Tracer( vec3_t source, vec3_t dest, int sparks ) {
 
 	CG_DrawTracer( start, finish );
 
-	midpoint[0] = ( start[0] + finish[0] ) * 0.5;
-	midpoint[1] = ( start[1] + finish[1] ) * 0.5;
-	midpoint[2] = ( start[2] + finish[2] ) * 0.5;
+	// midpoint[0] = ( start[0] + finish[0] ) * 0.5;
+	// midpoint[1] = ( start[1] + finish[1] ) * 0.5;
+	// midpoint[2] = ( start[2] + finish[2] ) * 0.5;
 }
 
 

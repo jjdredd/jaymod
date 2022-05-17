@@ -26,7 +26,8 @@ WM_DrawObjectives
 
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	const char *s, *str;
-	int tempy, rows;
+	int rows;
+	// int tempy;
 	int msec, mins, seconds, tens; // JPW NERVE
 	vec4_t tclr =	{ 0.6f,		0.6f,		0.6f,		1.0f };
 
@@ -107,7 +108,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	}
 // JPW NERVE -- mission time & reinforce time
 	else {
-		tempy = y;
+		// tempy = y;
 		rows = 1;
 
 		CG_FillRect( x-5, y-2, width+5, 21, clrUiBack );
@@ -604,13 +605,14 @@ static int WM_DrawInfoLine( int x, int y, float fade ) {
 static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows, int absmaxrows ) {
 	vec4_t hcolor;
 	float tempx, tempy;
-	int height, width;
+	int width;
+	// int height;
 	int i;
 	int count = 0;
 	qboolean use_mini_chars = qfalse; // CHRUKER: b035 - Needed to check if using mini chars
 	vec4_t tclr =	{ 0.6f,		0.6f,		0.6f,		1.0f };
 
-	height = SMALLCHAR_HEIGHT * maxrows;
+	// height = SMALLCHAR_HEIGHT * maxrows;
 	width = INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;
 
 	// Jaybird - 10 px change

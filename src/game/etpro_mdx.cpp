@@ -1270,7 +1270,8 @@ static void mdx_bone_orientation(/*const*/ grefEntity_t *refent, int idx, vec3_t
 
 	mdx_t *oldBoneFrameModel, *boneFrameModel;
 
-	struct bone *oldBone, *bone;
+	struct bone *bone;
+	// struct bone *oldBone;
 	struct frame_bone *oldFrameBone, *frameBone;
 
 	int oldFrame, frame;
@@ -1298,7 +1299,7 @@ static void mdx_bone_orientation(/*const*/ grefEntity_t *refent, int idx, vec3_t
 	}
 
 	bone = &boneFrameModel->bones[idx];
-	oldBone = &oldBoneFrameModel->bones[idx];
+	// oldBone = &oldBoneFrameModel->bones[idx];
 
 	frameBone = &boneFrameModel->frames[frame].bones[idx];
 	oldFrameBone = &oldBoneFrameModel->frames[oldFrame].bones[idx];
@@ -1423,11 +1424,11 @@ int trap_R_LerpTagNumber( orientation_t *tag, /*const*/ grefEntity_t *refent, in
 	mdm_t *model;
 	vec3_t axis[3];
 	vec3_t offset;
-	mdx_t *mdx;
+	// mdx_t *mdx;
 	int bone;
 
 	model = &mdm_models[QHANDLETOINDEX(refent->hModel)];
-	mdx = &mdx_models[QHANDLETOINDEX(refent->frameModel)];
+	// mdx = &mdx_models[QHANDLETOINDEX(refent->frameModel)];
 
 	if (tagNum < 0 || tagNum >= model->tag_count)
 		return -1;
@@ -1485,10 +1486,10 @@ static void mdx_SwingAngles( float destination, float swingTolerance, float clam
 
 	if ( !*swinging ) {
 		// see if a swing should be started
-		float centerAngle;
+		// float centerAngle;
 
 		// zinx - use predictable center so server can match cgame easier
-		centerAngle = rint(*angle / swingTolerance) * swingTolerance;
+		//centerAngle = rint(*angle / swingTolerance) * swingTolerance;
 
 		swing = AngleSubtract( destination, *angle );
 		if ( swing >= swingTolerance || swing < -swingTolerance ) {
@@ -2244,16 +2245,15 @@ qboolean mdx_hit_test(const vec3_t start, const vec3_t end, /*const*/ gentity_t 
 /* For new old-style hit tests; returns -center- positions, to have -centered- bbox applied. */
 void mdx_head_position(/*const*/ gentity_t *ent, /*const*/ grefEntity_t *refent, vec3_t org)
 {
-	bg_character_t *character;
 	mdm_t *model;
 	orientation_t o;
 	vec3_t axis[3];
 	int i;
 
 	if (ent->s.eType == ET_PLAYER) {
-		character = BG_GetCharacter(ent->client->sess.sessionTeam, ent->client->sess.playerType);
+		BG_GetCharacter(ent->client->sess.sessionTeam, ent->client->sess.playerType);
 	} else {
-		character = BG_GetCharacter(BODY_TEAM(ent), BODY_CLASS(ent));
+		BG_GetCharacter(BODY_TEAM(ent), BODY_CLASS(ent));
 	}
 
 	model = &mdm_models[QHANDLETOINDEX(refent->hModel)];
@@ -2276,16 +2276,15 @@ void mdx_head_position(/*const*/ gentity_t *ent, /*const*/ grefEntity_t *refent,
 
 void mdx_legs_position(/*const*/ gentity_t *ent, /*const*/ grefEntity_t *refent, vec3_t org)
 {
-	bg_character_t *character;
 	mdm_t *model;
 	orientation_t o;
 	vec3_t org1, org2;
 	int i;
 
 	if (ent->s.eType == ET_PLAYER) {
-		character = BG_GetCharacter(ent->client->sess.sessionTeam, ent->client->sess.playerType);
+		BG_GetCharacter(ent->client->sess.sessionTeam, ent->client->sess.playerType);
 	} else {
-		character = BG_GetCharacter(BODY_TEAM(ent), BODY_CLASS(ent));
+		BG_GetCharacter(BODY_TEAM(ent), BODY_CLASS(ent));
 	}
 
 	model = &mdm_models[QHANDLETOINDEX(refent->hModel)];

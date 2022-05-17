@@ -505,9 +505,11 @@ may include ANIM_TOGGLEBIT
 ===============
 */
 void CG_SetLerpFrameAnimationRate( centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation ) {
-	animation_t		*anim, *oldanim;
-	int				transitionMin = -1, oldAnimTime, oldAnimNum;
-	qboolean		firstAnim = qfalse;
+	animation_t	*anim, *oldanim;
+	int	transitionMin = -1;
+	// int oldAnimTime;
+	int oldAnimNum;
+	qboolean firstAnim = qfalse;
 
 	bg_character_t *character = CG_CharacterForClientinfo( ci, cent );
 
@@ -515,7 +517,7 @@ void CG_SetLerpFrameAnimationRate( centity_t *cent, clientInfo_t *ci, lerpFrame_
 		return;
 	}
 
-	oldAnimTime	= lf->animationTime;
+	// oldAnimTime	= lf->animationTime;
 	oldanim		= lf->animation;
 	oldAnimNum	= lf->animationNumber;
 
@@ -589,7 +591,8 @@ void CG_RunLerpFrameRate( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, c
 
 	qboolean	done = qfalse;	// break out if we would loop forever
 
-	int snapTime, snapPosTime;
+	// int snapTime;
+	int snapPosTime;
 	vec3_t snapOrg;
 
 #define	ANIM_SCALEMAX_LOW	1.1
@@ -641,7 +644,7 @@ void CG_RunLerpFrameRate( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, c
 					CG_Printf("nextSnap out of date!\n");
 				}
 #endif
-				snapTime = cg.nextSnap->serverTime;
+				// snapTime = cg.nextSnap->serverTime;
 				snapPosTime = cent->nextState.pos.trTime;
 				VectorCopy( cent->nextState.pos.trBase, snapOrg );
 
@@ -653,12 +656,12 @@ void CG_RunLerpFrameRate( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, c
 #ifdef DEBUG
 				CG_Printf("snap out of date!\n");
 #endif
-				snapTime = cg.snap->serverTime;
+				// snapTime = cg.snap->serverTime;
 				snapPosTime = cent->currentState.pos.trTime;
 				VectorCopy( cent->currentState.pos.trBase, snapOrg );
 			}
 		} else {
-			snapTime = cg.snap->serverTime;
+			// snapTime = cg.snap->serverTime;
 			snapPosTime = cent->currentState.pos.trTime;
 			VectorCopy( cent->currentState.pos.trBase, snapOrg );
 		}
@@ -906,10 +909,10 @@ static void CG_SwingAngles( float destination, float swingTolerance, float clamp
 
 	if ( !*swinging ) {
 		// see if a swing should be started
-		float centerAngle;
+		// float centerAngle;
 
 		// zinx - use predictable center so server can match cgame easier
-		centerAngle = rint(*angle / swingTolerance) * swingTolerance;
+		// centerAngle = rint(*angle / swingTolerance) * swingTolerance;
 
 		swing = AngleSubtract( destination, *angle );
 		if ( swing >= swingTolerance || swing < -swingTolerance ) {
@@ -1029,7 +1032,8 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	vec3_t			velocity;
 	float			speed;
 	float			clampTolerance;
-	int				legsSet, torsoSet;
+	int				legsSet;
+	// int             torsoSet;
 	clientInfo_t	*ci;
 	bg_character_t	*character;
 
@@ -1042,7 +1046,7 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	}
 
 	legsSet = cent->currentState.legsAnim & ~ANIM_TOGGLEBIT;
-	torsoSet = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
+	// torsoSet = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
 
 	VectorCopy( cent->lerpAngles, headAngles );
 	headAngles[YAW] = AngleMod( headAngles[YAW] );

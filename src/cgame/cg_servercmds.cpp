@@ -517,6 +517,7 @@ void CG_ParseReinforcementTimes(const char *pszReinfSeedString)
 				cgs.aReinfOffset[i] *= 1000;
 				break;
 			}
+			//ignore compiler warning -Wunused-but-set-variable
 			GETVAL(dwDummy, 1);
 		}
 	}

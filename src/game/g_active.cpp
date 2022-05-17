@@ -1224,7 +1224,7 @@ once for each server frame, which makes for smooth demo recording.
 ==============
 */
 void ClientThink_real( gentity_t *ent, bool skipServerTime ) {
-	int			msec, oldEventSequence, monsterslick = 0;
+	int			msec, oldEventSequence;
 	pmove_t		pm;
 	usercmd_t	*ucmd;
 	gclient_t	*client = ent->client;
@@ -1498,7 +1498,7 @@ void ClientThink_real( gentity_t *ent, bool skipServerTime ) {
 		pm.cmd.weapon = client->ps.weapon;
 	}
 
-	monsterslick = Pmove( &pm );
+	Pmove( &pm );
 
 	// Gordon: thx to bani for this
 	// ikkyo - fix leaning players bug                                       

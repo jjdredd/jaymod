@@ -874,7 +874,7 @@ void Just_Got_Thrown (gentity_t *self)
 {
 	float	len;
 	vec3_t	vec;
-	qboolean prop_hits = qfalse;
+	// qboolean prop_hits = qfalse;
 
 	len = 0;
 
@@ -884,7 +884,7 @@ void Just_Got_Thrown (gentity_t *self)
 		
 		if (self->enemy)
 		{
-			prop_hits = qtrue;
+			// prop_hits = qtrue;
 
 			G_Damage ( self->enemy, self, self, NULL, NULL, 5, 0, MOD_CRUSH );
 				
@@ -899,24 +899,18 @@ void Just_Got_Thrown (gentity_t *self)
 		VectorSubtract (self->r.currentOrigin, self->s.origin2, vec);
 		len = VectorLength (vec);
 				
-		{
-			trace_t		trace;
-			vec3_t		end;
-			gentity_t	*traceEnt;
+		trace_t		trace;
+		vec3_t		end;
+		// gentity_t	*traceEnt;
 
-			VectorCopy (self->r.currentOrigin, end);
-			end[2] += 1;
+		VectorCopy (self->r.currentOrigin, end);
+		end[2] += 1;
 
-			trap_Trace( &trace, self->r.currentOrigin, self->r.mins, self->r.maxs, end, self->s.number, MASK_SHOT );
+		trap_Trace( &trace, self->r.currentOrigin, self->r.mins, self->r.maxs, end, self->s.number, MASK_SHOT );
 
-			traceEnt = &g_entities[ trace.entityNum ];
+		// traceEnt = &g_entities[ trace.entityNum ];
 
-			if (trace.startsolid)
-			{
-				len = 9999;
-			}
-		}
-		
+		if (trace.startsolid) len = 9999;
 	}
 
 	self->think = Props_Chair_Think;
