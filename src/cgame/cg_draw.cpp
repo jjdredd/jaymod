@@ -3256,7 +3256,7 @@ CG_DrawSpectatorMessage
 */
 static void CG_DrawSpectatorMessage( void ) {
 	const char *str, *str2;
-	float x, y;
+	float y;
 	static int lastconfigGet = 0;
 
 	if ( !cg_descriptiveText.integer )
@@ -3271,7 +3271,10 @@ static void CG_DrawSpectatorMessage( void ) {
 		lastconfigGet = cg.time;
 	}
 
-	x = (cg.snap->ps.pm_flags & PMF_LIMBO) ? 170 : 80;
+	#ifdef MV_SUPPORT
+		float x = (cg.snap->ps.pm_flags & PMF_LIMBO) ? 170 : 80;
+	#endif
+	
 	y = 408;
 
 	y -= 2 * TINYCHAR_HEIGHT;
@@ -3291,12 +3294,12 @@ static void CG_DrawSpectatorMessage( void ) {
 	str = va( CG_TranslateString( "Press %s to follow previous player" ), str2 );
 	CG_DrawStringExt( 8, 178, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 
-#ifdef MV_SUPPORT
-	str2 = BindingFromName( "mvactivate" );
-	str = va( CG_TranslateString( "- Press %s to %s multiview mode" ), str2, ((cg.mvTotalClients > 0) ? "disable" : "activate") );
-	CG_DrawStringExt( x, y, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
-	y += TINYCHAR_HEIGHT;
-#endif
+	#ifdef MV_SUPPORT
+		str2 = BindingFromName( "mvactivate" );
+		str = va( CG_TranslateString( "- Press %s to %s multiview mode" ), str2, ((cg.mvTotalClients > 0) ? "disable" : "activate") );
+		CG_DrawStringExt( x, y, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
+		y += TINYCHAR_HEIGHT;
+	#endif
 }
 
 
@@ -4613,11 +4616,11 @@ static void CG_DrawPlayerStatus( void ) {
 	int				value, value2, value3;
 	char			buffer[32];
 	// int            weap;
-	playerState_t	*ps;
+	// playerState_t	*ps;
 	rectDef_t		rect;
-//	vec4_t			colorFaded = { 1.f, 1.f, 1.f, 0.3f };
+	// vec4_t			colorFaded = { 1.f, 1.f, 1.f, 0.3f };
 
-	ps = &cg.snap->ps;
+	// ps = &cg.snap->ps;
 	
 	// Draw weapon icon and overheat bar
 	rect.x = SCREEN_WIDTH - 82;

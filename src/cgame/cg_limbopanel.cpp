@@ -2467,7 +2467,7 @@ void CG_LimboPanel_Setup( void ) {
 	panel_button_t* button;
 	panel_button_t** buttons = limboPanelButtons;
 	clientInfo_t* ci = &cgs.clientinfo[cg.clientNum];
-	bg_playerclass_t *classinfo;
+	// bg_playerclass_t *classinfo;
 	int i;
 	char buffer[256];
 
@@ -2533,7 +2533,7 @@ void CG_LimboPanel_Setup( void ) {
 	cgs.ccSelectedObjective = CG_LimboPanel_GetMaxObjectives();
 	cgs.ccSelectedWeaponNumber = 1;
 
-	classinfo = CG_LimboPanel_GetPlayerClass();
+	// classinfo = CG_LimboPanel_GetPlayerClass();
 	if( CG_LimboPanel_WeaponIsDisabled( cgs.ccSelectedWeapon ) ) {
 		// set weapon to default if disabled
 		// NOTE classWeapons[0] must NEVER be disabled

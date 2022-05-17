@@ -433,14 +433,12 @@ CG_PyroSmokeTrail
 ==========================
 */
 void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
-	int		step;
-	vec3_t	origin, lastPos, dir;
-	int		contents;
-	int		lastContents, startTime;
-	entityState_t	*es;
-	int		t;
+	int	step;
+	vec3_t origin, lastPos, dir;
+	int startTime;
+	entityState_t *es;
+	int	t;
 	float rnd;
-	localEntity_t	*le;
 	team_t	team;
 
 	switch (ent->currentState.weapon) {
@@ -492,10 +490,10 @@ void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 	t = step * ( (startTime + step) / step );
 
 	BG_EvaluateTrajectory( &es->pos, cg.time, origin, qfalse, es->effect2Time );
-	contents = CG_PointContents( origin, -1 );
+	CG_PointContents( origin, -1 );
 
 	BG_EvaluateTrajectory( &es->pos, ent->trailTime, lastPos, qfalse, es->effect2Time );
-	lastContents = CG_PointContents( lastPos, -1 );
+	CG_PointContents( lastPos, -1 );
 
 	ent->trailTime = cg.time;
 
@@ -543,23 +541,23 @@ void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 		}
 
 		if( team == TEAM_ALLIES ) { // allied team, generate blue smoke
-			le = CG_SmokePuff( origin, dir, 
-				  25+rnd*110,	// width
-				  rnd*0.5+0.5, rnd*0.5+0.5, 1, 0.5,
-				  4800+(rand()%2800), // duration was 2800+
-				  t,
-				  0, 
-				  0,
-				  cgs.media.smokePuffShader);
+			CG_SmokePuff( origin, dir, 
+				25+rnd*110,	// width
+				rnd*0.5+0.5, rnd*0.5+0.5, 1, 0.5,
+				4800+(rand()%2800), // duration was 2800+
+				t,
+				0, 
+				0,
+				cgs.media.smokePuffShader);
 		} else {
-			le = CG_SmokePuff( origin, dir, 
-				  25+rnd*110,	// width
-				  1.0, rnd*0.5+0.5, rnd*0.5+0.5, 0.5,
-				  4800+(rand()%2800), // duration was 2800+
-				  t,
-				  0, 
-				  0,
-				  cgs.media.smokePuffShader);
+			CG_SmokePuff( origin, dir, 
+				25+rnd*110,	// width
+				1.0, rnd*0.5+0.5, rnd*0.5+0.5, 0.5,
+				4800+(rand()%2800), // duration was 2800+
+				t,
+				0, 
+				0,
+				cgs.media.smokePuffShader);
 		}
 //			CG_ParticleExplosion( "expblue", lastPos, vec3_origin, 100 + (int)(rnd*400), 4, 4 );	// fire "flare"
 
@@ -2103,9 +2101,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	int			i;
 	qboolean	isPlayer;
 
-	bg_playerclass_t* classInfo;
-
-	classInfo = BG_GetPlayerClassInfo(cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls);
+	BG_GetPlayerClassInfo(cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls);
 
 	// (SA) might as well have this check consistant throughout the routine
 	isPlayer = (qboolean)(cent->currentState.clientNum == cg.snap->ps.clientNum);
@@ -6129,7 +6125,6 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 	// impact splash and mark
 	if ( flesh ) {
 		vec3_t origin;
-		localEntity_t *le; // JPW NERVE
 		float rnd, tmpf; // JPW NERVE
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
 		int i,headshot; // JPW NERVE
@@ -6164,7 +6159,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				VectorScale(tmpv2,35,tmpv2); // was 75, before that 55
 				tmpv2[2] = 0;
 				VectorAdd(tmpv,tmpv2,tmpv);
-				le = CG_SmokePuff( origin, tmpv, 5+rnd*10, 1, rnd*0.8, rnd*0.8, 0.5, 500+(rand()%800), cg.time, 0, 0, cgs.media.fleshSmokePuffShader);
+				CG_SmokePuff( origin, tmpv, 5+rnd*10, 1, rnd*0.8, rnd*0.8, 0.5, 500+(rand()%800), cg.time, 0, 0, cgs.media.fleshSmokePuffShader);
 			}
 		} else {
 			// puff out the front (more dust no blood)
@@ -6178,7 +6173,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				VectorScale(tmpv2,35,tmpv2); // was 75, before that 55
 				tmpv2[2] = 0;
 				VectorAdd(tmpv,tmpv2,tmpv);
-				le = CG_SmokePuff( origin, tmpv, 5+rnd*10,	rnd*0.3f+0.5f, rnd*0.3f+0.5f, rnd*0.3f+0.5f, 0.125f, 500+(rand()%300), cg.time, 0, 0, cgs.media.smokePuffShader);
+				CG_SmokePuff( origin, tmpv, 5+rnd*10,	rnd*0.3f+0.5f, rnd*0.3f+0.5f, rnd*0.3f+0.5f, 0.125f, 500+(rand()%300), cg.time, 0, 0, cgs.media.smokePuffShader);
 			}
 		}
 // jpw

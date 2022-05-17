@@ -571,7 +571,6 @@ void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir )
 	vec3_t			origin, velocity, dir;
 	trace_t			trace;
 	qboolean		foundtag;
-	clientInfo_t	*ci;
 	int				clientNum;
 	vec4_t			projection, color;	
 
@@ -638,8 +637,7 @@ void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir )
 		if( clientNum < 0 || clientNum >= MAX_CLIENTS ) {
 			CG_Error( "Bad clientNum on player entity");
 		}
-		ci = &cgs.clientinfo[ clientNum ];
-		CG_CharacterForClientinfo( ci, cent );
+		CG_CharacterForClientinfo( &cgs.clientinfo[ clientNum ], cent );
 
 		// Ridah, fetch the various positions of the tag_gib*'s
 		// and spawn the gibs from the correct places (especially the head)

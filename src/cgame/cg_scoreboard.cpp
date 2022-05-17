@@ -25,7 +25,8 @@ WM_DrawObjectives
 #define INFO_TOTAL_WIDTH		(INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH)
 
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
-	const char *s, *str;
+	const char *s;
+	// const char *str;
 	int rows;
 	// int tempy;
 	int msec, mins, seconds, tens; // JPW NERVE
@@ -66,10 +67,10 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 		s = CG_ConfigString( CS_MULTI_MAPWINNER );
 		buf = Info_ValueForKey( s, "winner" );
 
-		if ( atoi( buf ) == -1 )
-			str = "ITS A TIE!";
-		else if ( atoi( buf ) ) {
-			str = "ALLIES";
+		if ( atoi( buf ) == -1 ){
+			// str = "IT'S A TIE!";
+		} else if ( atoi( buf ) ) {
+			// str = "ALLIES";
 //			shader = "ui/assets/portraits/allies_win";
 			flagshader = "ui/assets/portraits/allies_win_flag.tga";
 			nameshader = "ui/assets/portraits/text_allies.tga";
@@ -78,9 +79,8 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 				cg.latchVictorySound = qtrue;
 				trap_S_StartLocalSound( trap_S_RegisterSound( "sound/music/allies_win.wav", qtrue ), CHAN_LOCAL_SOUND );	// FIXME: stream
 			}*/
-		}
-		else {
-			str = "AXIS";
+		} else {
+			// str = "AXIS";
 //			shader = "ui/assets/portraits/axis_win";
 			flagshader = "ui/assets/portraits/axis_win_flag.tga";
 			nameshader = "ui/assets/portraits/text_axis.tga";

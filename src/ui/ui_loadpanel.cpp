@@ -359,7 +359,7 @@ void UI_LoadPanel_RenderLoadingText( panel_button_t* button )
 	uiClientState_t	cstate;
 	char			downloadName[MAX_INFO_VALUE];
 	char			buff[2560];
-	static connstate_t	lastConnState;
+	// static connstate_t	lastConnState;
 	// static char			lastLoadingText[MAX_INFO_VALUE];
 	char			*p, *s = "";
 	float			y;
@@ -375,7 +375,7 @@ void UI_LoadPanel_RenderLoadingText( panel_button_t* button )
 	// if ( lastConnState > cstate.connState ) {
 	// 	lastLoadingText[0] = '\0';
 	// }
-	lastConnState = cstate.connState;
+	// lastConnState = cstate.connState;
 
 	if( !connect_ownerdraw ) {
 		if( !trap_Cvar_VariableValue( "ui_connecting" ) ) {

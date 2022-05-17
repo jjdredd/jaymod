@@ -321,14 +321,14 @@ void CG_TraceCapsule_World( trace_t *result, const vec3_t start, const vec3_t mi
 CG_PointContents
 ================
 */
-int		CG_PointContents( const vec3_t point, int passEntityNum ) {
-	int			i;
-	entityState_t	*ent;
-	centity_t	*cent;
+int	CG_PointContents( const vec3_t point, int passEntityNum ) {
+	int	i;
+	entityState_t*ent;
+	centity_t *cent;
 	clipHandle_t cmodel;
-	int			contents;
+	int	contents;
 
-	contents = trap_CM_PointContents (point, 0);
+	contents = trap_CM_PointContents(point, 0);
 
 	for ( i = 0 ; i < cg_numSolidEntities ; i++ ) {
 		cent = cg_solidEntities[ i ];

@@ -592,7 +592,7 @@ reinforce
 // -- called when time expires for a team deployment cycle and there is at least one guy ready to go
 */
 void reinforce(gentity_t *ent) {
-	int p, team;// numDeployable=0, finished=0; // TTimo unused
+	int p; // team, numDeployable=0, finished=0;
 	// char *classname;
 	gclient_t *rclient;
 
@@ -607,7 +607,7 @@ void reinforce(gentity_t *ent) {
 	}
 
 	// get team to deploy from passed entity
-	team = ent->client->sess.sessionTeam;
+	// team = ent->client->sess.sessionTeam;
 
 	// find number active team spawnpoints
 	// if (team == TEAM_AXIS)
