@@ -3653,7 +3653,7 @@ Bullet_Fire_Extended(
             trx,
             g_clientObjects[ actor->s.number ],
             damage,
-            (distanceFalloff ? DAMAGE_DISTANCEFALLOFF : 0 ),
+            distanceFalloff,
             GetAmmoTableData(actor->s.weapon)->mod);
     } else if (traceEnt.takedamage) {
         G_Damage(
