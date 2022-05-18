@@ -503,7 +503,7 @@ void CG_ParseReinforcementTimes(const char *pszReinfSeedString)
 	const char *tmp = pszReinfSeedString, *tmp2;
 	unsigned int i, j, dwOffset[TEAM_NUM_TEAMS];
 
-#define GETVAL(x,y) if((tmp = strchr(tmp, ' ')) == NULL) return; x = atoi(++tmp)/y;
+	#define GETVAL(x,y) if((tmp = strchr(tmp, ' ')) == NULL) return; x = atoi(++tmp)/y;
 
 	dwOffset[TEAM_ALLIES] = atoi(pszReinfSeedString) >> REINF_BLUEDELT;
 	GETVAL(dwOffset[TEAM_AXIS], (1 << REINF_REDDELT));
@@ -517,7 +517,7 @@ void CG_ParseReinforcementTimes(const char *pszReinfSeedString)
 				cgs.aReinfOffset[i] *= 1000;
 				break;
 			}
-			GETVAL(0, 1);
+			// GETVAL(dummy, 1);
 		}
 	}
 }
