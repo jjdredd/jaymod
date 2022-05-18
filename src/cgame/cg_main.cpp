@@ -1397,10 +1397,11 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.landmineClick  = trap_S_RegisterSound( "sound/weapons/landmine/click.wav", qfalse );
 	cgs.media.landmineLaunch = trap_S_RegisterSound( "sound/weapons/landmine/launch.wav", qfalse );
 
-    cgs.media.molotovBonk = trap_S_RegisterSound( "sound/weapons/molotov/bonk.wav", qfalse );
+	cgs.media.molotovBonk = trap_S_RegisterSound( "sound/weapons/molotov/bonk.wav", qfalse );
 
-    for (int i = 0; i < 5; i++)
-        cgs.media.molotovScream[i] = trap_S_RegisterSound( va( "sound/weapons/molotov/scream%02d.wav", i+1), qfalse );
+	for (int i = 0; i < 5; i++) {
+		cgs.media.molotovScream[i] = trap_S_RegisterSound( va( "sound/weapons/molotov/scream%02d.wav", i+1), qfalse );
+	}
 
 	// FIXME: send as a special event
 	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_1.wav", qfalse );

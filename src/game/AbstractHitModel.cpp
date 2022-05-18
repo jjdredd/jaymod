@@ -643,10 +643,11 @@ AbstractHitModel::tracePlayerBegin( TraceContext& trx )
     VectorCopy( _contextHitModel->worldVol.maxs, client.gentity.r.maxs );
     VectorSubtract( client.gentity.r.maxs, client.gentity.r.currentOrigin, client.gentity.r.maxs );
 
-if (!(cvars::g_test.ivalue & G_TEST_SKIP_LINK))
-    trap_LinkEntity( &client.gentity );
+    if ( !(cvars::g_test.ivalue & G_TEST_SKIP_LINK) ) {
+        trap_LinkEntity( &client.gentity );
+    }
 
-    if (dbg) {
+    if ( dbg ) {
         trx.debug
             << "\n" << colA( "original.mins" ) << xvec3( _originalBounds[0] )
             << "\n" << colA( "original.maxs" ) << xvec3( _originalBounds[1] )

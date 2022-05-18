@@ -426,8 +426,7 @@ This is the entry point to the server-side-only prediction code
 ===================
 */
 void G_PredictPlayerMove( gentity_t *ent, float frametime ) {
-    if (!G_SkipCorrectionSafe(ent))
-        return;
+	if ( !G_SkipCorrectionSafe(ent) ) return;
 
 	G_PredictPlayerStepSlideMove( ent, frametime );
 }

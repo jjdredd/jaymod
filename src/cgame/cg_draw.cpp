@@ -698,10 +698,11 @@ static float CG_DrawClock( float y ) {
 	vec4_t		timerBackground =	{ 0.16f,	0.2f,	0.17f,	0.8f	};
 	vec4_t		timerBorder     =	{ 0.5f,		0.5f,	0.5f,	0.5f	};
 
-    if (cg_drawClock.integer == 2)
-        strftime( s, sizeof( s ), "%H:%M:%S", timestamp_s );
-    else
-        strftime( s, sizeof( s ), "%I:%M:%S%p", timestamp_s );
+    	if (cg_drawClock.integer == 2) {
+        	strftime( s, sizeof( s ), "%H:%M:%S", timestamp_s );
+   	 } else {
+        	strftime( s, sizeof( s ), "%I:%M:%S%p", timestamp_s );
+   	 }
 
 	w = CG_Text_Width_Ext( s, 0.19f, 0, &cgs.media.limboFont1 );
 
@@ -720,8 +721,7 @@ CG_DrawTimer
 */
 
 static float CG_DrawTimer( float y ) {
-    if (cgs.gamestate != GS_PLAYING)
-        return y;
+	if (cgs.gamestate != GS_PLAYING) return y;
 
 	char		*s;
 	int			w;

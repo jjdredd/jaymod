@@ -4378,17 +4378,13 @@ void FireWeapon( gentity_t *ent ) {
 	qboolean callEvent = qtrue;
 	
 	// ydnar: dead guys don't fire guns
-	if( ent->client->ps.pm_type == PM_DEAD )
-		return;
+	if( ent->client->ps.pm_type == PM_DEAD ) return;
 	
-    // Playdead players do not fire guns either
-    if (ent->client->ps.eFlags & EF_PLAYDEAD)
-        return;
+	// Playdead players do not fire guns either
+	if (ent->client->ps.eFlags & EF_PLAYDEAD) return;
 
 	// Rafael mg42
-	if (ent->client->ps.persistant[PERS_HWEAPON_USE] && ent->active) {
-		return;
-	}
+	if (ent->client->ps.persistant[PERS_HWEAPON_USE] && ent->active) return;
 
 	// Ridah, need to call this for AI prediction also
 	CalcMuzzlePoints(ent, ent->s.weapon);

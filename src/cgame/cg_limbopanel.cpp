@@ -1311,9 +1311,8 @@ qboolean CG_LimboPanel_ClassButton_KeyDown( panel_button_t* button, int key ) {
 		return qfalse;
 	}
 
-    // Check if the class is disabled
-    if (CG_IsClassDisabled(button->data[1]))
-        return qfalse;
+	// Check if the class is disabled
+	if (CG_IsClassDisabled(button->data[1])) return qfalse;
 
 	if( key == K_MOUSE1 ) {
 		SOUND_SELECT;

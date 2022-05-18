@@ -151,9 +151,9 @@ trap_SendServerCommand( const string& cmd, const text::Buffer& buf, int slot )
 }
 
 void trap_SetConfigstring( int num, const char *string ) {
-    if (cvars::g_test.ivalue & G_TEST_LOG_SETCS)
-        G_LogPrintf( "SETCS[%3d]: %d bytes\n", num, string ? strlen( string ) : 0);
-
+	if (cvars::g_test.ivalue & G_TEST_LOG_SETCS) {
+		G_LogPrintf( "SETCS[%3d]: %d bytes\n", num, string ? strlen( string ) : 0);
+	}
 	Engine::ptr( G_SET_CONFIGSTRING, num, string );
 }
 
@@ -166,9 +166,9 @@ void trap_GetUserinfo( int num, char *buffer, int bufferSize ) {
 }
 
 void trap_SetUserinfo( int num, const char *buffer ) {
-    if (cvars::g_test.ivalue & G_TEST_LOG_SETUI)
-        G_LogPrintf( "SETUI[%2d]: %d bytes\n", num, buffer ? strlen( buffer ) : 0);
-
+	if (cvars::g_test.ivalue & G_TEST_LOG_SETUI) {
+		G_LogPrintf( "SETUI[%2d]: %d bytes\n", num, buffer ? strlen( buffer ) : 0);
+	}
 	Engine::ptr( G_SET_USERINFO, num, buffer );
 }
 

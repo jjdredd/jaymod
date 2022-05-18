@@ -311,50 +311,47 @@ G_PrivateMessage
 */
 void G_PrivateMessage( gentity_t *ent ) 
 {
-    // Just for good measure
-    if (!ent || !ent->client)
-        return;
+	// Just for good measure
+	if (!ent || !ent->client) return;
 
 	// No private messages
-	if (!g_privateMessages.integer)
-		return;
+	if (!g_privateMessages.integer) return;
 
-    int clientIndex = ent - g_entities;
+	int clientIndex = ent - g_entities;
 
-    User& user = *connectedUsers[clientIndex];
-    Client& actor = g_clientObjects[clientIndex];
+	User& user = *connectedUsers[clientIndex];
+	Client& actor = g_clientObjects[clientIndex];
 
 	// Disallow when muted
-	if (user.muted)
-		return;
+	if (user.muted) return;
 
 	// Get the arguments (this part sucks)
-    vector<string> args;
-    Engine::args( args );
+	vector<string> args;
+	Engine::args( args );
 
-    // Chop off first arg if say
-    string s = args[0];
-    str::toLower( s );
-    if (s.find( "say" ) != string::npos)
-        args.erase( args.begin() );
+	// Chop off first arg if say
+	string s = args[0];
+	str::toLower( s );
+	if (s.find( "say" ) != string::npos)
+		args.erase( args.begin() );
 
-    using namespace text;
-    Buffer ebuf;
-    ebuf << xfail( args[0] + " error: " );
+	using namespace text;
+	Buffer ebuf;
+	ebuf << xfail( args[0] + " error: " );
 
-    // At this point, we can enforce usage
+	// At this point, we can enforce usage
 	if (args.size() < 3) {
 		ebuf << ' ' << xvalue( "PLAYER_FILTER" ) << ' ' << xvalue( "MESSAGE..." );
-        cmd::printChat( &actor, ebuf );
+		cmd::printChat( &actor, ebuf );
 		return;
 	}
 
-    // Find matching clients
-    vector<Client*> clients;
-    if (cmd::matchClients( args[1], clients, ebuf )) {
-        cmd::printChat( &actor, ebuf );
-        return;
-    }
+	// Find matching clients
+	vector<Client*> clients;
+	if (cmd::matchClients( args[1], clients, ebuf )) {
+		cmd::printChat( &actor, ebuf );
+		return;
+	}
 
     // Build subscriber list
     set<int> subscribers;

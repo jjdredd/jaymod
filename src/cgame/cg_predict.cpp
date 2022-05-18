@@ -861,29 +861,37 @@ static int IsUnacceptableError( playerState_t *ps, playerState_t *pps ) {
         return 17;
     }
 
-    if (memcmp( pps->events, ps->events, sizeof(pps->events) ))
+    if (memcmp( pps->events, ps->events, sizeof(pps->events) )) {
         return 18;
+    }
 
-    if (memcmp( pps->eventParms, ps->eventParms, sizeof(pps->eventParms) ))
+    if (memcmp( pps->eventParms, ps->eventParms, sizeof(pps->eventParms) )) {
         return 19;
+    }
 
-    if (memcmp( pps->stats, ps->stats, sizeof(pps->stats) ))
+    if (memcmp( pps->stats, ps->stats, sizeof(pps->stats) )) {
         return 20;
+    }
 
-    if (memcmp( pps->persistant, ps->persistant, sizeof(pps->persistant) ))
+    if (memcmp( pps->persistant, ps->persistant, sizeof(pps->persistant) )) {
         return 21;
+    }
 
-    if (memcmp( pps->powerups, ps->powerups, sizeof(pps->powerups) ))
+    if (memcmp( pps->powerups, ps->powerups, sizeof(pps->powerups) )) {
         return 22;
+    }
 
-    if (memcmp( pps->ammo, ps->ammo, sizeof(pps->ammo) ))
+    if (memcmp( pps->ammo, ps->ammo, sizeof(pps->ammo) )) {
         return 23;
+    }
 
-    if (memcmp( pps->ammoclip, ps->ammoclip, sizeof(pps->ammoclip) ))
+    if (memcmp( pps->ammoclip, ps->ammoclip, sizeof(pps->ammoclip) )) {
         return 24;
+    }
 
-    if (memcmp( pps->holdable, ps->holdable, sizeof(pps->holdable) ))
+    if (memcmp( pps->holdable, ps->holdable, sizeof(pps->holdable) )) {
         return 25;
+    }
 
 	return 0;
 }

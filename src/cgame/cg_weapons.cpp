@@ -27,17 +27,10 @@ CG_StartWeaponAnim
 ==============
 */
 static void CG_StartWeaponAnim( int anim ) {
-	if ( cg.predictedPlayerState.pm_type >= PM_DEAD )
-		return;
-	
-    if (cg.predictedPlayerState.eFlags & EF_PLAYDEAD)
-        return;
-
-	if ( cg.pmext.weapAnimTimer > 0 )
-		return;
-
-	if( cg.predictedPlayerState.weapon == WP_NONE)
-		return;
+	if ( cg.predictedPlayerState.pm_type >= PM_DEAD ) return;
+	if ( cg.predictedPlayerState.eFlags & EF_PLAYDEAD ) return;
+	if ( cg.pmext.weapAnimTimer > 0 ) return;
+	if ( cg.predictedPlayerState.weapon == WP_NONE ) return;
 
 	cg.predictedPlayerState.weapAnim = ( ( cg.predictedPlayerState.weapAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT ) | anim;	
 }
@@ -3124,16 +3117,13 @@ getPrevWeapInBank
 */
 static int getPrevWeapInBank( int bank, int cycle ) {
 	cycle--;
-	if(cycle < 0)
-		cycle = MAX_WEAPS_IN_BANK_MP - 1;
+	if(cycle < 0) cycle = MAX_WEAPS_IN_BANK_MP - 1;
 
-	
-		while(!weapBanksMultiPlayer[bank][cycle]) {
-			cycle--;
+	while(!weapBanksMultiPlayer[bank][cycle]) {
+		cycle--;
+		if(cycle < 0) cycle = MAX_WEAPS_IN_BANK_MP - 1;
+	}
 
-			if(cycle < 0)
-			cycle = MAX_WEAPS_IN_BANK_MP - 1;
-		}
 	return weapBanksMultiPlayer[bank][cycle];
 }
 
@@ -4176,43 +4166,35 @@ void CG_WeaponBank_f(void) {
 	int	num, i, curweap;
 	int curbank = 0, curcycle = 0, bank = 0, cycle = 0;
 
-	if (!cg.snap)
-		return;
+	if (!cg.snap) return;
 
 	//fretn - #447
 	//osp-rtcw & et pause bug
-	if (cg.snap->ps.pm_type == PM_FREEZE ) {
-		return;
-	}
+	if (cg.snap->ps.pm_type == PM_FREEZE ) return;
 
-	if ( cg.snap->ps.pm_flags & PMF_FOLLOW )
-		return;
+	if ( cg.snap->ps.pm_flags & PMF_FOLLOW ) return;
 
-	if(cg.time - cg.weaponSelectTime < cg_weaponCycleDelay.integer)
-		return;	// force pause so holding it down won't go too fast
+	// force pause so holding it down won't go too fast
+	if(cg.time - cg.weaponSelectTime < cg_weaponCycleDelay.integer) return;
 	
-	if( cg.weaponSelect == WP_MORTAR_SET || cg.weaponSelect == WP_MOBILE_MG42_SET ) {
+	if(cg.weaponSelect == WP_MORTAR_SET || cg.weaponSelect == WP_MOBILE_MG42_SET) {
 		return;
 	}
 
-    // Jaybird - not while playing dead
-    if (cg.snap->ps.eFlags & EF_PLAYDEAD)
-        return;
+	// Jaybird - not while playing dead
+	if (cg.snap->ps.eFlags & EF_PLAYDEAD) return;
 
 	cg.weaponSelectTime = cg.time;	// flash the current weapon icon
 
 	// Don't try to switch when in the middle of reloading.
-	if ( cg.snap->ps.weaponstate == WEAPON_RELOADING )
-		return;
+	if ( cg.snap->ps.weaponstate == WEAPON_RELOADING ) return;
 
 	bank = atoi( CG_Argv( 1 ) );
 
-	if ( bank <= 0 || bank > MAX_WEAP_BANKS_MP ) {
-		return;
-	}
+	if ( bank <= 0 || bank > MAX_WEAP_BANKS_MP ) return;
 
 	curweap = cg.weaponSelect;
-	CG_WeaponIndex(curweap, &curbank, &curcycle);		// get bank/cycle of current weapon
+	CG_WeaponIndex(curweap, &curbank, &curcycle); // get bank/cycle of current weapon
 
 	if(!cg.lastWeapSelInBank[bank]) {
 		num = weapBanksMultiPlayer[bank][0];

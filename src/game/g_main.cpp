@@ -1777,11 +1777,11 @@ G_InitGame
 ============
 */
 void G_InitGame( int levelTime, int randomSeed, int restart ) {
-    memcpy( ammoTableMP_BACKUP, ammoTableMP, sizeof(ammoTableMP_BACKUP) );
+	memcpy( ammoTableMP_BACKUP, ammoTableMP, sizeof(ammoTableMP_BACKUP) );
 
-	int					i;
-	char				cs[MAX_INFO_STRING];
-	char				mapConfig[MAX_STRING_CHARS];
+	int   i;
+	char  cs[MAX_INFO_STRING];
+	char  mapConfig[MAX_STRING_CHARS];
 
 	G_Printf ("------- Game Initialization -------\n");
 	G_Printf ("gamename: %s\n", GAMEVERSION);
@@ -1789,51 +1789,46 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	srand( randomSeed );
 
-	/*
-     * Reference pak2.pk3 for pure-checks.
-     */
+	// Reference pak2.pk3 for pure-checks.
 	if (trap_FS_FOpenFile( "pak2.dat", &i, FS_READ ) != -1) {
-	    trap_FS_FCloseFile( i );
-    }
-    else {
-        G_Printf( "-------\n"); 
-        G_Printf( "------- WARNING: unable to open %s .\n", "pak2.dat" );
-        G_Printf( "------- Please verify you have installed %s correctly.\n", "pak2.pk3" );
-        G_Printf( "-------\n");
-    }
+		trap_FS_FCloseFile( i );
+	} else {
+		G_Printf( "-------\n"); 
+		G_Printf( "------- WARNING: unable to open %s .\n", "pak2.dat" );
+		G_Printf( "------- Please verify you have installed %s correctly.\n", "pak2.pk3" );
+		G_Printf( "-------\n");
+	}
 
-	/*
-     * Reference jaymod-X.Y.Z.pk3 for pure-checks.
-     */
+	// Reference jaymod-X.Y.Z.pk3 for pure-checks.
 	if (trap_FS_FOpenFile( JAYMOD_packageBase ".dat", &i, FS_READ ) != -1) {
-        trap_FS_FCloseFile( i );
-    }
-    else {
-        G_Printf( "-------\n");
-        G_Printf( "------- WARNING: unable to open %s .\n", JAYMOD_packageBase ".dat" );
-        G_Printf( "------- Please verify you have installed %s correctly.\n", JAYMOD_pk3 );
-        G_Printf( "-------\n");
-    }
+		trap_FS_FCloseFile( i );
+	} else {
+		G_Printf( "-------\n");
+		G_Printf( "------- WARNING: unable to open %s .\n", JAYMOD_packageBase ".dat" );
+		G_Printf( "------- Please verify you have installed %s correctly.\n", JAYMOD_pk3 );
+		G_Printf( "-------\n");
+	}
 
 	G_RegisterCvars();
-    process.init();
-    molotov::init();
+	process.init();
+	molotov::init();
 	BG_cpuUpdate();
-    adminLog.init();
+	adminLog.init();
 
-    // Load users databases
+	// Load users databases
 	levelDB.load();
 	userDB.load( false );
 
-    // Load maps database
-    mapDB.load();
+	// Load maps database
+	mapDB.load();
 
-    // Load censor word list
-    censorDB.load();
+	// Load censor word list
+	censorDB.load();
 
-    // We guarantee that this array always points a user object.
-    for (int i = 0; i < MAX_CLIENTS; i++)
-        connectedUsers[i] = &User::BAD;
+	// We guarantee that this array always points a user object.
+	for (int i = 0; i < MAX_CLIENTS; i++) {
+		connectedUsers[i] = &User::BAD;
+	}
 
 	// Xian enforcemaxlives stuff	
 	/*
@@ -1841,7 +1836,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	in case the g_maxlives was changed, and a map_restart happened
 	*/
 	ClearMaxLivesBans();
-	
+
 	// just for verbosity
 	if( g_gametype.integer != GT_WOLF_LMS ) {
 		if( g_enforcemaxlives.integer &&
@@ -1853,9 +1848,10 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	G_ProcessIPBans();
 	G_InitMemory();
 
-    // NERVE - SMF - intialize gamestate
-    if (cvars::gameState.ivalue == GS_INITIALIZE)
-        cvars::gameState.set( cvars::g_warmup.ivalue ? GS_WARMUP : GS_PLAYING );
+	 // NERVE - SMF - intialize gamestate
+	 if (cvars::gameState.ivalue == GS_INITIALIZE) {
+	     cvars::gameState.set( cvars::g_warmup.ivalue ? GS_WARMUP : GS_PLAYING );
+	 }
 
 	// set some level globals
 	i = level.server_settings;
@@ -2053,15 +2049,18 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// initialize all clients for this game
 	level.maxclients = g_maxclients.integer;
 	level.clients = g_clients;
-	for (i = 0; i < MAX_CLIENTS; i++)
+	for (i = 0; i < MAX_CLIENTS; i++){
 		g_clientObjects[i].init();
+	}
 
-    for (i = 0; i < MAX_GENTITIES; i++)
-        g_entityObjects[i].init();
+	for (i = 0; i < MAX_GENTITIES; i++){
+		g_entityObjects[i].init();
+	}
 
 	// set client fields on player ents
-	for (i = 0; i < level.maxclients ; i++ )
+	for (i = 0; i < level.maxclients ; i++ ) {
 		g_entities[i].client = level.clients + i;
+	}
 
 	// always leave room for the max number of clients,
 	// even if they aren't all used, so numbers inside that
@@ -2078,12 +2077,14 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// reserve some spots for dead player bodies
 	InitBodyQue();
 
-    // Jaybird
-    // If this is campaign mode and it's a new campaign with the reset xp flag set,
-    // have the userDB wipe out all xp records if the client is connected or not.
-    if (g_gametype.integer == GT_WOLF_CAMPAIGN && level.newCampaign)
-        if (g_xpSave.integer & XPSAVE_RESETCAMPAIGN)
-            userDB.xpResetAll();
+	// Jaybird
+	// If this is campaign mode and it's a new campaign with the reset xp flag set,
+	// have the userDB wipe out all xp records if the client is connected or not.
+	if (g_gametype.integer == GT_WOLF_CAMPAIGN && level.newCampaign) {
+		if (g_xpSave.integer & XPSAVE_RESETCAMPAIGN) {
+			userDB.xpResetAll();
+		}
+	}
 
 	numSplinePaths = 0 ;
 	numPathCorners = 0;

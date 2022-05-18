@@ -412,8 +412,9 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
         string& s = locStrings[i];
 
         // Justify 1 is right align
-        if (cg_locationJustify.integer == 1)
+        if (cg_locationJustify.integer == 1) {
     		x = int( rect->x + ( width - 4 - CG_Text_Width_Ext( s.c_str(), .2f, 0, &cgs.media.limboFont2 ) ) );
+	}
 
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT,  .2f, .2f, tclr, s.c_str(), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 	}

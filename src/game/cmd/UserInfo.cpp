@@ -58,21 +58,21 @@ UserInfo::doUser( Buffer& buf, const User& user, InlineText& cA, InlineText& cB 
     char ftime[32];
     strftime( ftime, sizeof(ftime), "%c", localtime( &now ));
 
-    buf << xheader( "-USER INFORMATION" )
-        << '\n' << cA( "name" ) << cB( user.namex );
+    buf << xheader( "-USER INFORMATION" ) << '\n' << cA( "name" ) << cB( user.namex );
 
-    if (lev.namex.empty())
+    if (lev.namex.empty()) {
         buf << '\n' << cA( "level" ) << cB( lev.level );
-    else
+    } else {
         buf << '\n' << cA( "level" ) << cB( lev.level ) << " (" << xvalue( lev.namex ) << ')';
+    }
 
-        buf << '\n' << cA( "GUID"        ) << cB( user.guid )
-            << " (USERID: " << xvalue( user.guid.length() == 32 ? user.guid.substr( 24 ) : "" ) << ')'
-        << '\n' << cA( "IP"          ) << cB( user.ip )
-        << '\n' << cA( "MAC"         ) << cB( user.mac )
-        << '\n' << cA( "timestamp"   ) << cB( ftime )
-        << '\n' << cA( "greet-text"  ) << cB( user.greetingText.empty() ? "none" : user.greetingText )
-        << '\n' << cA( "greet-audio" ) << cB( user.greetingAudio.empty() ? "none" : user.greetingAudio  );
+    buf << '\n' << cA( "GUID"    ) << cB( user.guid )
+        << " (USERID: " << xvalue( user.guid.length() == 32 ? user.guid.substr( 24 ) : "" ) << ')'
+    << '\n' << cA( "IP"          ) << cB( user.ip )
+    << '\n' << cA( "MAC"         ) << cB( user.mac )
+    << '\n' << cA( "timestamp"   ) << cB( ftime )
+    << '\n' << cA( "greet-text"  ) << cB( user.greetingText.empty() ? "none" : user.greetingText )
+    << '\n' << cA( "greet-audio" ) << cB( user.greetingAudio.empty() ? "none" : user.greetingAudio  );
 
     if (user.muted) {
         buf << '\n' << xheader( "-MUTE INFORMATION" );

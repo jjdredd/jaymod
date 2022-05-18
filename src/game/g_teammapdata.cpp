@@ -707,8 +707,9 @@ void G_SendInfo(gentity_t* e, stringstream& buffer, int& ax_cnt, int& al_cnt, bo
     msg << ax_cnt << " " << al_cnt << "\"" << buffer.str() << "\"";
 
     // Send the command
-if (!(cvars::g_test.ivalue & G_TEST_SKIP_EINFO))
-    trap_SendServerCommand( e-g_entities, msg.str().c_str() );
+    if (!(cvars::g_test.ivalue & G_TEST_SKIP_EINFO)) {
+        trap_SendServerCommand( e-g_entities, msg.str().c_str() );
+    }
 
     // Empty some variables
     started = true;
