@@ -2282,9 +2282,10 @@ static void CG_DrawCrosshair(void) {
 	w *= ( 1 + f*2.0 );
 	h *= ( 1 + f*2.0 );
 	
-	x = cg_crosshairX.integer;
-	y = cg_crosshairY.integer;
+	x = y = 0;
 	CG_AdjustFrom640( &x, &y, &w, &h );
+	x = cg_crosshairX;
+	y = cg_crosshairY;
 
 	hShader = cgs.media.crosshairShader[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ];
 
@@ -2292,9 +2293,10 @@ static void CG_DrawCrosshair(void) {
 
 	if ( cg.crosshairShaderAlt[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ] ) {
 		w = h = cg_crosshairSize.value;
-		x = cg_crosshairX.integer;
-		y = cg_crosshairY.integer;
+		x = y = 0;
 		CG_AdjustFrom640( &x, &y, &w, &h );
+		x = cg_crosshairX;
+		y = cg_crosshairY;
 
 		if(cg_crosshairHealth.integer == 0) {
 			trap_R_SetColor(cg.xhairColorAlt);
