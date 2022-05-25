@@ -3275,7 +3275,6 @@ PM_AdjustAimSpreadScale
 #define	AIMSPREAD_INCREASE_RATE		665.0f      // (was 800.0f)
 #define	AIMSPREAD_VIEWRATE_MIN		75.0f		// degrees per second (was 30.0f)
 #define	AIMSPREAD_VIEWRATE_RANGE	60.0f		// degrees per second (was 120.0f)
-#define	AIMSPREAD_HISTORY_FRAMES	4		    // number of frames for spread moving average
 
 void PM_AdjustAimSpreadScale( void ) {
 	int		i;

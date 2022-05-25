@@ -1139,6 +1139,7 @@ typedef enum
 #define	MAX_EVENTS				4	// max events per frame before we drop events
 //#define	MAX_EVENTS				2	// max events per frame before we drop events
 
+#define	AIMSPREAD_HISTORY		4   // number of frames for spread moving average
 
 #define PS_PMOVEFRAMECOUNTBITS	6
 
@@ -1286,9 +1287,9 @@ typedef struct playerState_s {
 	float		aimSpreadScaleFloat;	// (SA) the server-side aimspreadscale that lets it track finer changes but still only
 										// transmit the 8bit int to the client
 	int			aimSpreadScale;			// 0 - 255 increases with angular movement		// Arnout : DOES get send over the network
-	int			aimSpreadHistoryAngle[AIMSPREAD_HISTORY_FRAMES]
-	int			aimSpreadHistoryTime[AIMSPREAD_HISTORY_FRAMES]
-	int			aimSpreadHistoryHead	// current index for aimSpreadHistory
+	int			aimSpreadHistoryAngle[AIMSPREAD_HISTORY];
+	int			aimSpreadHistoryTime[AIMSPREAD_HISTORY];
+	int			aimSpreadHistoryHead;	// current index for aimSpreadHistory
 	int			lastFireTime;			// used by server to hold last firing frame briefly when randomly releasing trigger (AI)
 
 	int			quickGrenTime;
