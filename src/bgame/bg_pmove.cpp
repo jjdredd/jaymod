@@ -3268,6 +3268,71 @@ void PM_CoolWeapons( void ) {
 
 /*
 ==============
+PM_AimSpreadAngle
+==============
+*/
+
+float PM_AimSpreadAngle(void)
+{   
+	int head, milliseconds, referenceTime; //, count;
+	float angle, gap;
+
+	angle = 0;
+	// take player movement into account (even if only for the scoped weapons)
+	// TODO: also check for jump/crouch and adjust accordingly
+	if(BG_IsScopedWeapon(pm->ps->weapon)) {
+		for(int i = 0; i < 2; i++) {
+			angle += fabs(pm->ps->velocity[i]);
+		}
+	} else {
+		// take player view rotation into account
+		for(int i = 0; i < 2; i++ ) {
+			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) );
+		}
+	}
+
+	//abuse cg_delag as a temporary way of turning spread history on/off
+	//cg_delag 2 == calculate a moving average, otherwise exit now
+	if ( !(cg_delag.integer & 2) ) return angle;
+
+	///////////////////////////////////////////////////////////////////////////////
+    
+    //fill the spreadHistory array as we go
+    head = pm->ps->aimSpreadHistoryHead;
+    pm->ps->aimSpreadHistoryAngle[head] = angle;
+
+    //calculate average viewchange for recent history
+    milliseconds = pm->ps->aimSpreadHistoryTime[head];
+
+	//count = 1;
+	referenceTime = milliseconds;
+    //step back through the spread history and add up the total recent spread
+    for (int n = 0; n < (AIMSPREAD_HISTORY - 1); n++) {
+        head--;
+        if ( head < 0 ) head = AIMSPREAD_HISTORY - 1;
+
+        gap = referenceTime - pm->ps->aimSpreadHistoryTime[head];
+        referenceTime = pm->ps->aimSpreadHistoryTime[head];
+
+        // don't count any more history if interval is negative or more than 50ms
+        if (gap <= 0 || gap > 50) {
+        	n = AIMSPREAD_HISTORY;
+        	break;
+        }
+
+        angle += pm->ps->aimSpreadHistoryAngle[head];
+        milliseconds += gap;
+        //count++;
+    }
+
+    pm->ps->aimSpreadHistoryHead++;
+    if ( pm->ps->aimSpreadHistoryHead >= AIMSPREAD_HISTORY ) pm->ps->aimSpreadHistoryHead = 0;
+
+    return angle / (float(milliseconds) / 1000.0f); // angle from moving avg
+}
+
+/*
+==============
 PM_AdjustAimSpreadScale
 ==============
 */
@@ -3277,7 +3342,6 @@ PM_AdjustAimSpreadScale
 #define	AIMSPREAD_VIEWRATE_RANGE	60.0f		// degrees per second (was 120.0f)
 
 void PM_AdjustAimSpreadScale( void ) {
-	int		i;
 	float	increase, decrease, speed, scale;
 	float	cmdTime, cmdTime, wpnScale;
 
@@ -3427,71 +3491,6 @@ void PM_AdjustAimSpreadScale( void ) {
 	if (pm->ps->aimSpreadScaleFloat > 255) pm->ps->aimSpreadScaleFloat = 255;
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
-}
-
-/*
-==============
-PM_AimSpreadAngle
-==============
-*/
-
-float PM_AimSpreadAngle(void)
-{   
-	int head, milliseconds, referenceTime; //, count;
-	float angle, gap;
-
-	angle = 0;
-	// take player movement into account (even if only for the scoped weapons)
-	// TODO: also check for jump/crouch and adjust accordingly
-	if(BG_IsScopedWeapon(pm->ps->weapon)) {
-		for(i = 0; i < 2; i++) {
-			angle += fabs(pm->ps->velocity[i]);
-		}
-	} else {
-		// take player view rotation into account
-		for( i = 0; i < 2; i++ ) {
-			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) );
-		}
-	}
-
-	//abuse cg_delag as a temporary way of turning spread history on/off
-	//cg_delag 2 == calculate a moving average, otherwise exit now
-	if ( !(cg_delag.integer & 2) ) return angle;
-
-	///////////////////////////////////////////////////////////////////////////////
-    
-    //fill the spreadHistory array as we go
-    head = pm->ps->aimSpreadHistoryHead;
-    pm->ps->aimSpreadHistoryAngle[head] = angle;
-
-    //calculate average viewchange for recent history
-    milliseconds = aimSpreadHistoryTime[head];
-
-	//count = 1;
-	referenceTime = milliseconds;
-    //step back through the spread history and add up the total recent spread
-    for (int n = 0; n < (AIMSPREAD_HISTORY - 1); n++) {
-        head--;
-        if ( head < 0 ) head = AIMSPREAD_HISTORY - 1;
-
-        gap = referenceTime - aimSpreadHistoryTime[head];
-        referenceTime = aimSpreadHistoryTime[head];
-
-        // don't count any more history if interval is negative or more than 50ms
-        if (gap <= 0 || gap > 50) {
-        	n = AIMSPREAD_HISTORY;
-        	break;
-        }
-
-        angle += aimSpreadHistoryAngle[head];
-        milliseconds += gap;
-        //count++;
-    }
-
-    spreadHistoryHead++;
-    if ( spreadHistoryHead >= AIMSPREAD_HISTORY ) spreadHistoryHead = 0;
-
-    return angle / (float(milliseconds) / 1000.0f); // angle from moving avg
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
