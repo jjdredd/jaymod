@@ -3342,8 +3342,7 @@ PM_AdjustAimSpreadScale
 #define	AIMSPREAD_VIEWRATE_RANGE	60.0f		// degrees per second (was 120.0f)
 
 void PM_AdjustAimSpreadScale( void ) {
-	float	increase, decrease, speed, scale;
-	float	cmdTime, cmdTime, wpnScale;
+	float increase, decrease, speed, scale, cmdTime, wpnScale;
 
 	// all weapons are very inaccurate in zoomed mode
 	if(pm->ps->eFlags & EF_ZOOMING) {
