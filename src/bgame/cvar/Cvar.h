@@ -96,6 +96,8 @@ namespace objects {
     extern Cvar bg_proneDelay;
 
     extern Cvar gameState;
+
+    extern Cvar tempSpread; // 0 = default, 1 = moving average, 2 = no turn spread
 }
 
 ///////////////////////////////////////////////////////////////////////////////

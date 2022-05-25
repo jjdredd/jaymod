@@ -249,7 +249,8 @@ void CG_ParseJaymodinfo( void) {
     cvars::bg_dynamiteTime.set   ( Info_ValueForKey( info, "5" ));
     cvars::bg_glow.set           ( Info_ValueForKey( info, "6" ));
     cvars::bg_misc.set           ( Info_ValueForKey( info, "7" ));
-    cvars::bg_panzerWar.set      ( Info_ValueForKey( info, "8" ));
+    //cvars::bg_panzerWar.set      ( Info_ValueForKey( info, "8" ));
+    cvars::tempSpread.set      ( Info_ValueForKey( info, "8" ));
     cvars::bg_poisonSyringes.set ( Info_ValueForKey( info, "9" ));
     cvars::bg_skills.set         ( Info_ValueForKey( info, "a" ));
     cvars::bg_sniperWar.set      ( Info_ValueForKey( info, "b" ));

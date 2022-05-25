@@ -76,7 +76,9 @@ namespace objects {
 
     Cvar bg_proneDelay      ( "cg_proneDelay",         "0",   CVAR_ROM );
 
-    Cvar gameState( "gameState", "-1", CVAR_ROM );
+    Cvar gameState ( "gameState", "-1", CVAR_ROM );
+
+    Cvar tempSpread ( "tempSpread", "1", CVAR_ROM );
 
 ///////////////////////////////////////////////////////////////////////////////
 

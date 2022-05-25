@@ -107,6 +107,8 @@ namespace objects {
     Cvar sv_tempBanMessage( "sv_tempBanMessage", "", CVAR_ROM );
 
     Cvar g_test( "g_test", "0", 0, NULL );  // TODO: nuke when done with scale testing
+
+    Cvar tempSpread( "tempSpread", "1", CVAR_JAYMODINFO );
 } // namespace objects
 
 ///////////////////////////////////////////////////////////////////////////////

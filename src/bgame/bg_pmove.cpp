@@ -3272,63 +3272,55 @@ PM_AimSpreadAngle
 ==============
 */
 
-float PM_AimSpreadAngle(void)
+float PM_AimSpreadMovingAverage( float angle )
 {   
-	int head, milliseconds, referenceTime; //, count;
-	float angle, gap;
+	int head, time, referenceTime, count;
+	int timeBetweenCommands;
 
-	angle = 0;
-	// take player movement into account (even if only for the scoped weapons)
-	// TODO: also check for jump/crouch and adjust accordingly
-	if(BG_IsScopedWeapon(pm->ps->weapon)) {
-		for(int i = 0; i < 2; i++) {
-			angle += fabs(pm->ps->velocity[i]);
-		}
-	} else {
-		// take player view rotation into account
-		for(int i = 0; i < 2; i++ ) {
-			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) );
-		}
-	}
-
-	//abuse g_hitmodeDebug as a temporary way of turning spread history on/off
-	//g_hitmodeDebug 1 == calculate a moving average, otherwise exit now
-	if (cvars::bg_proneDelay.ivalue == 0) return angle;
-
-	///////////////////////////////////////////////////////////////////////////////
+	//this is the first movement so there is no history, initialize
+	if(!(pm->pmext->aimSpreadHistoryHead)) pm->pmext->aimSpreadHistoryHead = 0;
     
     //fill the spreadHistory array as we go
-    head = pm->ps->aimSpreadHistoryHead;
-    pm->ps->aimSpreadHistoryAngle[head] = angle;
+    head = pm->pmext->aimSpreadHistoryHead;
+    pm->pmext->aimSpreadHistoryAngle[head] = angle;
+    pm->pmext->aimSpreadHistoryTime[head] = pm->cmd.serverTime;
 
     //calculate average viewchange for recent history
-    milliseconds = pm->ps->aimSpreadHistoryTime[head];
+    time = pm->cmd.serverTime - pm->oldcmd.serverTime;
 
-	//count = 1;
-	referenceTime = milliseconds;
+	count = 1;
+	referenceTime = pm->pmext->aimSpreadHistoryTime[head];
     //step back through the spread history and add up the total recent spread
-    for (int n = 0; n < (AIMSPREAD_HISTORY - 1); n++) {
+    for (int n = 0; n < (AIMSPREAD_MAX_HISTORY - 1); n++) {
+    	//Com_Printf( "^3referenceTime: %i \n", referenceTime );
         head--;
-        if ( head < 0 ) head = AIMSPREAD_HISTORY - 1;
+        if ( head < 0 ) head = AIMSPREAD_MAX_HISTORY - 1;
+        //Com_Printf( "^3prevTime: %i \n", pm->pmext->aimSpreadHistoryTime[head] );
 
-        gap = referenceTime - pm->ps->aimSpreadHistoryTime[head];
-        referenceTime = pm->ps->aimSpreadHistoryTime[head];
+        timeBetweenCommands = referenceTime - pm->pmext->aimSpreadHistoryTime[head];
+        referenceTime = pm->pmext->aimSpreadHistoryTime[head];
 
         // don't count any more history if interval is negative or more than 50ms
-        if (gap <= 0 || gap > 50) {
-        	n = AIMSPREAD_HISTORY;
+        //Com_Printf( "^3timeBetweenCommands: %i \n", timeBetweenCommands );
+        if (timeBetweenCommands <= 0 || timeBetweenCommands > 50) {
+        	n = AIMSPREAD_MAX_HISTORY;
         	break;
         }
 
-        angle += pm->ps->aimSpreadHistoryAngle[head];
-        milliseconds += gap;
-        //count++;
+        angle += pm->pmext->aimSpreadHistoryAngle[head];
+        Com_Printf( "^1angle +=: %i \n", pm->pmext->aimSpreadHistoryAngle[head] );
+        time += timeBetweenCommands;
+        count++;
     }
+    if ( count < AIMSPREAD_MAX_HISTORY) Com_Printf( "^3count: %i \n", count );
 
-    pm->ps->aimSpreadHistoryHead++;
-    if ( pm->ps->aimSpreadHistoryHead >= AIMSPREAD_HISTORY ) pm->ps->aimSpreadHistoryHead = 0;
+    pm->pmext->aimSpreadHistoryHead++;
+    if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) pm->pmext->aimSpreadHistoryHead = 0;
 
-    return angle / (float(milliseconds) / 1000.0f); // angle from moving avg
+	Com_Printf( "^3angle: %f \n", angle );
+	Com_Printf( "^3time: %i \n", time );
+
+    return angle / (float(time) / 1000.0f); // angle from moving avg
 }
 
 /*
@@ -3337,12 +3329,30 @@ PM_AdjustAimSpreadScale
 ==============
 */
 #define	AIMSPREAD_DECREASE_RATE		200.0f		
-#define	AIMSPREAD_INCREASE_RATE		665.0f      // (was 800.0f)
-#define	AIMSPREAD_VIEWRATE_MIN		75.0f		// degrees per second (was 30.0f)
-#define	AIMSPREAD_VIEWRATE_RANGE	60.0f		// degrees per second (was 120.0f)
+//#define	AIMSPREAD_INCREASE_RATE		665.0f      // (was 800.0f)
+//#define	AIMSPREAD_VIEWRATE_MIN		75.0f		// degrees per second (was 30.0f)
+//#define	AIMSPREAD_VIEWRATE_RANGE	60.0f		// degrees per second (was 120.0f)
+
 
 void PM_AdjustAimSpreadScale( void ) {
-	float increase, decrease, speed, scale, cmdTime, wpnScale;
+	float com_maxfps = CG_Cvar_Get("com_maxfps");
+	
+
+	float AIMSPREAD_INCREASE_RATE;
+	float AIMSPREAD_VIEWRATE_MIN;
+	float AIMSPREAD_VIEWRATE_RANGE;
+
+	if( cvars::tempSpread.ivalue == 0) {
+		AIMSPREAD_INCREASE_RATE = 800.0f;
+		AIMSPREAD_VIEWRATE_MIN = 30.0f;
+		AIMSPREAD_VIEWRATE_RANGE = 120.0f;
+	} else {
+		AIMSPREAD_INCREASE_RATE = 800.0f; //665
+		AIMSPREAD_VIEWRATE_MIN = 30.0f; //75
+		AIMSPREAD_VIEWRATE_RANGE = 120.0f; //60
+	}
+
+	float increase, decrease, angle, speed, scale, timeBetweenCommands, wpnScale;
 
 	// all weapons are very inaccurate in zoomed mode
 	if(pm->ps->eFlags & EF_ZOOMING) {
@@ -3358,8 +3368,13 @@ void PM_AdjustAimSpreadScale( void ) {
         return;
     }
 
-    pm->ps->aimSpreadHistoryAngle[pm->ps->aimSpreadHistoryHead] = pm->cmd.serverTime;
-    cmdTime = float(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0f;
+    timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
+
+    if (timeBetweenCommands < int(1000.0 / com_maxfps->integer)) {
+	Com_Printf( "FAIL" );
+    }
+
+    timeBetweenCommands = float(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0f;
 
 	wpnScale = 0.0f;
 	switch(pm->ps->weapon) {
@@ -3459,11 +3474,44 @@ void PM_AdjustAimSpreadScale( void ) {
                 wpnScale *= 0.50f;
         }
 
-		decrease = (cmdTime * AIMSPREAD_DECREASE_RATE) / wpnScale;
+		decrease = (timeBetweenCommands * AIMSPREAD_DECREASE_RATE) / wpnScale;
 
-		speed = PM_AimSpreadAngle() / cmdTime;
+		angle = 0.0f;
 
-		//viewchange = (float)viewchange / cmdTime;	// convert into this movement for a second
+		// take player view rotation into account
+		for (int i = 0; i < 2; i++) {
+			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) ); //check fabs vs Q_fabs
+			if (angle > 180) angle = 360 - angle;
+		}
+
+		// take player movement into account (even if only for the scoped weapons)
+		// TODO: also check for jump/crouch and adjust accordingly
+		if (BG_IsScopedWeapon(pm->ps->weapon)) {
+			for (int i = 0; i < 2; i++) angle += fabs(pm->ps->velocity[i]); //check fabs vs Q_fabs
+		}
+
+		////////////////////////////////////////////////////////////////////////////////
+		if (cvars::tempSpread.ivalue == 2) { // no spread
+			speed = 0;
+		} else if(cvars::tempSpread.ivalue == 1) { // moving average
+			speed = PM_AimSpreadMovingAverage(angle);
+		} else { // old way
+			speed = angle / timeBetweenCommands;
+		}
+
+		if (speed <= 0) {
+			//Com_Printf( "^ispeed: %f \n", speed );
+		} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
+			Com_Printf( "^ispeed: %f \n", speed );
+			Com_Printf( "  ^iangle: %f \n", angle );
+			Com_Printf( "  ^itimeBetweenCommands: %f \n", timeBetweenCommands );
+		} else {
+			Com_Printf( "^7speed: %f \n", speed );
+			Com_Printf( "  ^7angle: %f \n", angle );
+			Com_Printf( "  ^7timeBetweenCommands: %f \n", timeBetweenCommands );
+		}
+		////////////////////////////////////////////////////////////////////////////////
+
 		speed -= AIMSPREAD_VIEWRATE_MIN / wpnScale;
 		if (speed <= 0) {
 			speed = 0;
@@ -3472,12 +3520,12 @@ void PM_AdjustAimSpreadScale( void ) {
 		}
 
 		// now give us a scale from 0.0 to 1.0 to apply the spread increase
-		scale = speed / (float)(AIMSPREAD_VIEWRATE_RANGE / wpnScale);
+		scale = speed / (AIMSPREAD_VIEWRATE_RANGE / wpnScale);
 
-		if (cvars::bg_proneDelay.ivalue > 0) {
-			increase = cmdTime * scale * AIMSPREAD_INCREASE_RATE;
-		} else {
-			increase = (int)(cmdTime * scale * AIMSPREAD_INCREASE_RATE);	
+		if (cvars::tempSpread.ivalue == 1) { // moving average
+			increase = timeBetweenCommands * scale * AIMSPREAD_INCREASE_RATE;
+		} else { // default
+			increase = (int)(timeBetweenCommands * scale * AIMSPREAD_INCREASE_RATE);	
 		}
 	} else {
 		increase = 0;

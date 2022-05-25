@@ -1072,7 +1072,8 @@ void G_UpdateJaymodCS() {
     Info_SetValueForKey( cs, "5", cvars::bg_dynamiteTime.svalue );
     Info_SetValueForKey( cs, "6", cvars::bg_glow.svalue );
     Info_SetValueForKey( cs, "7", cvars::bg_misc.svalue );
-    Info_SetValueForKey( cs, "8", cvars::bg_panzerWar.svalue );
+    //Info_SetValueForKey( cs, "8", cvars::bg_panzerWar.svalue );
+    Info_SetValueForKey( cs, "8", cvars::tempSpread.svalue );
     Info_SetValueForKey( cs, "9", cvars::bg_poisonSyringes.svalue );
     Info_SetValueForKey( cs, "a", cvars::bg_skills.svalue );
     Info_SetValueForKey( cs, "b", cvars::bg_sniperWar.svalue );
