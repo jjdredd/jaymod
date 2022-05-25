@@ -1286,6 +1286,9 @@ typedef struct playerState_s {
 	float		aimSpreadScaleFloat;	// (SA) the server-side aimspreadscale that lets it track finer changes but still only
 										// transmit the 8bit int to the client
 	int			aimSpreadScale;			// 0 - 255 increases with angular movement		// Arnout : DOES get send over the network
+	int			aimSpreadHistoryAngle[AIMSPREAD_HISTORY_FRAMES]
+	int			aimSpreadHistoryTime[AIMSPREAD_HISTORY_FRAMES]
+	int			aimSpreadHistoryHead	// current index for aimSpreadHistory
 	int			lastFireTime;			// used by server to hold last firing frame briefly when randomly releasing trigger (AI)
 
 	int			quickGrenTime;

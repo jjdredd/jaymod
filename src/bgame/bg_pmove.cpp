@@ -3271,17 +3271,16 @@ void PM_CoolWeapons( void ) {
 PM_AdjustAimSpreadScale
 ==============
 */
-//#define	AIMSPREAD_DECREASE_RATE		300.0f
-#define	AIMSPREAD_DECREASE_RATE		200.0f		// (SA) when I made the increase/decrease floats (so slower weapon recover could happen for scoped weaps) the average rate increased significantly
-#define	AIMSPREAD_INCREASE_RATE		800.0f
-#define	AIMSPREAD_VIEWRATE_MIN		30.0f		// degrees per second
-#define	AIMSPREAD_VIEWRATE_RANGE	120.0f		// degrees per second
+#define	AIMSPREAD_DECREASE_RATE		200.0f		
+#define	AIMSPREAD_INCREASE_RATE		665.0f      // (was 800.0f)
+#define	AIMSPREAD_VIEWRATE_MIN		75.0f		// degrees per second (was 30.0f)
+#define	AIMSPREAD_VIEWRATE_RANGE	60.0f		// degrees per second (was 120.0f)
+#define	AIMSPREAD_HISTORY_FRAMES	4		    // number of frames for spread moving average
 
 void PM_AdjustAimSpreadScale( void ) {
-//	int		increase, decrease, i;
 	int		i;
-	float	increase, decrease;		// (SA) was losing lots of precision on slower weapons (scoped)
-	float	viewchange, cmdTime, wpnScale;
+	float	increase, decrease, speed, scale;
+	float	cmdTime, cmdTime, wpnScale;
 
 	// all weapons are very inaccurate in zoomed mode
 	if(pm->ps->eFlags & EF_ZOOMING) {
@@ -3297,7 +3296,8 @@ void PM_AdjustAimSpreadScale( void ) {
         return;
     }
 
-	cmdTime = (float)(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0;
+    pm->ps->aimSpreadHistoryAngle[pm->ps->aimSpreadHistoryHead] = pm->cmd.serverTime;
+    cmdTime = float(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0f;
 
 	wpnScale = 0.0f;
 	switch(pm->ps->weapon) {
@@ -3399,32 +3399,24 @@ void PM_AdjustAimSpreadScale( void ) {
 
 		decrease = (cmdTime * AIMSPREAD_DECREASE_RATE) / wpnScale;
 
-		viewchange = 0;
-		// take player movement into account (even if only for the scoped weapons)
-		// TODO: also check for jump/crouch and adjust accordingly
-		if(BG_IsScopedWeapon(pm->ps->weapon)) {
-			for(i = 0; i < 2; i++) {
-				viewchange += fabs(pm->ps->velocity[i]);
-			}
-		} else {
-			// take player view rotation into account
-			for( i = 0; i < 2; i++ ) {
-				viewchange += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) );
-			}
-		}
+		speed = PM_AimSpreadAngle() / cmdTime;
 
-		viewchange = (float)viewchange / cmdTime;	// convert into this movement for a second
-		viewchange -= AIMSPREAD_VIEWRATE_MIN / wpnScale;
-		if (viewchange <= 0) {
-			viewchange = 0;
-		} else if( viewchange > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
-			viewchange = AIMSPREAD_VIEWRATE_RANGE / wpnScale;
+		//viewchange = (float)viewchange / cmdTime;	// convert into this movement for a second
+		speed -= AIMSPREAD_VIEWRATE_MIN / wpnScale;
+		if (speed <= 0) {
+			speed = 0;
+		} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
+			speed = AIMSPREAD_VIEWRATE_RANGE / wpnScale;
 		}
 
 		// now give us a scale from 0.0 to 1.0 to apply the spread increase
-		viewchange = viewchange / (float)(AIMSPREAD_VIEWRATE_RANGE / wpnScale);
+		scale = speed / (float)(AIMSPREAD_VIEWRATE_RANGE / wpnScale);
 
-		increase = (int)(cmdTime * viewchange * AIMSPREAD_INCREASE_RATE);
+		if (cg_delag.integer & 2) {
+			increase = cmdTime * scale * AIMSPREAD_INCREASE_RATE;
+		} else {
+			increase = (int)(cmdTime * scale * AIMSPREAD_INCREASE_RATE);	
+		}
 	} else {
 		increase = 0;
 		decrease = AIMSPREAD_DECREASE_RATE;
@@ -3436,6 +3428,71 @@ void PM_AdjustAimSpreadScale( void ) {
 	if (pm->ps->aimSpreadScaleFloat > 255) pm->ps->aimSpreadScaleFloat = 255;
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
+}
+
+/*
+==============
+PM_AimSpreadAngle
+==============
+*/
+
+float PM_AimSpreadAngle(void)
+{   
+	int head, milliseconds, referenceTime; //, count;
+	float angle, gap;
+
+	angle = 0;
+	// take player movement into account (even if only for the scoped weapons)
+	// TODO: also check for jump/crouch and adjust accordingly
+	if(BG_IsScopedWeapon(pm->ps->weapon)) {
+		for(i = 0; i < 2; i++) {
+			angle += fabs(pm->ps->velocity[i]);
+		}
+	} else {
+		// take player view rotation into account
+		for( i = 0; i < 2; i++ ) {
+			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) );
+		}
+	}
+
+	//abuse cg_delag as a temporary way of turning spread history on/off
+	//cg_delag 2 == calculate a moving average, otherwise exit now
+	if ( !(cg_delag.integer & 2) ) return angle;
+
+	///////////////////////////////////////////////////////////////////////////////
+    
+    //fill the spreadHistory array as we go
+    head = pm->ps->aimSpreadHistoryHead;
+    pm->ps->aimSpreadHistoryAngle[head] = angle;
+
+    //calculate average viewchange for recent history
+    milliseconds = aimSpreadHistoryTime[head];
+
+	//count = 1;
+	referenceTime = milliseconds;
+    //step back through the spread history and add up the total recent spread
+    for (int n = 0; n < (AIMSPREAD_HISTORY - 1); n++) {
+        head--;
+        if ( head < 0 ) head = AIMSPREAD_HISTORY - 1;
+
+        gap = referenceTime - aimSpreadHistoryTime[head];
+        referenceTime = aimSpreadHistoryTime[head];
+
+        // don't count any more history if interval is negative or more than 50ms
+        if (gap <= 0 || gap > 50) {
+        	n = AIMSPREAD_HISTORY;
+        	break;
+        }
+
+        angle += aimSpreadHistoryAngle[head];
+        milliseconds += gap;
+        //count++;
+    }
+
+    spreadHistoryHead++;
+    if ( spreadHistoryHead >= AIMSPREAD_HISTORY ) spreadHistoryHead = 0;
+
+    return angle / (float(milliseconds) / 1000.0f); // angle from moving avg
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
