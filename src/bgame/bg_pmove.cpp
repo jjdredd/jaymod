@@ -3291,9 +3291,9 @@ float PM_AimSpreadAngle(void)
 		}
 	}
 
-	//abuse cg_delag as a temporary way of turning spread history on/off
-	//cg_delag 2 == calculate a moving average, otherwise exit now
-	if ( !(cg_delag.integer & 2) ) return angle;
+	//abuse g_hitmodeDebug as a temporary way of turning spread history on/off
+	//g_hitmodeDebug 1 == calculate a moving average, otherwise exit now
+	if (cvars::g_hitmodeDebug.ivalue == 0) return angle;
 
 	///////////////////////////////////////////////////////////////////////////////
     
@@ -3474,7 +3474,7 @@ void PM_AdjustAimSpreadScale( void ) {
 		// now give us a scale from 0.0 to 1.0 to apply the spread increase
 		scale = speed / (float)(AIMSPREAD_VIEWRATE_RANGE / wpnScale);
 
-		if (cg_delag.integer & 2) {
+		if (cvars::g_hitmodeDebug.ivalue & 1) {
 			increase = cmdTime * scale * AIMSPREAD_INCREASE_RATE;
 		} else {
 			increase = (int)(cmdTime * scale * AIMSPREAD_INCREASE_RATE);	
