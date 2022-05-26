@@ -582,7 +582,7 @@ cvarTable_t	cvarTable[] = {
 	{ &cl_waveoffset, "cl_waveoffset", "0", CVAR_ROM },
 	{ &cg_recording_statusline, "cg_recording_statusline", "9", CVAR_ARCHIVE },
 
-	{ &com_maxFPS, "com_maxFPS" },
+	{ &com_maxFPS, "com_maxFPS", "85", CVAR_ARCHIVE },
 };
 
 int		cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
@@ -607,8 +607,8 @@ void CG_SetJayFlags() {
 	trap_Cvar_Set( "cg_jaymiscflags", va("%i",flags));
 	cg_jaymiscflags.integer = flags;
 
-	trap_Cvar_Set( "com_maxFPS", va("%i", 333));
-	trap_Cvar_Update(&com_maxFPS);
+	//trap_Cvar_Set( "com_maxFPS", va("%i", 333));
+	//trap_Cvar_Update(&com_maxFPS);
 }
 
 /*

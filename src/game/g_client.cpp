@@ -1727,14 +1727,14 @@ void ClientUserinfoChanged( int clientNum ) {
     }
 //unlagged - client options
 
-//maxFPS 
+//maxFPS - frametime error correction 
     // see if the player has opted out
-    s = Info_ValueForKey( userinfo, "com_maxFPS" );
-    if ( !atoi( s ) ) {
-        client->pers.frametime = 0;
-    } else {
-        client->pers.frametime = atoi( s );
-    }
+    // s = Info_ValueForKey( userinfo, "com_maxFPS" );
+    // if ( !atoi( s ) ) {
+    //     client->pers.frametime = 0;
+    // } else {
+    //     client->pers.frametime = atoi( s );
+    // }
 //maxFPS
 
     // OSP - extra client info settings

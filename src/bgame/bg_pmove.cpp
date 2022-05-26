@@ -543,7 +543,7 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 #ifdef CGAMEDLL
 	extern vmCvar_t			cg_gameType;
 	extern vmCvar_t			cg_movespeed;
-	extern	vmCvar_t		com_maxFPS;
+	extern vmCvar_t		    com_maxFPS;
 #endif
 #ifdef GAMEDLL
 	extern	vmCvar_t		g_gametype;
@@ -3276,8 +3276,10 @@ PM_AimSpreadAngle
 
 float PM_AimSpreadMovingAverage( float angle )
 {   
-	int head, time, referenceTime, count;
+	int head, referenceTime, count;
 	int timeBetweenCommands;
+	int totalTime = 0;
+	float totalAngle = 0.0f;
 
 	//this is the first movement so there is no history, initialize
 	if(!(pm->pmext->aimSpreadHistoryHead)) pm->pmext->aimSpreadHistoryHead = 0;
@@ -3288,7 +3290,8 @@ float PM_AimSpreadMovingAverage( float angle )
     pm->pmext->aimSpreadHistoryTime[head] = pm->cmd.serverTime;
 
     //calculate average viewchange for recent history
-    time = pm->cmd.serverTime - pm->oldcmd.serverTime;
+    totalAngle += angle;
+    totalTime += pm->cmd.serverTime - pm->oldcmd.serverTime;
 
 	count = 1;
 	referenceTime = pm->pmext->aimSpreadHistoryTime[head];
@@ -3309,9 +3312,9 @@ float PM_AimSpreadMovingAverage( float angle )
         	break;
         }
 
-        angle += pm->pmext->aimSpreadHistoryAngle[head];
-        Com_Printf( "^1angle +=: %i \n", pm->pmext->aimSpreadHistoryAngle[head] );
-        time += timeBetweenCommands;
+        totalAngle += pm->pmext->aimSpreadHistoryAngle[head];
+        //Com_Printf( "^1angle +=: %f \n", pm->pmext->aimSpreadHistoryAngle[head] );
+        totalTime += timeBetweenCommands;
         count++;
     }
     if ( count < AIMSPREAD_MAX_HISTORY) Com_Printf( "^3count: %i \n", count );
@@ -3319,10 +3322,10 @@ float PM_AimSpreadMovingAverage( float angle )
     pm->pmext->aimSpreadHistoryHead++;
     if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) pm->pmext->aimSpreadHistoryHead = 0;
 
-	Com_Printf( "^3angle: %f \n", angle );
-	Com_Printf( "^3time: %i \n", time );
+	//Com_Printf( "^3angle: %f \n", angle );
+	//Com_Printf( "^3time: %i \n", time );
 
-    return angle / (float(time) / 1000.0f); // angle from moving avg
+    return totalAngle / (float(totalTime) / 1000.0f); // moving average speed
 }
 
 /*
@@ -3337,15 +3340,8 @@ PM_AdjustAimSpreadScale
 
 
 void PM_AdjustAimSpreadScale( void ) {
-	//Com_Printf( cvars::cl_frametime.ivalue );
-	#ifdef CGAMEDLL
-    	Com_Printf( "com_maxFPS: %i", com_maxFPS.integer );
-    #else
-    	Com_Printf( "com_maxFPS: game" );
-    #endif
-	
-	//float ft = CG_Cvar_Get("com_maxfps");
-	
+	float timeBetweenCommands;
+	float increase, decrease, angle, speed, scale, wpnScale;
 
 	float AIMSPREAD_INCREASE_RATE;
 	float AIMSPREAD_VIEWRATE_MIN;
@@ -3361,7 +3357,18 @@ void PM_AdjustAimSpreadScale( void ) {
 		AIMSPREAD_VIEWRATE_RANGE = 120.0f; //60
 	}
 
-	float increase, decrease, angle, speed, scale, timeBetweenCommands, wpnScale;
+	timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
+	//Com_Printf( "^5tbc: %f \n", timeBetweenCommands );
+
+
+	// if(timeBetweenCommands < 1000) {
+	// 	Com_Printf( "   pm->cmd.serverTime: %i \n", pm->cmd.serverTime );
+	// 	Com_Printf( "pm->oldcmd.serverTime: %i \n", pm->oldcmd.serverTime );
+	// 	Com_Printf( "  timeBetweenCommands: %f \n", timeBetweenCommands );
+	// }
+
+    //no new command so dump out now, spread will not change
+    //if( timeBetweenCommands <= 0) return;
 
 	// all weapons are very inaccurate in zoomed mode
 	if(pm->ps->eFlags & EF_ZOOMING) {
@@ -3377,14 +3384,41 @@ void PM_AdjustAimSpreadScale( void ) {
         return;
     }
 
-    timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
+    #ifdef CGAMEDLL
+    	int frametimeTarget = 1000 / com_maxFPS.integer;
+		// Com_Printf( "com_maxFPS: %i \n", frametimeTarget );
 
-    //if (timeBetweenCommands < int(1000.0 / cvars::cl_frametime.ivalue)) {
-	// if (timeBetweenCommands < int(1000.0 / com_maxFPS.integer)) {
-	// 	Com_Printf( "FAIL" );
- //    }
+		//sometimes frames are faster than com_maxFPS should allow, this causes a spike in spread
+		//this check prevents that spike, frames slower than com_maxFPS are assumed to be a real delay 
+		bool clamped = false;
+		if (int(timeBetweenCommands) < frametimeTarget) {
+			//Com_Printf( "^iclamped timeBetweenCommands: %f, frametimeTarget: %i \n", timeBetweenCommands, frametimeTarget );
+			timeBetweenCommands = frametimeTarget;
+			clamped = true;
+		} else {
+		//Com_Printf( "^5tbc: %f \n", timeBetweenCommands );
+		}
+    #else
+		bool clamped = false;
+		if(cvars::tempSpread.ivalue == 1) { // moving average
+			//fixed target for testing at 200 FPS
+	    	int frametimeTarget = 5;
+			// Com_Printf( "com_maxFPS: %i \n", frametimeTarget );
 
-    timeBetweenCommands = float(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0f;
+			//sometimes frames are faster than com_maxFPS should allow, this causes a spike in spread
+			//this check prevents that spike, frames slower than com_maxFPS are assumed to be a real delay 
+			
+			if (int(timeBetweenCommands) < frametimeTarget) {
+				//Com_Printf( "^2timeBetweenCommands: %f, frametimeTarget: %i \n", timeBetweenCommands, frametimeTarget );
+				timeBetweenCommands = frametimeTarget;
+				clamped = true;
+			}
+		}
+    #endif
+
+	float timeBetweenCommandsSaved = timeBetweenCommands; //temp
+
+    timeBetweenCommands /=  1000.0f; // convert ms to sec
 
 	wpnScale = 0.0f;
 	switch(pm->ps->weapon) {
@@ -3494,6 +3528,7 @@ void PM_AdjustAimSpreadScale( void ) {
 			if (angle > 180) angle = 360 - angle;
 		}
 
+
 		// take player movement into account (even if only for the scoped weapons)
 		// TODO: also check for jump/crouch and adjust accordingly
 		if (BG_IsScopedWeapon(pm->ps->weapon)) {
@@ -3509,17 +3544,33 @@ void PM_AdjustAimSpreadScale( void ) {
 			speed = angle / timeBetweenCommands;
 		}
 
-		if (speed <= 0) {
-			//Com_Printf( "^ispeed: %f \n", speed );
-		} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
-			Com_Printf( "^ispeed: %f \n", speed );
-			Com_Printf( "  ^iangle: %f \n", angle );
-			Com_Printf( "  ^itimeBetweenCommands: %f \n", timeBetweenCommands );
-		} else {
-			Com_Printf( "^7speed: %f \n", speed );
-			Com_Printf( "  ^7angle: %f \n", angle );
-			Com_Printf( "  ^7timeBetweenCommands: %f \n", timeBetweenCommands );
-		}
+		#ifdef CGAMEDLL
+			if (speed <= 0) {
+				//Com_Printf( "^ispeed: %f \n", speed );
+			} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
+				//Com_Printf( "^ispeed: %f \n", speed );
+				//Com_Printf( "  ^iangle: %f \n", angle );
+				if (clamped) {
+					Com_Printf( "^i%i,%i,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle );
+				} else {
+					Com_Printf( "  ^i%i,%i,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle  );	
+				}
+				
+			} else {
+				//Com_Printf( "^7speed: %f \n", speed );
+				//Com_Printf( "  ^7angle: %f \n", angle );
+				if (clamped) {
+					Com_Printf( "^7%i,%i,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle );
+				} else {
+					Com_Printf( "^7%i,%i,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle );
+				}
+			}
+		#else
+			if (clamped) {
+				Com_Printf( "  ^7timeBetweenCommands: %f ^3CLAMPED \n", timeBetweenCommands );
+			}
+
+		#endif
 		////////////////////////////////////////////////////////////////////////////////
 
 		speed -= AIMSPREAD_VIEWRATE_MIN / wpnScale;
