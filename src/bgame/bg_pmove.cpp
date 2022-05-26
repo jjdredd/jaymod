@@ -3337,7 +3337,7 @@ PM_AdjustAimSpreadScale
 
 
 void PM_AdjustAimSpreadScale( void ) {
-	Com_Printf( cl_frametime );
+	Com_Printf( cvars::cl_frametime.ivalue );
 	//float ft = CG_Cvar_Get("com_maxfps");
 	
 
@@ -3373,7 +3373,7 @@ void PM_AdjustAimSpreadScale( void ) {
 
     timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
 
-    if (timeBetweenCommands < int(1000.0 / cl_frametime->integer)) {
+    if (timeBetweenCommands < int(1000.0 / cvars::cl_frametime.ivalue)) {
 	Com_Printf( "FAIL" );
     }
 
