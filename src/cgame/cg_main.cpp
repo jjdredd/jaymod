@@ -607,8 +607,8 @@ void CG_SetJayFlags() {
 	trap_Cvar_Set( "cg_jaymiscflags", va("%i",flags));
 	cg_jaymiscflags.integer = flags;
 
-	trap_Cvar_Set( "cg_maxFPS", va("%i", 333));
-	trap_Cvar_Update(&cg_maxFPS);
+	trap_Cvar_Set( "com_maxFPS", va("%i", 333));
+	trap_Cvar_Update(&com_maxFPS);
 }
 
 /*
