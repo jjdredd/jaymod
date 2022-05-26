@@ -98,7 +98,7 @@ namespace objects {
     extern Cvar gameState;
 
     extern Cvar tempSpread; // 0 = default, 1 = moving average, 2 = no turn spread
-    //extern Cvar bg_maxFPS;
+    extern Cvar com_maxFPS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
