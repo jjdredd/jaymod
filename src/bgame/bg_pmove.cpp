@@ -548,7 +548,7 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 #ifdef GAMEDLL
 	extern	vmCvar_t		g_gametype;
 	extern	vmCvar_t		g_movespeed;
-	extern	vmCvar_t		com_maxFPS;
+	//extern	vmCvar_t		com_maxFPS;
 #endif
 
 /*
@@ -3338,7 +3338,7 @@ PM_AdjustAimSpreadScale
 
 void PM_AdjustAimSpreadScale( void ) {
 	//Com_Printf( cvars::cl_frametime.ivalue );
-	Com_Printf( cvars::com_maxFPS.ivalue );
+	Com_Printf( com_maxFPS.integer );
 	//float ft = CG_Cvar_Get("com_maxfps");
 	
 

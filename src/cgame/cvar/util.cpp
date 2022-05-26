@@ -44,11 +44,11 @@ void cb_sv_fps( Cvar& var )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void cb_cl_frametime( Cvar& var )
-{
-    if (var.ivalue != cvars::cl_frametime.ivalue)
-        var.set( cvars::cl_frametime.ivalue );
-}
+// void cb_cl_frametime( Cvar& var )
+// {
+//     if (var.ivalue != cvars::cl_frametime.ivalue)
+//         var.set( cvars::cl_frametime.ivalue );
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 

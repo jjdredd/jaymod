@@ -8,7 +8,7 @@ void cb_cl_snaps      ( Cvar& );
 void cb_cl_timeNudge  ( Cvar& );
 void cb_sv_fps        ( Cvar& );
 
-void cb_cl_frametime  ( Cvar& );
+//void cb_cl_frametime  ( Cvar& );
 
 ///////////////////////////////////////////////////////////////////////////////
 
