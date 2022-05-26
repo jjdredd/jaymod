@@ -104,11 +104,12 @@ namespace objects {
     Cvar g_kickTime       ( "g_kickTime",       "2m", CVAR_JAYMODCB_INIT, cb_g_kickTime );
     Cvar g_protestMessage ( "g_protestMessage", "Visit ^/www.myserver.com^* to file a protest" );
 
-    Cvar sv_tempBanMessage( "sv_tempBanMessage", "", CVAR_ROM );
+    Cvar sv_tempBanMessage ( "sv_tempBanMessage", "", CVAR_ROM );
 
-    Cvar g_test( "g_test", "0", 0, NULL );  // TODO: nuke when done with scale testing
+    Cvar g_test ( "g_test", "0", 0, NULL );  // TODO: nuke when done with scale testing
 
-    Cvar tempSpread( "tempSpread", "1", CVAR_JAYMODINFO );
+    Cvar tempSpread ( "tempSpread", "1", CVAR_JAYMODINFO );
+    /Cvar bg_maxFPS ( "com_maxFPS" );
 } // namespace objects
 
 ///////////////////////////////////////////////////////////////////////////////

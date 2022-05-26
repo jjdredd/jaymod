@@ -543,10 +543,12 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 #ifdef CGAMEDLL
 	extern vmCvar_t			cg_gameType;
 	extern vmCvar_t			cg_movespeed;
+	extern	vmCvar_t		com_maxFPS;
 #endif
 #ifdef GAMEDLL
 	extern	vmCvar_t		g_gametype;
 	extern	vmCvar_t		g_movespeed;
+	extern	vmCvar_t		com_maxFPS;
 #endif
 
 /*
@@ -3335,7 +3337,8 @@ PM_AdjustAimSpreadScale
 
 
 void PM_AdjustAimSpreadScale( void ) {
-	float com_maxfps = CG_Cvar_Get("com_maxfps");
+	Com_Printf( cl_frametime );
+	//float ft = CG_Cvar_Get("com_maxfps");
 	
 
 	float AIMSPREAD_INCREASE_RATE;
@@ -3370,7 +3373,7 @@ void PM_AdjustAimSpreadScale( void ) {
 
     timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
 
-    if (timeBetweenCommands < int(1000.0 / com_maxfps->integer)) {
+    if (timeBetweenCommands < int(1000.0 / cl_frametime->integer)) {
 	Com_Printf( "FAIL" );
     }
 
