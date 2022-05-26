@@ -3543,34 +3543,6 @@ void PM_AdjustAimSpreadScale( void ) {
 		} else { // old way
 			speed = angle / timeBetweenCommands;
 		}
-
-		#ifdef CGAMEDLL
-			if (speed <= 0) {
-				//Com_Printf( "^ispeed: %f \n", speed );
-			} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
-				//Com_Printf( "^ispeed: %f \n", speed );
-				//Com_Printf( "  ^iangle: %f \n", angle );
-				if (clamped) {
-					Com_Printf( "^i%i,%i,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle );
-				} else {
-					Com_Printf( "  ^i%i,%i,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle  );	
-				}
-				
-			} else {
-				//Com_Printf( "^7speed: %f \n", speed );
-				//Com_Printf( "  ^7angle: %f \n", angle );
-				if (clamped) {
-					Com_Printf( "^7%i,%i,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle );
-				} else {
-					Com_Printf( "^7%i,%i,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle );
-				}
-			}
-		#else
-			if (clamped) {
-				Com_Printf( "  ^7timeBetweenCommands: %f ^3CLAMPED \n", timeBetweenCommands );
-			}
-
-		#endif
 		////////////////////////////////////////////////////////////////////////////////
 
 		speed -= AIMSPREAD_VIEWRATE_MIN / wpnScale;
@@ -3599,6 +3571,33 @@ void PM_AdjustAimSpreadScale( void ) {
 	if (pm->ps->aimSpreadScaleFloat > 255) pm->ps->aimSpreadScaleFloat = 255;
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
+
+	#ifdef CGAMEDLL
+		if (speed <= 0) {
+			//Com_Printf( "^ispeed: %f \n", speed );
+		} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
+			//Com_Printf( "^ispeed: %f \n", speed );
+			//Com_Printf( "  ^iangle: %f \n", angle );
+			if (clamped) {
+				Com_Printf( "^i%i,%i,%f,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat );
+			} else {
+				Com_Printf( "  ^i%i,%i,%f,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat  );	
+			}
+			
+		} else {
+			//Com_Printf( "^7speed: %f \n", speed );
+			//Com_Printf( "  ^7angle: %f \n", angle );
+			if (clamped) {
+				Com_Printf( "^7%i,%i,%f,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat );
+			} else {
+				Com_Printf( "^7%i,%i,%f,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat );
+			}
+		}
+	#else
+		if (clamped) {
+			//Com_Printf( "  ^7timeBetweenCommands: %f ^3CLAMPED \n", timeBetweenCommands );
+		}
+	#endif
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
