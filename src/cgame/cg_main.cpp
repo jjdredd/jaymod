@@ -322,6 +322,8 @@ vmCvar_t	cg_debugDelag;
 vmCvar_t	cg_optimizePrediction;
 //unlagged - client options
 
+vmCvar_t	cg_maxFPS;
+
 typedef struct {
 	vmCvar_t	*vmCvar;
 	char		*cvarName;
@@ -579,6 +581,8 @@ cvarTable_t	cvarTable[] = {
 	{ &cl_wavefilename, "cl_wavefilename", "", CVAR_ROM },
 	{ &cl_waveoffset, "cl_waveoffset", "0", CVAR_ROM },
 	{ &cg_recording_statusline, "cg_recording_statusline", "9", CVAR_ARCHIVE },
+
+	{ &cg_maxFPS, "com_maxFPS", "0", CVAR_ROM },
 };
 
 int		cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
@@ -602,6 +606,8 @@ void CG_SetJayFlags() {
 	// This will trigger an update to the server
 	trap_Cvar_Set( "cg_jaymiscflags", va("%i",flags));
 	cg_jaymiscflags.integer = flags;
+
+	trap_Cvar_Set( "cg_maxFPS", va("%i", 333));
 }
 
 /*
