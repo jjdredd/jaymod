@@ -543,7 +543,7 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 #ifdef CGAMEDLL
 	extern vmCvar_t			cg_gameType;
 	extern vmCvar_t			cg_movespeed;
-	//extern	vmCvar_t		com_maxFPS;
+	extern	vmCvar_t		com_maxFPS;
 #endif
 #ifdef GAMEDLL
 	extern	vmCvar_t		g_gametype;
