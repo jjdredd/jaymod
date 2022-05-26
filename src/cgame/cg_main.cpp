@@ -322,7 +322,7 @@ vmCvar_t	cg_debugDelag;
 vmCvar_t	cg_optimizePrediction;
 //unlagged - client options
 
-vmCvar_t	cg_maxFPS;
+vmCvar_t	com_maxFPS;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -582,7 +582,7 @@ cvarTable_t	cvarTable[] = {
 	{ &cl_waveoffset, "cl_waveoffset", "0", CVAR_ROM },
 	{ &cg_recording_statusline, "cg_recording_statusline", "9", CVAR_ARCHIVE },
 
-	{ &cg_maxFPS, "com_maxFPS", "0", CVAR_ROM },
+	{ &com_maxFPS, "com_maxFPS" },
 };
 
 int		cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );

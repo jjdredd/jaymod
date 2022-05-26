@@ -80,7 +80,7 @@ namespace objects {
 
     Cvar tempSpread ( "tempSpread", "1", CVAR_ROM );
     //Cvar cl_frametime ( "com_maxFPS", "1", 0, cb_cl_frametime );
-    Cvar com_maxFPS ( "com_maxFPS");
+    Cvar bg_maxFPS ( "com_maxFPS");
 
 ///////////////////////////////////////////////////////////////////////////////
 
