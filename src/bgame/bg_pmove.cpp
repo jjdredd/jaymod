@@ -3339,7 +3339,7 @@ PM_AdjustAimSpreadScale
 void PM_AdjustAimSpreadScale( void ) {
 	//Com_Printf( cvars::cl_frametime.ivalue );
 	#ifdef CGAMEDLL
-    	Com_Printf( "com_maxFPS: %i", cvars::com_maxFPS.ivalue );
+    	Com_Printf( "com_maxFPS: %i", com_maxFPS.integer );
     #else
     	Com_Printf( "com_maxFPS: game" );
     #endif
