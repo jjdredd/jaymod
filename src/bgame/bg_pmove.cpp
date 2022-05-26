@@ -3338,7 +3338,7 @@ PM_AdjustAimSpreadScale
 
 void PM_AdjustAimSpreadScale( void ) {
 	//Com_Printf( cvars::cl_frametime.ivalue );
-	Com_Printf( com_maxFPS.integer );
+	Com_Printf( cvars::com_maxFPS.ivalue );
 	//float ft = CG_Cvar_Get("com_maxfps");
 	
 
