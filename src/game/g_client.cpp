@@ -1727,6 +1727,16 @@ void ClientUserinfoChanged( int clientNum ) {
     }
 //unlagged - client options
 
+//maxFPS 
+    // see if the player has opted out
+    s = Info_ValueForKey( userinfo, "com_maxFPS" );
+    if ( !atoi( s ) ) {
+        client->pers.frametime = 0;
+    } else {
+        client->pers.frametime = atoi( s );
+    }
+//maxFPS
+
     // OSP - extra client info settings
     //       FIXME: move other userinfo flag settings in here
     if(ent->r.svFlags & SVF_BOT) {

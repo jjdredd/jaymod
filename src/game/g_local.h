@@ -830,6 +830,8 @@ typedef struct {
 //unlagged - true ping
 
 	int			joinedTeamTime;
+
+	int frametime; // used to fix spread spikes from 'fast' frames
 } clientPersistant_t;
 
 typedef struct {
