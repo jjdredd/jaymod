@@ -1412,7 +1412,7 @@ void ClientThink_real( gentity_t *ent, bool skipServerTime ) {
 	oldEventSequence = client->ps.eventSequence;
 
 	client->currentAimSpreadScale = (float)client->ps.aimSpreadScale/255.0f;
-
+	
 	memset (&pm, 0, sizeof(pm));
 
 	pm.ps = &client->ps;

@@ -3274,11 +3274,11 @@ PM_AimSpreadAngle
 ==============
 */
 
-float PM_AimSpreadMovingAverage( float angle )
+float PM_AimSpreadMovingAverage( float angle, float referenceSpeed)
 {   
 	int head, referenceTime, count;
 	int timeBetweenCommands;
-	int totalTime = 0;
+	float totalTime = 0.0f;
 	float totalAngle = 0.0f;
 
 	//this is the first movement so there is no history, initialize
@@ -3291,10 +3291,20 @@ float PM_AimSpreadMovingAverage( float angle )
 
     //calculate average viewchange for recent history
     totalAngle += angle;
-    totalTime += pm->cmd.serverTime - pm->oldcmd.serverTime;
+    totalTime += float(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0f;
+
+	referenceTime = pm->pmext->aimSpreadHistoryTime[head];
+    pm->pmext->aimSpreadHistoryHead++;
+    if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) pm->pmext->aimSpreadHistoryHead = 0;
+
+    // if (angle > 0.0f) {
+    // 	Com_Printf("^iCLASSIC angle: %f", angle);
+    // 	return totalAngle / (float(totalTime) / 1000.0f); // speed w/o moving average
+    // } else {
+    // 	Com_Printf("^3MOVING  angle: %f", angle);
+    // }
 
 	count = 1;
-	referenceTime = pm->pmext->aimSpreadHistoryTime[head];
     //step back through the spread history and add up the total recent spread
     for (int n = 0; n < (AIMSPREAD_MAX_HISTORY - 1); n++) {
     	//Com_Printf( "^3referenceTime: %i \n", referenceTime );
@@ -3311,16 +3321,21 @@ float PM_AimSpreadMovingAverage( float angle )
         	n = AIMSPREAD_MAX_HISTORY;
         	break;
         }
+        // bias the roll-off to be faster for longer frame times
+        float olderSpeed = pm->pmext->aimSpreadHistoryAngle[head] / (float(timeBetweenCommands) / 1000.0f);
+        if (referenceSpeed - olderSpeed < 0.0f) { //slowing down
+        	Com_Printf("slowing down");
+        }
+
 
         totalAngle += pm->pmext->aimSpreadHistoryAngle[head];
         //Com_Printf( "^1angle +=: %f \n", pm->pmext->aimSpreadHistoryAngle[head] );
-        totalTime += timeBetweenCommands;
+        totalTime += float(timeBetweenCommands) / 1000.0f;
         count++;
+
+        referenceSpeed = olderSpeed;
     }
     if ( count < AIMSPREAD_MAX_HISTORY) Com_Printf( "^3count: %i \n", count );
-
-    pm->pmext->aimSpreadHistoryHead++;
-    if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) pm->pmext->aimSpreadHistoryHead = 0;
 
 	//Com_Printf( "^3angle: %f \n", angle );
 	//Com_Printf( "^3time: %i \n", time );
@@ -3340,8 +3355,10 @@ PM_AdjustAimSpreadScale
 
 
 void PM_AdjustAimSpreadScale( void ) {
+
 	float timeBetweenCommands;
 	float increase, decrease, angle, speed, scale, wpnScale;
+	float realSpeed; //temp
 
 	float AIMSPREAD_INCREASE_RATE;
 	float AIMSPREAD_VIEWRATE_MIN;
@@ -3352,9 +3369,9 @@ void PM_AdjustAimSpreadScale( void ) {
 		AIMSPREAD_VIEWRATE_MIN = 30.0f;
 		AIMSPREAD_VIEWRATE_RANGE = 120.0f;
 	} else {
-		AIMSPREAD_INCREASE_RATE = 800.0f; //665
-		AIMSPREAD_VIEWRATE_MIN = 30.0f; //75
-		AIMSPREAD_VIEWRATE_RANGE = 120.0f; //60
+		AIMSPREAD_INCREASE_RATE = 676.2f; //665
+		AIMSPREAD_VIEWRATE_MIN = 50.0f; //75
+		AIMSPREAD_VIEWRATE_RANGE = 100.0f; //60
 	}
 
 	timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
@@ -3397,7 +3414,7 @@ void PM_AdjustAimSpreadScale( void ) {
 			clamped = true;
 		} else {
 		//Com_Printf( "^5tbc: %f \n", timeBetweenCommands );
-		}
+		} 
     #else
 		bool clamped = false;
 		if(cvars::tempSpread.ivalue == 1) { // moving average
@@ -3535,16 +3552,16 @@ void PM_AdjustAimSpreadScale( void ) {
 			for (int i = 0; i < 2; i++) angle += fabs(pm->ps->velocity[i]); //check fabs vs Q_fabs
 		}
 
-		////////////////////////////////////////////////////////////////////////////////
-		if (cvars::tempSpread.ivalue == 2) { // no spread
-			speed = 0;
-		} else if(cvars::tempSpread.ivalue == 1) { // moving average
-			speed = PM_AimSpreadMovingAverage(angle);
-		} else { // old way
-			speed = angle / timeBetweenCommands;
-		}
+		speed = angle / timeBetweenCommands;
+
 		////////////////////////////////////////////////////////////////////////////////
 
+		if (cvars::tempSpread.ivalue == 2) speed = 0; // no spread	
+		if(cvars::tempSpread.ivalue == 1) speed = PM_AimSpreadMovingAverage(angle, speed); // moving average
+
+		////////////////////////////////////////////////////////////////////////////////
+
+		realSpeed = speed;
 		speed -= AIMSPREAD_VIEWRATE_MIN / wpnScale;
 		if (speed <= 0) {
 			speed = 0;
@@ -3573,24 +3590,24 @@ void PM_AdjustAimSpreadScale( void ) {
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
 
 	#ifdef CGAMEDLL
-		if (speed <= 0) {
+		if (realSpeed <= 0.0f) {
 			//Com_Printf( "^ispeed: %f \n", speed );
 		} else if( speed > (AIMSPREAD_VIEWRATE_RANGE / wpnScale) ) {
 			//Com_Printf( "^ispeed: %f \n", speed );
 			//Com_Printf( "  ^iangle: %f \n", angle );
 			if (clamped) {
-				Com_Printf( "^i%i,%i,%f,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat );
+				Com_Printf( "^i%i,%i,%f,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, pm->ps->aimSpreadScaleFloat );
 			} else {
-				Com_Printf( "  ^i%i,%i,%f,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat  );	
+				Com_Printf( "  ^i%i,%i,%f,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, pm->ps->aimSpreadScaleFloat  );	
 			}
 			
 		} else {
 			//Com_Printf( "^7speed: %f \n", speed );
 			//Com_Printf( "  ^7angle: %f \n", angle );
 			if (clamped) {
-				Com_Printf( "^7%i,%i,%f,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat );
+				Com_Printf( "^7%i,%i,%f,%f,%f,^3CLAMPED \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, pm->ps->aimSpreadScaleFloat );
 			} else {
-				Com_Printf( "^7%i,%i,%f,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, aimSpreadScaleFloat );
+				Com_Printf( "^7%i,%i,%f,%f,%f \n", pm->cmd.serverTime, pm->oldcmd.serverTime, timeBetweenCommandsSaved, angle, pm->ps->aimSpreadScaleFloat );
 			}
 		}
 	#else
@@ -5163,6 +5180,7 @@ static void PM_Weapon( void ) {
 	case WP_M97:
 		addTime = GetAmmoTableData(pm->ps->weapon)->nextShotTime;
 		aimSpreadScaleAdd = 15+rand()%10;	// (SA) new values for DM
+		//aimSpreadScaleAdd = 20;	// cake
 		break;
 
 	case WP_STEN:
@@ -6468,7 +6486,9 @@ int Pmove (pmove_t *pmove) {
 
 	// RF
 	pm = pmove;
-	PM_AdjustAimSpreadScale ();
+	PM_AdjustAimSpreadScale();
+	//pm->ps->aimSpreadScale = 0;
+	//pm->ps->aimSpreadScaleFloat = 0.0;
 
 //	startedTorsoAnim = -1;
 //	startedLegAnim = -1;
