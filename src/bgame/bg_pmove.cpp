@@ -3270,77 +3270,107 @@ void PM_CoolWeapons( void ) {
 
 /*
 ==============
-PM_AimSpreadAngle
+PM_AimSpreadSkipProtection
 ==============
 */
-
-float PM_AimSpreadMovingAverage( float angle, float referenceSpeed)
+																						// pm->cmd.serverTime
+void PM_AimSpreadSkipProtection( float * speedPtr, float angle, float noSpreadSpeedLimit, int referenceTime )
 {   
-	int head, referenceTime, count;
+	int frametimeTarget = 1000 / com_maxFPS; //should be passed to function instead
+	float limit = noSpreadSpeedLimit * frametimeTarget / 1000.0; //should  probably be passed to function instead
+
+
+
+	int i, referenceTime, count;
 	int timeBetweenCommands;
-	float totalTime = 0.0f;
+	int totalTime = 0;
 	float totalAngle = 0.0f;
 
+	// note: may or may not need this
 	//this is the first movement so there is no history, initialize
-	if(!(pm->pmext->aimSpreadHistoryHead)) pm->pmext->aimSpreadHistoryHead = 0;
+	//if(!(pm->pmext->aimSpreadHistoryHead)) pm->pmext->aimSpreadHistoryHead = 0;
+
+	float *angles = pm->pmext->aimSpreadHistoryAngle;
+	float *times = pm->pmext->aimSpreadHistoryTime;
+	i = pm->pmext->aimSpreadHistoryHead;
     
-    //fill the spreadHistory array as we go
-    head = pm->pmext->aimSpreadHistoryHead;
-    pm->pmext->aimSpreadHistoryAngle[head] = angle;
-    pm->pmext->aimSpreadHistoryTime[head] = pm->cmd.serverTime;
+    //fill the spreadHistory arrays each time we visit this function
+    angles[i] = angle;
+    times[i] = referenceTime;
 
-    //calculate average viewchange for recent history
-    totalAngle += angle;
-    totalTime += float(pm->cmd.serverTime - pm->oldcmd.serverTime) / 1000.0f;
-
-	referenceTime = pm->pmext->aimSpreadHistoryTime[head];
     pm->pmext->aimSpreadHistoryHead++;
-    if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) pm->pmext->aimSpreadHistoryHead = 0;
+    if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) 
+    {
+    	pm->pmext->aimSpreadHistoryHead = 0;
+    }
 
-    // if (angle > 0.0f) {
-    // 	Com_Printf("^iCLASSIC angle: %f", angle);
-    // 	return totalAngle / (float(totalTime) / 1000.0f); // speed w/o moving average
-    // } else {
-    // 	Com_Printf("^3MOVING  angle: %f", angle);
-    // }
+	bool allzero = true;
+    bool anyzero = false;
+    
 
-	count = 1;
-    //step back through the spread history and add up the total recent spread
-    for (int n = 0; n < (AIMSPREAD_MAX_HISTORY - 1); n++) {
-    	//Com_Printf( "^3referenceTime: %i \n", referenceTime );
-        head--;
-        if ( head < 0 ) head = AIMSPREAD_MAX_HISTORY - 1;
-        //Com_Printf( "^3prevTime: %i \n", pm->pmext->aimSpreadHistoryTime[head] );
+    for (int n = 0; n < (AIMSPREAD_MAX_HISTORY - 1); n++)
+    {
+        i--;
+        if ( i < 0 ) i = AIMSPREAD_MAX_HISTORY - 1;
 
-        timeBetweenCommands = referenceTime - pm->pmext->aimSpreadHistoryTime[head];
-        referenceTime = pm->pmext->aimSpreadHistoryTime[head];
+        timeBetweenCommands = referenceTime - times[i];
+        referenceTime = pm->pmext->aimSpreadHistoryTime[i];
 
-        // don't count any more history if interval is negative or more than 50ms
-        //Com_Printf( "^3timeBetweenCommands: %i \n", timeBetweenCommands );
-        if (timeBetweenCommands <= 0 || timeBetweenCommands > 50) {
+        // remaining history is incoherent or outdated
+        if (timeBetweenCommands <= 0 || timeBetweenCommands > 4*frametimeTarget) {
         	n = AIMSPREAD_MAX_HISTORY;
         	break;
         }
-        // bias the roll-off to be faster for longer frame times
-        float olderSpeed = pm->pmext->aimSpreadHistoryAngle[head] / (float(timeBetweenCommands) / 1000.0f);
-        if (referenceSpeed - olderSpeed < 0.0f) { //slowing down
-        	Com_Printf("slowing down");
+
+       if(allzero == true  && angles[i] != 0) allzero = false;
+       if(anyzero == false && angles[i] == 0) anyzero = true;
+
+        if ( angle != 0 && angles[i] != 0 )
+        { 
+        	// the new angle isn't zero and the previous angle wasn't zero
+			if(n == 0) return; // not skipping (most common outcome)
+			
+			// probably not skipping, relevant adjacent angles are small
+			if(angle < limit || angles[i] < limit) return;
+			
+			break; // skipping
+		}
+
+		// it is essential to do this here, afer the above if and before the below if
+		totalAngle += angles[i];
+		totalTime += timeBetweenCommands;
+
+		if ( angle == 0 && angles[i] != 0)
+		{
+			if ( anyzero == true )
+			{
+        		float limit = noSpreadSpeedLimit * frametimeTarget / 1000.0;
+        		// small angle, not skipping
+        		if ( angles[i] <= limit) return;
+        		// skipping
+	        	break;
+        	}
+        	else 
+        	{
+        		// full history, not skipping
+        		if ( n+1 == AIMSPREAD_MAX_HISTORY-1) return;
+        	}
         }
-
-
-        totalAngle += pm->pmext->aimSpreadHistoryAngle[head];
-        //Com_Printf( "^1angle +=: %f \n", pm->pmext->aimSpreadHistoryAngle[head] );
-        totalTime += float(timeBetweenCommands) / 1000.0f;
-        count++;
-
-        referenceSpeed = olderSpeed;
     }
-    if ( count < AIMSPREAD_MAX_HISTORY) Com_Printf( "^3count: %i \n", count );
 
-	//Com_Printf( "^3angle: %f \n", angle );
-	//Com_Printf( "^3time: %i \n", time );
+	// history is all 0, probably not skipping
+    if(allzero == true) return;
 
-    return totalAngle / (float(totalTime) / 1000.0f); // moving average speed
+	////////////////////////////////////////////////////////////////////////////
+
+    // if we haven't already returned then skipping was detected
+
+    // include the latest move in the average
+    totalAngle += angle;
+    totalTime += pm->cmd.serverTime - pm->oldcmd.serverTime;
+
+	// so we adjust the speed by averaging over the accumulated history
+	*speedPtr = totalAngle / (float(totalTime) / 1000.0f);
 }
 
 /*
