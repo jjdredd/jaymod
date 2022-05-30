@@ -3551,13 +3551,13 @@ void PM_AdjustAimSpreadScale( void ) {
 	}
 
 	// update the aimSpreadScale
-	pm->ps->aimSpreadScaleFloat += (increase - decrease);
+	pm->ps->aimSpreadScaleFloat += increase - decrease;
 	if (pm->ps->aimSpreadScaleFloat < 0) pm->ps->aimSpreadScaleFloat = 0;
 	if (pm->ps->aimSpreadScaleFloat > 255) pm->ps->aimSpreadScaleFloat = 255;
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
 
-	Com_Printf("%08.4f", aimSpreadScaleFloat);
+	Com_Printf("%08.4f", pm->ps->aimSpreadScaleFloat);
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
