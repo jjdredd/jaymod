@@ -3530,7 +3530,7 @@ void PM_AdjustAimSpreadScale( void ) {
 		if ( cvars::tempSpread.ivalue == 2 ) speed = 0; // no spread
 		if ( cvars::tempSpread.ivalue == 1 && frametimeTarget < 8 )
 		{
-			PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit, frametimeTarget)
+			PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit, frametimeTarget);
 		}
 		////////////////////////////////////////////////////////////////////////////////
 
