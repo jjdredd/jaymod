@@ -705,7 +705,7 @@ typedef struct {
 	// Jaybird - Shotgun
 	qboolean	m97reloadInterrupt;
 
-	int			aimSpreadHistoryAngle[AIMSPREAD_MAX_HISTORY];
+	float		aimSpreadHistoryAngle[AIMSPREAD_MAX_HISTORY];
 	int			aimSpreadHistoryTime[AIMSPREAD_MAX_HISTORY];
 	int			aimSpreadHistoryHead;	// current index for aimSpreadHistory
 

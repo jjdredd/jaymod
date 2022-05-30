@@ -3285,7 +3285,7 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 	int i = pm->pmext->aimSpreadHistoryHead;
 	float *angles = pm->pmext->aimSpreadHistoryAngle;
-	float *times = pm->pmext->aimSpreadHistoryTime;
+	int *times = pm->pmext->aimSpreadHistoryTime;
 
 	//fill the history arrays and advance the head each time we visit this function
 	angles[i] = angle;
