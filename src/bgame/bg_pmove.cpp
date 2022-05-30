@@ -3283,7 +3283,7 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 	float totalAngle = 0.0f;
 	float smallAngleLimit = noSpreadSpeedLimit * frametimeTarget / 1000.0;
 
-	int i = pm->pmext->aimSpreadHistoryHead
+	int i = pm->pmext->aimSpreadHistoryHead;
 	float *angles = pm->pmext->aimSpreadHistoryAngle;
 	float *times = pm->pmext->aimSpreadHistoryTime;
 
