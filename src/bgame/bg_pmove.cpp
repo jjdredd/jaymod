@@ -3379,8 +3379,9 @@ void PM_AdjustAimSpreadScale( void ) {
 	#ifdef CGAMEDLL
     	int frametimeTarget = 1000 / com_maxFPS.integer;
     #else
-    	int frametimeTarget = 1; //no clamping for server yet
+    	int frametimeTarget = client->pers.frametime; //no clamping for server yet
     #endif
+    Com_Printf("frametimeTarget: %i \n", frametimeTarget);
 
 	float increase, decrease, angle, speed, scale, wpnScale, timeBetweenCommands;
 

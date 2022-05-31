@@ -533,6 +533,9 @@ cvarTable_t	cvarTable[] = {
 	{ &cg_instanttapout,	"cg_instanttapout",	"0",	CVAR_ARCHIVE },	
 	{ &cg_debugSkills,		"cg_debugSkills",	"0",	0 },
 	{ NULL,					"cg_etVersion",		"",		CVAR_USERINFO | CVAR_ROM },
+
+	{ NULL,					"cg_frametime", "",		CVAR_USERINFO | CVAR_ROM },
+
 	{ &cg_drawFireteamOverlay, "cg_drawFireteamOverlay", "1", CVAR_ARCHIVE },
 	{ &cg_drawSmallPopupIcons, "cg_drawSmallPopupIcons", "1", CVAR_ARCHIVE },
 
@@ -2949,6 +2952,8 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 		CG_Error( "^3ET game-engine mismatch\n^xClient: ^1%s\n^xServer: ^2%s", GAME_VERSION, s );
 	}
 	trap_Cvar_Set( "cg_etVersion", GAME_VERSION_DATED );	// So server can check
+
+	trap_Cvar_Set( "cg_frametime", int(1000 / com_maxFPS) ); // cake
 
     // Check Jaymod version.
     s = Info_ValueForKey( CG_ConfigString( CS_JAYMODINFO ), "jver" );
