@@ -3268,12 +3268,14 @@ void PM_CoolWeapons( void ) {
 
 }
 
+bool debugging = false;
+
 /*
 ==============
 PM_AimSpreadSkipProtection
 ==============
 */
-void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTime, float noSpreadSpeedLimit, int frametimeTarget)
+bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTime, float noSpreadSpeedLimit, int frametimeTarget)
 {
 	bool anyzero = false;
 	bool allzero = true;
@@ -3345,7 +3347,7 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 		}
 	}
 
-	if( allzero == true ) return; // history is all 0, probably not skipping
+	if( allzero == true ) return false; // history is all 0, probably not skipping
 
 	// if we haven't already returned then skipping was detected
 	// include the latest move in the average and then adjust the
@@ -3357,7 +3359,7 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 	*speedPtr = totalAngle / ( float(totalTime) / 1000.0f );
 
-	if (debugging) Com_printf("%i -> ", itemsToAverage);
+	if (debugging) Com_Printf("%i -> ", itemsToAverage);
 	return true;
 }
 
@@ -3370,7 +3372,6 @@ PM_AdjustAimSpreadScale
 // #define AIMSPREAD_INCREASE_RATE  676.2f
 // #define AIMSPREAD_VIEWRATE_MIN	 50.0f
 // #define AIMSPREAD_VIEWRATE_RANGE 100.0f
-
 
 void PM_AdjustAimSpreadScale( void ) {
 	bool skipping = false;
@@ -3531,11 +3532,14 @@ void PM_AdjustAimSpreadScale( void ) {
 			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) ); //check fabs vs Q_fabs
 			if (angle > 180) angle = 360 - angle;
 		}
-		if (debugging) Com_printf("%f -> ",angle);
+		
+		Com_Printf("%i ", pm->cmd.serverTime);
+		Com_Printf("%f ", angle);
+		if (debugging) Com_Printf("%f -> ",angle);
 
 		speed = angle / timeBetweenCommands;
 
-		if (debugging) Com_printf("%06.2f -> ",speed);
+		if (debugging) Com_Printf("%06.2f -> ",speed);
 
 		float noSpreadSpeedLimit = AIMSPREAD_VIEWRATE_MIN / wpnScale;
 		float maxSpreadSpeedLimit = AIMSPREAD_VIEWRATE_RANGE / wpnScale;
@@ -3545,10 +3549,10 @@ void PM_AdjustAimSpreadScale( void ) {
 		if ( cvars::tempSpread.ivalue == 1 && frametimeTarget < 8 )
 		{			
 			skipping = PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit, frametimeTarget);
-			if (!skipping && debugging) Com_printf("0 -> ");
+			if (!skipping && debugging) Com_Printf("0 -> ");
 
 		}
-		if (debugging) Com_printf("%06.2f -> ",speed);
+		if (debugging) Com_Printf("%06.2f -> ",speed);
 		////////////////////////////////////////////////////////////////////////////////
 
 		speed -= noSpreadSpeedLimit;
