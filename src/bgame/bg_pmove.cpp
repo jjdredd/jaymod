@@ -3281,6 +3281,7 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 	int timeBetweenCommands;
 	int totalTime = 0;
 	float totalAngle = 0.0f;
+
 	float smallAngleLimit = noSpreadSpeedLimit * frametimeTarget / 1000.0;
 
 	int i = pm->pmext->aimSpreadHistoryHead;
@@ -3292,7 +3293,8 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 	times[i] = referenceTime;
 	pm->pmext->aimSpreadHistoryHead++;
 	if ( pm->pmext->aimSpreadHistoryHead == AIMSPREAD_MAX_HISTORY ) pm->pmext->aimSpreadHistoryHead = 0;
-		
+
+	int itemsToAverage = 0;		
 	for ( int howFarBack = 1; howFarBack < AIMSPREAD_MAX_HISTORY; howFarBack++ )
 	{
 		i--;
@@ -3313,29 +3315,32 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 		if ( angle != 0 && angles[i] != 0 )
 		{
-			if(howFarBack == 1) return; // not skipping (most common exit)
+			if(howFarBack == 1) return false; // not skipping (most common exit)
 			// small angle(s), probably not skipping
-			if(angle < smallAngleLimit || angles[i] < smallAngleLimit) return;
+			if(angle < smallAngleLimit || angles[i] < smallAngleLimit) return false;
 			break; // skipping
 		}
+
+		if ( angle == 0 && angles[i] == 0 && !allzero) break; //skipping
 
 		// must be done here, after the proceeding if() and before the following if()
 		// we don't want to include the previous move > 0 in the skipping average 
 		totalAngle += angles[i];
 		totalTime += timeBetweenCommands;
+		itemsToAverage++;
 
 		if ( angle == 0 && angles[i] != 0 )
 		{
 			if ( anyzero == true )
 			{
 				// small angle, probably not skipping
-				if ( angles[i] <= smallAngleLimit ) return;
+				if ( angles[i] <= smallAngleLimit ) return false;
 				break; // skipping
 			}
 			else 
 			{
-				// full > 0 history, probably not skipping
-				if ( howFarBack == AIMSPREAD_MAX_HISTORY - 1 ) return;
+				// full non-zero history, probably not skipping
+				if ( howFarBack == AIMSPREAD_MAX_HISTORY-1 ) return false;
 			}
 		}
 	}
@@ -3348,8 +3353,12 @@ void PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 	totalAngle += angle;
 	totalTime += pm->cmd.serverTime - pm->oldcmd.serverTime;
+	itemsToAverage++;
 
 	*speedPtr = totalAngle / ( float(totalTime) / 1000.0f );
+
+	if (debugging) Com_printf("%i -> ", itemsToAverage);
+	return true;
 }
 
 /*
@@ -3364,6 +3373,8 @@ PM_AdjustAimSpreadScale
 
 
 void PM_AdjustAimSpreadScale( void ) {
+	bool skipping = false;
+
 	#ifdef CGAMEDLL
     	int frametimeTarget = 1000 / com_maxFPS.integer;
     #else
@@ -3509,19 +3520,22 @@ void PM_AdjustAimSpreadScale( void ) {
 
 		angle = 0.0f;
 
-		// take player view rotation into account
-		for (int i = 0; i < 2; i++) {
-			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) ); //check fabs vs Q_fabs
-			if (angle > 180) angle = 360 - angle;
-		}
-
 		// take player movement into account (even if only for the scoped weapons)
 		// TODO: also check for jump/crouch and adjust accordingly
 		if (BG_IsScopedWeapon(pm->ps->weapon)) {
 			for (int i = 0; i < 2; i++) angle += fabs(pm->ps->velocity[i]); //check fabs vs Q_fabs
 		}
 
+		// take player view rotation into account
+		for (int i = 0; i < 2; i++) {
+			angle += fabs( SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]) ); //check fabs vs Q_fabs
+			if (angle > 180) angle = 360 - angle;
+		}
+		if (debugging) Com_printf("%f -> ",angle);
+
 		speed = angle / timeBetweenCommands;
+
+		if (debugging) Com_printf("%06.2f -> ",speed);
 
 		float noSpreadSpeedLimit = AIMSPREAD_VIEWRATE_MIN / wpnScale;
 		float maxSpreadSpeedLimit = AIMSPREAD_VIEWRATE_RANGE / wpnScale;
@@ -3529,13 +3543,15 @@ void PM_AdjustAimSpreadScale( void ) {
 		////////////////////////////////////////////////////////////////////////////////
 		if ( cvars::tempSpread.ivalue == 2 ) speed = 0; // no spread
 		if ( cvars::tempSpread.ivalue == 1 && frametimeTarget < 8 )
-		{
-			PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit, frametimeTarget);
+		{			
+			skipping = PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit, frametimeTarget);
+			if (!skipping && debugging) Com_printf("0 -> ");
+
 		}
+		if (debugging) Com_printf("%06.2f -> ",speed);
 		////////////////////////////////////////////////////////////////////////////////
 
 		speed -= noSpreadSpeedLimit;
-
 		if ( speed <= 0 ) speed = 0;
 		if( speed > maxSpreadSpeedLimit ) speed = maxSpreadSpeedLimit;
 
@@ -3557,7 +3573,7 @@ void PM_AdjustAimSpreadScale( void ) {
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
 
-	Com_Printf("%08.4f", pm->ps->aimSpreadScaleFloat);
+	Com_Printf("%09.5f\n", pm->ps->aimSpreadScaleFloat);
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
