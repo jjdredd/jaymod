@@ -765,6 +765,8 @@ void CG_UpdateCvars( void ) {
 
     if (jayFlags)
         CG_SetJayFlags();
+
+    CG_SetFrametime(); // cake
 }
 
 void CG_setClientFlags(void)
