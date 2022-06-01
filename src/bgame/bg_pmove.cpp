@@ -3306,7 +3306,7 @@ bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 		referenceTime = pm->pmext->aimSpreadHistoryTime[i];
 
 		// check if remaining history is incoherent or outdated
-		if ( timeBetweenCommands <= 0 || timeBetweenCommands > 4*frametimeTarget ) //magic number alert
+		if ( timeBetweenCommands <= 0 || timeBetweenCommands > 50) // 4*frametimeTarget ) //magic number alert
 		{
 			howFarBack = AIMSPREAD_MAX_HISTORY;
 			break;
@@ -3379,7 +3379,8 @@ void PM_AdjustAimSpreadScale( void ) {
 	#ifdef CGAMEDLL
     	int frametimeTarget = 1000 / com_maxFPS.integer;
     #else
-    	int frametimeTarget = client->pers.frametime; //no clamping for server yet
+    	//int frametimeTarget = pm->pmext->frametime; //no clamping for server yet
+    	int frametimeTarget = pm->frametime;
     #endif
     Com_Printf("frametimeTarget: %i \n", frametimeTarget);
 
@@ -6450,6 +6451,7 @@ int Pmove (pmove_t *pmove) {
 
 	// RF
 	pm = pmove;
+	Com_Printf("%i %i %i %i",pm->frametime, pmove->frametime, pm->pmext->frametime, pmove->pmext->frametime);
 	PM_AdjustAimSpreadScale();
 	//pm->ps->aimSpreadScale = 0;
 	//pm->ps->aimSpreadScaleFloat = 0.0;

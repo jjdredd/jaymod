@@ -12,8 +12,6 @@ namespace objects {
 
     extern Cvar sv_fps;
     extern Cvar sv_maxRate;
-
-    //extern Cvar com_maxFPS;
 } // namespace objects
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1423,6 +1423,9 @@ void ClientThink_real( gentity_t *ent, bool skipServerTime ) {
 	// MrE: always use capsule for AI and player
 	pm.trace = trap_TraceCapsule;
 
+	pm.pmext->frametime = client->pers.frametime;
+	pm.frametime = client->pers.frametime;
+
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
 		// DHM-Nerve added:: EF_DEAD is checked for in Pmove functions, but wasn't being set until after Pmove

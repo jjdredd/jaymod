@@ -1728,13 +1728,15 @@ void ClientUserinfoChanged( int clientNum ) {
 //unlagged - client options
 
 //maxFPS - frametime error correction 
-    s = Info_ValueForKey( userinfo, "cg_frametime" );
+    s = Info_ValueForKey( userinfo, "cl_frametime" );
     if ( !atoi( s ) ) {
-        client->pers.frametime = 1;
+    	client->pers.frametime = 1;
     } else {
         client->pers.frametime = atoi( s );
     }
-//maxFPS
+    client->pmext.frametime = client->pers.frametime; // redundant?
+
+//maxFPS - frametime error correction 
 
     // OSP - extra client info settings
     //       FIXME: move other userinfo flag settings in here

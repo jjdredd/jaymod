@@ -706,8 +706,9 @@ typedef struct {
 	qboolean	m97reloadInterrupt;
 
 	float		aimSpreadHistoryAngle[AIMSPREAD_MAX_HISTORY];
-	int			aimSpreadHistoryTime[AIMSPREAD_MAX_HISTORY];
-	int			aimSpreadHistoryHead;	// current index for aimSpreadHistory
+	int	    aimSpreadHistoryTime[AIMSPREAD_MAX_HISTORY];
+	int		  aimSpreadHistoryHead;	// current index for aimSpreadHistory
+	int     frametime;
 
     // Fall kills
 #ifdef GAMEDLL
@@ -772,6 +773,7 @@ typedef struct {
 	// tjw: used to determine if the player move is for prediction
 	//      if it is, the movement should trigger no events 
 	//qboolean predict;
+	int frametime;
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles

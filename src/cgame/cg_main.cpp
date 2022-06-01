@@ -323,6 +323,7 @@ vmCvar_t	cg_optimizePrediction;
 //unlagged - client options
 
 vmCvar_t	com_maxFPS;
+vmCvar_t cl_frametime;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -534,8 +535,6 @@ cvarTable_t	cvarTable[] = {
 	{ &cg_debugSkills,		"cg_debugSkills",	"0",	0 },
 	{ NULL,					"cg_etVersion",		"",		CVAR_USERINFO | CVAR_ROM },
 
-	{ NULL,					"cg_frametime", "",		CVAR_USERINFO | CVAR_ROM },
-
 	{ &cg_drawFireteamOverlay, "cg_drawFireteamOverlay", "1", CVAR_ARCHIVE },
 	{ &cg_drawSmallPopupIcons, "cg_drawSmallPopupIcons", "1", CVAR_ARCHIVE },
 
@@ -586,11 +585,24 @@ cvarTable_t	cvarTable[] = {
 	{ &cg_recording_statusline, "cg_recording_statusline", "9", CVAR_ARCHIVE },
 
 	{ &com_maxFPS, "com_maxFPS", "85", CVAR_ARCHIVE },
+	{ &cl_frametime, "cl_frametime", "", CVAR_USERINFO | CVAR_ROM },
 };
 
 int		cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
 qboolean	cvarsLoaded = qfalse;
 void CG_setClientFlags(void);
+
+/*
+=================
+CG_SetFrametime
+=================
+*/
+void CG_SetFrametime() {
+	int frametime = 1000 / com_maxFPS.integer;
+	char frametime_str[sizeof(frametime)];  
+	Com_sprintf( frametime_str, sizeof(frametime), "%i", frametime);
+	trap_Cvar_Set( "cl_frametime", frametime_str );
+}
 
 /*
 =================
@@ -2953,7 +2965,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	}
 	trap_Cvar_Set( "cg_etVersion", GAME_VERSION_DATED );	// So server can check
 
-	trap_Cvar_Set( "cg_frametime", int(1000 / com_maxFPS) ); // cake
+	CG_SetFrametime(); // cake
 
     // Check Jaymod version.
     s = Info_ValueForKey( CG_ConfigString( CS_JAYMODINFO ), "jver" );
@@ -3080,6 +3092,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	CG_ParseJaymodinfo();
 	CG_ParseSkillLevels();
 	CG_SetJayFlags();
+	CG_SetFrametime(); // cake
 	CG_SetMACAddress();
 
 	// Jaybird - Call an authentication request
