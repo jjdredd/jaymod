@@ -598,10 +598,10 @@ CG_SetFrametime
 =================
 */
 void CG_SetFrametime() {
-	int frametime = 1000 / com_maxFPS.integer;
-	char frametime_str[sizeof(frametime)];  
-	Com_sprintf( frametime_str, sizeof(frametime), "%i", frametime);
-	trap_Cvar_Set( "cl_frametime", frametime_str );
+	int frametimeTarget = 1000 / com_maxFPS.integer;
+	char str[sizeof(frametimeTarget)];  
+	Com_sprintf( str, sizeof(frametimeTarget), "%i", frametime);
+	trap_Cvar_Set( "cl_frametime", str );
 }
 
 /*
@@ -621,9 +621,6 @@ void CG_SetJayFlags() {
 	// This will trigger an update to the server
 	trap_Cvar_Set( "cg_jaymiscflags", va("%i",flags));
 	cg_jaymiscflags.integer = flags;
-
-	//trap_Cvar_Set( "com_maxFPS", va("%i", 333));
-	//trap_Cvar_Update(&com_maxFPS);
 }
 
 /*

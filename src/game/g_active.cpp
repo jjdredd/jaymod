@@ -1423,8 +1423,7 @@ void ClientThink_real( gentity_t *ent, bool skipServerTime ) {
 	// MrE: always use capsule for AI and player
 	pm.trace = trap_TraceCapsule;
 
-	pm.pmext->frametime = client->pers.frametime;
-	pm.frametime = client->pers.frametime;
+	pm.frametimeTarget = client->pers.frametimeTarget; // cake
 
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;

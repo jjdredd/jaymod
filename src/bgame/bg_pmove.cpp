@@ -548,7 +548,6 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 #ifdef GAMEDLL
 	extern	vmCvar_t		g_gametype;
 	extern	vmCvar_t		g_movespeed;
-	//extern	vmCvar_t		com_maxFPS;
 #endif
 
 /*
@@ -3275,8 +3274,13 @@ bool debugging = false;
 PM_AimSpreadSkipProtection
 ==============
 */
-bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTime, float noSpreadSpeedLimit, int frametimeTarget)
+bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTime, float noSpreadSpeedLimit)
 {
+	bool logging = false;
+	#ifdef GAMEDLL
+    	logging = true;
+    #endif
+
 	bool anyzero = false;
 	bool allzero = true;
 
@@ -3284,7 +3288,7 @@ bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 	int totalTime = 0;
 	float totalAngle = 0.0f;
 
-	float smallAngleLimit = noSpreadSpeedLimit * frametimeTarget / 1000.0;
+	float smallAngleLimit = noSpreadSpeedLimit * pm->frametimeTarget / 1000.0;
 
 	int i = pm->pmext->aimSpreadHistoryHead;
 	float *angles = pm->pmext->aimSpreadHistoryAngle;
@@ -3359,7 +3363,7 @@ bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 	*speedPtr = totalAngle / ( float(totalTime) / 1000.0f );
 
-	if (debugging) Com_Printf("%i -> ", itemsToAverage);
+	if (logging && debugging) Com_Printf("%i -> ", itemsToAverage);
 	return true;
 }
 
@@ -3374,15 +3378,21 @@ PM_AdjustAimSpreadScale
 // #define AIMSPREAD_VIEWRATE_RANGE 100.0f
 
 void PM_AdjustAimSpreadScale( void ) {
+	bool logging = false;
+
+	#ifdef GAMEDLL
+		if (cvars::g_bulletmodeDebug.ivalue & 512) debugging = true;
+		Com_Printf("%i ", pm->frametimeTarget);
+		logging = true;
+	#endif
+	
 	bool skipping = false;
 
-	#ifdef CGAMEDLL
-    	int frametimeTarget = 1000 / com_maxFPS.integer;
-    #else
-    	//int frametimeTarget = pm->pmext->frametime; //no clamping for server yet
-    	int frametimeTarget = pm->frametime;
-    #endif
-    Com_Printf("frametimeTarget: %i \n", frametimeTarget);
+	// #ifdef CGAMEDLL
+	// 	int frametimeTarget = 1000 / com_maxFPS.integer;
+	// #else
+	// 	int frametimeTarget = pm->pmext->frametime;
+	// #endif
 
 	float increase, decrease, angle, speed, scale, wpnScale, timeBetweenCommands;
 
@@ -3395,9 +3405,9 @@ void PM_AdjustAimSpreadScale( void ) {
 		AIMSPREAD_VIEWRATE_MIN = 30.0f;
 		AIMSPREAD_VIEWRATE_RANGE = 120.0f;
 	} else {
-		AIMSPREAD_INCREASE_RATE = 676.2f; //665
-		AIMSPREAD_VIEWRATE_MIN = 50.0f; //75
-		AIMSPREAD_VIEWRATE_RANGE = 100.0f; //60
+		AIMSPREAD_INCREASE_RATE = 676.2f;
+		AIMSPREAD_VIEWRATE_MIN = 50.0f;
+		AIMSPREAD_VIEWRATE_RANGE = 100.0f;
 	}
 
 	// all weapons are very inaccurate in zoomed mode
@@ -3415,9 +3425,10 @@ void PM_AdjustAimSpreadScale( void ) {
     }
 
     timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
+
 	//sometimes frames are faster than com_maxFPS should allow, this causes a spike in spread
 	//this check prevents that spike, frames slower than com_maxFPS are assumed to be a real delay 
-	if (int(timeBetweenCommands) < frametimeTarget) timeBetweenCommands = frametimeTarget;
+	if (int(timeBetweenCommands) < pm->frametimeTarget) timeBetweenCommands = pm->frametimeTarget;
     
     timeBetweenCommands /=  1000.0f; // convert ms to sec
 
@@ -3535,26 +3546,26 @@ void PM_AdjustAimSpreadScale( void ) {
 			if (angle > 180) angle = 360 - angle;
 		}
 		
-		Com_Printf("%i ", pm->cmd.serverTime);
-		Com_Printf("%f ", angle);
-		if (debugging) Com_Printf("%f -> ",angle);
+		if (logging) Com_Printf("%i ", pm->cmd.serverTime);
+		if (logging) Com_Printf("%f ", angle);
+		if (logging && debugging) Com_Printf("%f -> ",angle);
 
 		speed = angle / timeBetweenCommands;
 
-		if (debugging) Com_Printf("%06.2f -> ",speed);
+		if (logging && debugging) Com_Printf("%06.2f -> ",speed);
 
 		float noSpreadSpeedLimit = AIMSPREAD_VIEWRATE_MIN / wpnScale;
 		float maxSpreadSpeedLimit = AIMSPREAD_VIEWRATE_RANGE / wpnScale;
 
 		////////////////////////////////////////////////////////////////////////////////
 		if ( cvars::tempSpread.ivalue == 2 ) speed = 0; // no spread
-		if ( cvars::tempSpread.ivalue == 1 && frametimeTarget < 8 )
+		if ( cvars::tempSpread.ivalue == 1 && pm->frametimeTarget < 8 )
 		{			
-			skipping = PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit, frametimeTarget);
-			if (!skipping && debugging) Com_Printf("0 -> ");
+			skipping = PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit);
+			if (!skipping && debugging) Com_Printf("X -> ");
 
 		}
-		if (debugging) Com_Printf("%06.2f -> ",speed);
+		if (logging && debugging) Com_Printf("%06.2f -> ",speed);
 		////////////////////////////////////////////////////////////////////////////////
 
 		speed -= noSpreadSpeedLimit;
@@ -3579,7 +3590,7 @@ void PM_AdjustAimSpreadScale( void ) {
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
 
-	Com_Printf("%09.5f\n", pm->ps->aimSpreadScaleFloat);
+	if (logging) Com_Printf("%09.5f\n", pm->ps->aimSpreadScaleFloat);
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)

@@ -79,8 +79,6 @@ namespace objects {
     Cvar gameState ( "gameState", "-1", CVAR_ROM );
 
     Cvar tempSpread ( "tempSpread", "1", CVAR_ROM );
-    //Cvar cl_frametime ( "com_maxFPS", "1", 0, cb_cl_frametime );
-    //Cvar bg_maxFPS ( "com_maxFPS", "85", CVAR_ROM );
 
 ///////////////////////////////////////////////////////////////////////////////
 
