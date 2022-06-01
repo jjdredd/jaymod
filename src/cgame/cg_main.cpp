@@ -600,7 +600,7 @@ CG_SetFrametime
 void CG_SetFrametime() {
 	int frametimeTarget = 1000 / com_maxFPS.integer;
 	char str[sizeof(frametimeTarget)];  
-	Com_sprintf( str, sizeof(frametimeTarget), "%i", frametime);
+	Com_sprintf( str, sizeof(frametimeTarget), "%i", frametimeTarget);
 	trap_Cvar_Set( "cl_frametime", str );
 }
 
