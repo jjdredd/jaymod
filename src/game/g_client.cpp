@@ -1730,11 +1730,11 @@ void ClientUserinfoChanged( int clientNum ) {
 //maxFPS - frametime error correction 
     s = Info_ValueForKey( userinfo, "cl_frametime" );
     if ( !atoi( s ) ) {
-    	client->pers.frametime = 1;
+    	client->pers.frametimeTarget = 1;
     } else {
-        client->pers.frametime = atoi( s );
+        client->pers.frametimeTarget = atoi( s );
     }
-    client->pmext.frametime = client->pers.frametime; // redundant?
+    //client->pmext.frametimeTarget = client->pers.frametimeTarget; // redundant?
 
 //maxFPS - frametime error correction 
 
