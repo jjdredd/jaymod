@@ -6462,7 +6462,7 @@ int Pmove (pmove_t *pmove) {
 
 	// RF
 	pm = pmove;
-	Com_Printf("%i %i %i %i",pm->frametime, pmove->frametime, pm->pmext->frametime, pmove->pmext->frametime);
+	//Com_Printf("%i %i %i %i",pm->frametimeTarget, pmove->frametimeTarget);
 	PM_AdjustAimSpreadScale();
 	//pm->ps->aimSpreadScale = 0;
 	//pm->ps->aimSpreadScaleFloat = 0.0;
