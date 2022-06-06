@@ -3337,17 +3337,24 @@ bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 		if ( angle == 0 && angles[i] != 0 )
 		{
-			if ( anyzero == true )
-			{
-				// small angle, probably not skipping
-				if ( angles[i] <= smallAngleLimit ) return false;
-				break; // skipping
-			}
-			else 
-			{
-				// full non-zero history, probably not skipping
-				if ( howFarBack == AIMSPREAD_MAX_HISTORY-1 ) return false;
-			}
+			if ( angles[i] <= smallAngleLimit ) return false;
+			break; // skipping
+			// if ( anyzero == true )
+			// {
+			// 	// small angle, probably not skipping
+			// 	if ( angles[i] <= smallAngleLimit ) return false;
+			// 	break; // skipping
+			// }
+			// else 
+			// {
+			// 	// full non-zero history, probably not skipping
+			// 	if ( howFarBack == AIMSPREAD_MAX_HISTORY-1 ) return false;
+			// }
+		}
+
+		if ( howFarBack == AIMSPREAD_MAX_HISTORY-1 ) {
+			if (logging && debugging) Com_Printf("UNEXPECTED STATE AIMSPREAD_MAX_HISTORY");
+			//return false;
 		}
 	}
 
@@ -3425,10 +3432,12 @@ void PM_AdjustAimSpreadScale( void ) {
     }
 
     timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
+    if (logging && debugging) Com_Printf(" times %i %i %i -> ", pm->cmd.serverTime, pm->oldcmd.serverTime, pm->ps->commandTime);
+    if (logging && debugging) Com_Printf("tbc %f -> ", timeBetweenCommands);
 
 	//sometimes frames are faster than com_maxFPS should allow, this causes a spike in spread
 	//this check prevents that spike, frames slower than com_maxFPS are assumed to be a real delay 
-	if (int(timeBetweenCommands) < pm->frametimeTarget) timeBetweenCommands = pm->frametimeTarget;
+	//if (int(timeBetweenCommands) < pm->frametimeTarget) timeBetweenCommands = pm->frametimeTarget;
     
     timeBetweenCommands /=  1000.0f; // convert ms to sec
 
@@ -6431,8 +6440,12 @@ Pmove
 Can be called by either the server or the client
 ================
 */
-int Pmove (pmove_t *pmove) {
+int Pmove(pmove_t *pmove) {
 	int			finalTime;
+
+	//int tbc = pmove->cmd.serverTime - pmove->oldcmd.serverTime;
+	//Com_Printf("%i %i %i \n",pmove->cmd.serverTime, pmove->oldcmd.serverTime, tbc);
+	//return
 
 	// Ridah
 /*	if (pmove->ps->eFlags & EF_DUMMY_PMOVE) {

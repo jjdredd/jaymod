@@ -656,7 +656,7 @@ typedef enum {
 #define PMF_TIME_LOCKPLAYER	32768	// DHM - Nerve :: Lock all movement and view changes
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK|PMF_TIME_LOCKPLAYER/*|PMF_TIME_LOAD*/)
 
-#define	AIMSPREAD_MAX_HISTORY		4   // number of frames for spread moving average
+#define	AIMSPREAD_MAX_HISTORY		10   // maximum number of frames for spread moving average
 
 #include <bgame/bg_attack2.h>
 
