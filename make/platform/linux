@@ -20,7 +20,7 @@ AR  = /usr/bin/ar
 
 ###############################################################################
 
-CXX = $(GCC/)bin/g++
+CXX = $(GCC/)bin/g++ -fno-gnu-unique
 
 CXX.pch.ext  = gch
 CXX.pch.arch = default
@@ -32,7 +32,7 @@ CXX.opt.R = $(call fnPrefix,-Xlinker -R,$(CXX.R) $($(CXX.inherit).CXX.R))
 CXX.opt.U = $(call fnPrefix,-U,$(CXX.U) $($(CXX.inherit).CXX.U))
 CXX.opt.l = $(call fnPrefix,-l,$(CXX.l) $($(CXX.inherit).CXX.l))
 
-CXX.opt.BIT    = -m32
+CXX.opt.BIT    = -m32 
 CXX.opt.ML     = -fmessage-length=0
 CXX.opt.NSA    = -fno-strict-aliasing
 CXX.opt.O      = -O3 -march=i686 -ffast-math
