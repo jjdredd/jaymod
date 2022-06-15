@@ -3559,7 +3559,7 @@ void Bullet_Endpos(gentity_t *ent, float spread, vec3_t *end) {
 	r = crandom()*spread;
 	u = crandom()*spread;
 
-	Com_Printf("^3spread: %f \n", spread);
+	Com_Printf("^3(g_weapon.cpp 3562) spread: %f \n", spread);
 
 	if(BG_IsScopedWeapon(ent->s.weapon)) {
 		// aim dir already accounted for sway of scoped weapons in CalcMuzzlePoints()
@@ -4392,7 +4392,7 @@ void FireWeapon( gentity_t *ent ) {
 	CalcMuzzlePoints(ent, ent->s.weapon);
 
 	aimSpreadScale = ent->client->currentAimSpreadScale;
-	Com_Printf("^4g_weapons.cpp aimSpreadScale: %f \n", aimSpreadScale);
+	Com_Printf("^4(g_weapons.cpp 4395) aimSpreadScale: %f \n", aimSpreadScale);
 
 	// Ridah, add accuracy factor for AI
 	aimSpreadScale+= 0.15f;	// (SA) just adding a temp /maximum/ accuracy for player (this will be re-visited in greater detail :)

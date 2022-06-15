@@ -3267,7 +3267,9 @@ void PM_CoolWeapons( void ) {
 
 }
 
-bool debugging = false;
+#ifdef GAMEDLL
+extern vmCvar_t g_developer;
+#endif
 
 /*
 ==============
@@ -3276,10 +3278,10 @@ PM_AimSpreadSkipProtection
 */
 bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTime, float noSpreadSpeedLimit)
 {
-	bool logging = false;
-	#ifdef GAMEDLL
-    	logging = true;
-    #endif
+	int developer = 0;
+  #ifdef GAMEDLL
+	developer = g_developer.integer;
+  #endif
 
 	bool anyzero = false;
 	bool allzero = true;
@@ -3353,7 +3355,7 @@ bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 		}
 
 		if ( howFarBack == AIMSPREAD_MAX_HISTORY-1 ) {
-			if (logging && debugging) Com_Printf("UNEXPECTED STATE AIMSPREAD_MAX_HISTORY");
+			if(developer & 4) Com_Printf("AIMSPREAD_MAX_HISTORY");
 			//return false;
 		}
 	}
@@ -3370,7 +3372,7 @@ bool PM_AimSpreadSkipProtection( float * speedPtr, float angle, int referenceTim
 
 	*speedPtr = totalAngle / ( float(totalTime) / 1000.0f );
 
-	if (logging && debugging) Com_Printf("%i -> ", itemsToAverage);
+	if(developer & 4) Com_Printf("%i -> ", itemsToAverage);
 	return true;
 }
 
@@ -3384,16 +3386,16 @@ PM_AdjustAimSpreadScale
 // #define AIMSPREAD_VIEWRATE_MIN	 50.0f
 // #define AIMSPREAD_VIEWRATE_RANGE 100.0f
 
-void PM_AdjustAimSpreadScale( void ) {
-	bool logging = false;
+#define FORWARD_BIT  1  // 0b000000X0
+#define BACKWARD_BIT 2  // 0b00000X00
 
-	#ifdef GAMEDLL
-		if (cvars::g_bulletmodeDebug.ivalue & 512) debugging = true;
-		Com_Printf("%i ", pm->frametimeTarget);
-		logging = true;
-	#endif
-	
+void PM_AdjustAimSpreadScale( void ) {	
 	bool skipping = false;
+
+	int developer = 0;
+  #ifdef GAMEDLL
+	developer = g_developer.integer;
+  #endif
 
 	// #ifdef CGAMEDLL
 	// 	int frametimeTarget = 1000 / com_maxFPS.integer;
@@ -3432,13 +3434,14 @@ void PM_AdjustAimSpreadScale( void ) {
     }
 
     timeBetweenCommands = pm->cmd.serverTime - pm->oldcmd.serverTime;
-    if (logging && debugging) Com_Printf(" times %i %i %i -> ", pm->cmd.serverTime, pm->oldcmd.serverTime, pm->ps->commandTime);
-    if (logging && debugging) Com_Printf("tbc %f -> ", timeBetweenCommands);
+    if(developer & 4) Com_Printf("(%i - %i) = %i ms", pm->cmd.serverTime, pm->oldcmd.serverTime, int(timeBetweenCommands));
 
 	//sometimes frames are faster than com_maxFPS should allow, this causes a spike in spread
 	//this check prevents that spike, frames slower than com_maxFPS are assumed to be a real delay 
 	//if (int(timeBetweenCommands) < pm->frametimeTarget) timeBetweenCommands = pm->frametimeTarget;
-    
+	timeBetweenCommands += pm->pmext->deltaAdjustment;
+	if(developer & 4) Com_Printf("+ %2i = %i ms ->", pm->pmext->deltaAdjustment, int(timeBetweenCommands));
+
     timeBetweenCommands /=  1000.0f; // convert ms to sec
 
 	wpnScale = 0.0f;
@@ -3555,26 +3558,27 @@ void PM_AdjustAimSpreadScale( void ) {
 			if (angle > 180) angle = 360 - angle;
 		}
 		
-		if (logging) Com_Printf("%i ", pm->cmd.serverTime);
-		if (logging) Com_Printf("%f ", angle);
-		if (logging && debugging) Com_Printf("%f -> ",angle);
+		if(developer & 2) Com_Printf("%i ", pm->cmd.serverTime);
+		if(developer & 2) Com_Printf("%f ", angle);
+
+		if(developer & 4) Com_Printf("%f -> ",angle);
 
 		speed = angle / timeBetweenCommands;
 
-		if (logging && debugging) Com_Printf("%06.2f -> ",speed);
+		if(developer & 4) Com_Printf("%06.2f -> ",speed);
 
 		float noSpreadSpeedLimit = AIMSPREAD_VIEWRATE_MIN / wpnScale;
 		float maxSpreadSpeedLimit = AIMSPREAD_VIEWRATE_RANGE / wpnScale;
 
 		////////////////////////////////////////////////////////////////////////////////
 		if ( cvars::tempSpread.ivalue == 2 ) speed = 0; // no spread
-		if ( cvars::tempSpread.ivalue == 1 && pm->frametimeTarget < 8 )
+		if ( cvars::tempSpread.ivalue == 1 ) // && pm->frametimeTarget < 8 )
 		{			
 			skipping = PM_AimSpreadSkipProtection(&speed, angle, pm->cmd.serverTime, noSpreadSpeedLimit);
-			if (!skipping && debugging) Com_Printf("X -> ");
+			if (!skipping && developer & 4) Com_Printf("X -> ");
 
 		}
-		if (logging && debugging) Com_Printf("%06.2f -> ",speed);
+		if(developer & 4) Com_Printf("%06.2f -> ",speed);
 		////////////////////////////////////////////////////////////////////////////////
 
 		speed -= noSpreadSpeedLimit;
@@ -3599,7 +3603,24 @@ void PM_AdjustAimSpreadScale( void ) {
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
 
-	if (logging) Com_Printf("%09.5f\n", pm->ps->aimSpreadScaleFloat);
+	if(developer & 2) Com_Printf("%09.5f\n", pm->ps->aimSpreadScaleFloat);
+
+  #ifdef GAMEDLL
+	if ( pm->cmd.flags & (1 << FORWARD_BIT) ) {
+		pm->pmext->deltaAdjustment = -1;
+		//if(developer & 2) Com_Printf("^i%i +1\n", pm->cmd.serverTime);
+	}
+	else if ( pm->cmd.flags & (1 << BACKWARD_BIT) )
+	{
+		pm->pmext->deltaAdjustment = 2;
+		//if(developer & 2) Com_Printf("^i%i -2\n", pm->cmd.serverTime);
+	}
+	else
+	{
+		pm->pmext->deltaAdjustment = 0;
+		//if(developer & 2) Com_Printf("^i%i  0\n", pm->cmd.serverTime);
+	}
+  #endif
 }
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
