@@ -2253,7 +2253,8 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
-	if ( cg_drawCrosshair.integer < 0 )	//----(SA)	moved down so it doesn't keep the scoped weaps from drawing reticles
+	//----(SA)	moved down so it doesn't keep the scoped weaps from drawing reticles
+	if ( cg_drawCrosshair.integer < -1 || cg_drawCrosshair.integer > 9) 
 		return;
 
 	// no crosshair while leaning
@@ -2286,11 +2287,14 @@ static void CG_DrawCrosshair(void) {
 	y = cg_crosshairY.integer;
 	CG_AdjustFrom640( &x, &y, &w, &h );
 
-	hShader = cgs.media.crosshairShader[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ];
+	// -1 is the 'code' for custom crosshair, 0-9 are the existing ones
+	int whichCrosshair = cg_drawCrosshair.integer == -1 ? 10 : cg_drawCrosshair.integer;
+
+	hShader = cgs.media.crosshairShader[ whichCrosshair ];
 
 	trap_R_DrawStretchPic( x + 0.5 * (cg.refdef_current->width - w), y + 0.5 * (cg.refdef_current->height - h), w, h, 0, 0, 1, 1, hShader );
 
-	if ( cg.crosshairShaderAlt[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ] ) {
+	if ( cg.crosshairShaderAlt[ whichCrosshair ] ) {
 		w = h = cg_crosshairSize.value;
 		x = cg_crosshairX.integer;
 		y = cg_crosshairY.integer;
@@ -2300,7 +2304,7 @@ static void CG_DrawCrosshair(void) {
 			trap_R_SetColor(cg.xhairColorAlt);
 		}
 
-		trap_R_DrawStretchPic( x + 0.5 * (cg.refdef_current->width - w), y + 0.5 * (cg.refdef_current->height - h), w, h, 0, 0, 1, 1, cg.crosshairShaderAlt[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ] );
+		trap_R_DrawStretchPic( x + 0.5 * (cg.refdef_current->width - w), y + 0.5 * (cg.refdef_current->height - h), w, h, 0, 0, 1, 1, cg.crosshairShaderAlt[ whichCrosshair ] );
 	}
 }
 
