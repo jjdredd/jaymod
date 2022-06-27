@@ -1779,14 +1779,17 @@ void CG_SpeakerEditorDraw( void )
 
 		CG_AdjustFrom640( &x, &y, &w, &h );
 
+		// -1 is the 'code' for custom crosshair, 0-9 are the existing ones
+		int whichCrosshair = cg_drawCrosshair.integer == -1 ? 10 : cg_drawCrosshair.integer;
+
 		trap_R_DrawStretchPic( x + 0.5 * (cg.refdef_current->width - w),
 							   y + 0.5 * (cg.refdef_current->height - h),
-							   w, h, 0, 0, 1, 1, cgs.media.crosshairShader[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ] );
+							   w, h, 0, 0, 1, 1, cgs.media.crosshairShader[ whichCrosshair ] );
 
-		if( cg.crosshairShaderAlt[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ] ) {
+		if( cg.crosshairShaderAlt[ whichCrosshair ] ) {
 			trap_R_DrawStretchPic( x + 0.5 * (cg.refdef_current->width - w),
 								   y + 0.5 * (cg.refdef_current->height - h),
-								   w, h, 0, 0, 1, 1, cg.crosshairShaderAlt[ cg_drawCrosshair.integer % NUM_CROSSHAIRS ] );
+								   w, h, 0, 0, 1, 1, cg.crosshairShaderAlt[ whichCrosshair ] );
 		}
 
 

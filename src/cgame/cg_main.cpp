@@ -1644,13 +1644,10 @@ static void CG_RegisterGraphics( void ) {
 	for ( i = 0 ; i < NUM_CROSSHAIRS - 1 ; i++ ) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader( va("gfx/2d/crosshair%c", 'a'+i) );
 		cg.crosshairShaderAlt[i] = trap_R_RegisterShader( va("gfx/2d/crosshair%c_alt", 'a'+i) );
-
-		crosshairj_alt.tga
-		crosshairj.tga
 	}
 	//attempt at custom crosshair option (try with/without .tga)
-	cgs.media.crosshairShader[10] = trap_R_RegisterShader( "crosshair.tga" );
-	cg.crosshairShaderAlt[10] = trap_R_RegisterShader( "crosshair_alt.tga" );
+	cgs.media.crosshairShader[NUM_CROSSHAIRS - 1] = trap_R_RegisterShaderNoMip( "crosshair/crosshair" );
+	cg.crosshairShaderAlt[NUM_CROSSHAIRS - 1] = trap_R_RegisterShaderNoMip( "crosshair/crosshair_alt" );
 
 	for ( i = 0 ; i < SK_NUM_SKILLS ; i++ ) {
 		cgs.media.medals[i] = trap_R_RegisterShaderNoMip( va( "gfx/limbo/medals0%i", i ) );

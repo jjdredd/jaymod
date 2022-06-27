@@ -318,10 +318,14 @@ void AssetCache() {
 	uiInfo.uiDC.Assets.checkboxCheckNot = trap_R_RegisterShaderNoMip( ASSET_CHECKBOX_CHECK_NOT );
 	uiInfo.uiDC.Assets.checkboxCheckNo = trap_R_RegisterShaderNoMip( ASSET_CHECKBOX_CHECK_NO );
 
-	for( n = 0; n < NUM_CROSSHAIRS; n++ ) {
+	for( n = 0; n < NUM_CROSSHAIRS - 1; n++ ) {
 		uiInfo.uiDC.Assets.crosshairShader[n] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c", 'a' + n ) );
 		uiInfo.uiDC.Assets.crosshairAltShader[n] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c_alt", 'a' + n ) );
 	}
+
+	//attempt at custom crosshair option (try with/without .tga)
+	uiInfo.uiDC.Assets.crosshairShader[NUM_CROSSHAIRS - 1] = trap_R_RegisterShaderNoMip( "crosshair/crosshair" );
+	uiInfo.uiDC.Assets.crosshairAltShader[NUM_CROSSHAIRS - 1] = trap_R_RegisterShaderNoMip( "crosshair/crosshair_alt" );
 
 	//uiInfo.newHighScoreSound = trap_S_RegisterSound("sound/feedback/voc_newhighscore.wav");
 

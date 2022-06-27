@@ -2254,7 +2254,7 @@ static void CG_DrawCrosshair(void) {
 	}
 
 	//----(SA)	moved down so it doesn't keep the scoped weaps from drawing reticles
-	if ( cg_drawCrosshair.integer < -1 || cg_drawCrosshair.integer > 9) 
+	if ( cg_drawCrosshair.integer < -1 || cg_drawCrosshair.integer > 10) 
 		return;
 
 	// no crosshair while leaning
