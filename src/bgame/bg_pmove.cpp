@@ -3355,7 +3355,7 @@ void PM_AdjustAimSpreadScale( void ) {
 		break;
 	}
 
-	if (wpnScale) {
+	if (wpnScale || cvars::bg_spread.ivalue & 1 == false) {
         if (cvars::bg_misc.ivalue & MISC_REALAIMSPREAD) {
             if (pml.ladder) {
                 wpnScale *= 1.25f;
@@ -5124,9 +5124,13 @@ static void PM_Weapon( void ) {
 	}
 
 	// add the recoil amount to the aimSpreadScale
-//	pm->ps->aimSpreadScale += 3.0*aimSpreadScaleAdd;
-//	if (pm->ps->aimSpreadScale > 255) pm->ps->aimSpreadScale = 255;
-	pm->ps->aimSpreadScaleFloat += 3.0*aimSpreadScaleAdd;
+	//	pm->ps->aimSpreadScale += 3.0*aimSpreadScaleAdd;
+	//	if (pm->ps->aimSpreadScale > 255) pm->ps->aimSpreadScale = 255;
+	if (cvars::bg_spread.ivalue & 2)
+	{
+		pm->ps->aimSpreadScaleFloat += 3.0*aimSpreadScaleAdd;	
+	}
+	
 	if (pm->ps->aimSpreadScaleFloat > 255)
 		pm->ps->aimSpreadScaleFloat = 255;
 

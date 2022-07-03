@@ -4391,7 +4391,10 @@ void FireWeapon( gentity_t *ent ) {
 
 	aimSpreadScale = ent->client->currentAimSpreadScale;
 	// Ridah, add accuracy factor for AI
-	aimSpreadScale+= 0.15f;	// (SA) just adding a temp /maximum/ accuracy for player (this will be re-visited in greater detail :)
+	// (SA) just adding a temp /maximum/ accuracy for player (this will be re-visited in greater detail :)
+	//aimSpreadScale+= 0.15f;	
+	aimSpreadScale+= cvars::g_spreadMinimum.fvalue;
+
 	if(aimSpreadScale > 1)
 		aimSpreadScale = 1.0f;	// still cap at 1.0
 

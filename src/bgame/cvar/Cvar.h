@@ -96,6 +96,8 @@ namespace objects {
     extern Cvar bg_proneDelay;
 
     extern Cvar gameState;
+
+    extern Cvar bg_spread;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -31,6 +31,8 @@ namespace objects {
     extern Cvar sv_tempBanMessage;
 
     extern Cvar g_test; // TODO: nuke when done with scale testing
+
+    extern Cvar g_spreadMinimum;
 } // namespace objects
 
 ///////////////////////////////////////////////////////////////////////////////

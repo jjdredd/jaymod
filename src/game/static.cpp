@@ -71,12 +71,14 @@ namespace objects {
 
     Cvar bg_covertops          ( "g_covertops",          "0", CVAR_ARCHIVE | CVAR_JAYMODINFO );
 
-    Cvar bg_fixedphysics       ( "g_fixedphysics",        "1",   CVAR_JAYMODINFO );
-    Cvar bg_fixedphysicsfps    ( "g_fixedphysicsfps",     "125", CVAR_JAYMODINFO );
+    Cvar bg_fixedphysics       ( "g_fixedphysics",        "1", CVAR_JAYMODINFO );
+    Cvar bg_fixedphysicsfps    ( "g_fixedphysicsfps",   "125", CVAR_JAYMODINFO );
 
-    Cvar bg_proneDelay         ( "g_proneDelay",          "0",   CVAR_JAYMODINFO );
+    Cvar bg_proneDelay         ( "g_proneDelay",          "0", CVAR_JAYMODINFO );
 
-    Cvar gameState( "gameState", "-1", CVAR_WOLFINFO | CVAR_ROM );
+    Cvar gameState             ( "gameState",            "-1", CVAR_WOLFINFO | CVAR_ROM );
+
+    Cvar bg_spread             ( "bg_spread",             "3", CVAR_ARCHIVE);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -94,6 +96,8 @@ namespace objects {
     Cvar g_hitmodeGhosting     ( "g_hitmodeGhosting",      "0", 0, AbstractHitModel::cvarGhosting );
     Cvar g_hitmodeReference    ( "g_hitmodeReference",     "1", 0, NULL );
     Cvar g_hitmodeZone         ( "g_hitmodeZone",          "1", 0, AbstractHitModel::cvarZone );
+
+    Cvar g_spreadMinimum       ( "g_spreadMinimum",     "0.15", 0, CVAR_ARCHIVE);
 
     Cvar g_maxLandmines ( "team_maxLandmines", "10" );
     Cvar g_shutdownExit ( "g_shutdownExit",    "0" );
