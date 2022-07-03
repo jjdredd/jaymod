@@ -97,7 +97,7 @@ namespace objects {
     Cvar g_hitmodeReference    ( "g_hitmodeReference",     "1", 0, NULL );
     Cvar g_hitmodeZone         ( "g_hitmodeZone",          "1", 0, AbstractHitModel::cvarZone );
 
-    Cvar g_spreadMinimum       ( "g_spreadMinimum",     "0.15", 0, CVAR_ARCHIVE);
+    Cvar g_spreadMinimum       ( "g_spreadMinimum",     "0.15", CVAR_ARCHIVE);
 
     Cvar g_maxLandmines ( "team_maxLandmines", "10" );
     Cvar g_shutdownExit ( "g_shutdownExit",    "0" );
