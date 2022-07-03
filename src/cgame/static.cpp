@@ -78,6 +78,8 @@ namespace objects {
 
     Cvar gameState( "gameState", "-1", CVAR_ROM );
 
+    Cvar bg_spread      ( "cg_spread",      "3", CVAR_ROM );
+
 ///////////////////////////////////////////////////////////////////////////////
 
     Cvar cl_mac        ( "cl_mac",        "", CVAR_ROM | CVAR_USERINFO );

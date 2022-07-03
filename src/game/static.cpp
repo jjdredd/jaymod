@@ -78,7 +78,7 @@ namespace objects {
 
     Cvar gameState             ( "gameState",            "-1", CVAR_WOLFINFO | CVAR_ROM );
 
-    Cvar bg_spread             ( "bg_spread",             "3", CVAR_ARCHIVE);
+    Cvar bg_spread             ( "g_spread",             "3", CVAR_ARCHIVE);
 
 ///////////////////////////////////////////////////////////////////////////////
 

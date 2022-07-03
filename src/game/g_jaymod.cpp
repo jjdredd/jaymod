@@ -1117,6 +1117,8 @@ void G_UpdateJaymodCS() {
 
     Info_SetValueForKey( cs, "z", cvars::bg_proneDelay.svalue );
 
+    //Info_SetValueForKey( cs, "Z", cvars::bg_spread.svalue ); //testing only
+
     trap_SetConfigstring( CS_JAYMODINFO, cs );
 }
 
