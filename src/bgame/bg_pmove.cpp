@@ -3355,7 +3355,7 @@ void PM_AdjustAimSpreadScale( void ) {
 		break;
 	}
 
-	if (wpnScale || cvars::bg_spread.ivalue & 1 == false) {
+	if (wpnScale && cvars::bg_spread.ivalue & 1) {
         if (cvars::bg_misc.ivalue & MISC_REALAIMSPREAD) {
             if (pml.ladder) {
                 wpnScale *= 1.25f;
