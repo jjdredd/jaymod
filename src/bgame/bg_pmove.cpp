@@ -3430,10 +3430,15 @@ void PM_AdjustAimSpreadScale( void ) {
 		decrease = AIMSPREAD_DECREASE_RATE;
 	}
 
+
 	// update the aimSpreadScale
 	pm->ps->aimSpreadScaleFloat += (increase - decrease);
 	if (pm->ps->aimSpreadScaleFloat < 0) pm->ps->aimSpreadScaleFloat = 0;
 	if (pm->ps->aimSpreadScaleFloat > 255) pm->ps->aimSpreadScaleFloat = 255;
+
+	#ifdef CGAMEDLL
+	pm->ps->aimSpreadScaleFloat = 255;
+	#endif
 
 	pm->ps->aimSpreadScale = (int)pm->ps->aimSpreadScaleFloat;	// update the int for the client
 }
