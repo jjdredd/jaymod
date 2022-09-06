@@ -1,0 +1,11 @@
+IDMODULE.suffix = .mp.x86_64.so
+
+CXX.O = 1
+CXX.fnStrip = strip $(1)
+
+CXX.libstdcxx.DEPS = $(BUILD/)libstdc++.a
+CXX.static         = 1
+
+CXX.opt.BIT    =
+
+CXX.opt.O      = -O3 -march=x86-64 -ffast-math

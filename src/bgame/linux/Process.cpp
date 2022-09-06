@@ -118,7 +118,7 @@ handlerHUP( int num, siginfo_t* info, void* context )
      * It is probably not necessary to do this when ttycon=0 but
      * there's no harm in it either since we're shutting down anyways.
      */
-    close( fileno( stdin ));
+    fclose(stdin);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ handlerTERM( int num, siginfo_t* info, void* context )
      * It is probably not necessary to do this when ttycon=0 but
      * there's no harm in it either since we're shutting down anyways.
      */
-    close( fileno( stdin ));
+    fclose(stdin);
 }
 
 //////////////////////////////////////////////////////////////////////////////
