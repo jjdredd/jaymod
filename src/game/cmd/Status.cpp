@@ -122,10 +122,10 @@ Status::doExecute( Context& txt )
     colB.width = 4;
 
     buf << '\n' << xheader( "-DATABASE" )
-        << '\n' << colA("user")  << colB( userDB.mapGUID.size() )
-            << "  (" << xvalue( userDB.mapBANTIME.size() ) << " bans)"
-        << '\n' << colA("level") << colB( levelDB.mapLEVEL.size() )
-        << '\n' << colA("map")   << colB( mapDB.mapNAME.size() );
+        << '\n' << colA("user")  << colB( static_cast<uint64>(userDB.mapGUID.size()) )
+	<< "  (" << xvalue( static_cast<uint64>(userDB.mapBANTIME.size()) ) << " bans)"
+	<< '\n' << colA("level") << colB( static_cast<uint64>(levelDB.mapLEVEL.size()) )
+	<< '\n' << colA("map")   << colB( static_cast<uint64>(mapDB.mapNAME.size()) );
 
     colA.width = 14;
 

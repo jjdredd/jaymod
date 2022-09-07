@@ -4435,7 +4435,7 @@ qboolean etpro_ScriptAction_DeleteEntity( gentity_t *ent, char *params )
 				while ((matches[numMatches] = e = G_Find(e, FOFS(scriptName), value)) != NULL)
 					numMatches++;
 			} else if (!Q_stricmp(key, "classname"))  {
-				while ((matches[numMatches] = e = G_Find(e, FOFS(classname), value)) != NULL)
+				while ((matches[numMatches] = e = G_Find(e, offsetof(gentity_t, classname), value)) != NULL)
 					numMatches++;
 			} else if (!Q_stricmp(key, "targetname")) {
 				hash = BG_StringHashValue(value);

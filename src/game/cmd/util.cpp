@@ -181,7 +181,8 @@ matchClient( const string& spec, Client*& client, Buffer& ebuf )
     }
 
     if (clients.size() > 1) {
-        ebuf << "Ambiguous client name: " << xvalue( clients.size() ) << " clients found.";
+        ebuf << "Ambiguous client name: "
+	     << xvalue( static_cast<uint64>(clients.size()) ) << " clients found.";
         return true;
     }
 

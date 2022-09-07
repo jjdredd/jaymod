@@ -432,7 +432,10 @@ void G_PrivateMessage( gentity_t *ent )
 		    // Send message
             {
                 Buffer buf;
-                buf << xvalue( user.namex ) << " -> " << xvalue( u.namex ) << " (" << xvalue( nsubs ) << "): "
+
+                buf << xvalue( user.namex ) << " -> "
+		    << xvalue( u.namex ) << " ("
+		    << xvalue( static_cast<uint64>(nsubs) ) << "): "
                     << xcbold << message;
                 cmd::printPm( &c, buf, true );
 
@@ -458,7 +461,9 @@ void G_PrivateMessage( gentity_t *ent )
             Client& c = g_clientObjects[*it];
 
             Buffer buf;
-            buf << xvalue( user.namex ) << " -> " << xvalue( args[1] ) << " (" << xvalue( nsubs ) << "): "
+            buf << xvalue( user.namex ) << " -> "
+		<< xvalue( args[1] )
+		<< " (" << xvalue( static_cast<uint64>(nsubs) ) << "): "
                 << xcbold << message;
             cmd::printPm( &c, buf, false );
         }

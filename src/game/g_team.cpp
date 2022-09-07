@@ -178,7 +178,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 	}
 
 	flag = NULL;
-	while ((flag = G_Find (flag, FOFS(classname), c)) != NULL) {
+	while ((flag = G_Find (flag, offsetof(gentity_t, classname), c)) != NULL) {
 		if (!(flag->flags & FL_DROPPED_ITEM))
 			break;
 	}
@@ -234,7 +234,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 
 // JPW NERVE -- look for nearby checkpoints and spawnpoints
 	flag = NULL;
-	while ((flag = G_Find (flag, FOFS(classname), "team_WOLF_checkpoint")) != NULL) {
+	while ((flag = G_Find (flag, offsetof(gentity_t, classname), "team_WOLF_checkpoint")) != NULL) {
 		VectorSubtract(targ->client->ps.origin, flag->s.origin, v1);
 		if ((flag->s.frame != WCP_ANIM_NOFLAG) && (flag->count == attacker->client->sess.sessionTeam))
 			if (VectorLengthSquared(v1) < SQR(WOLF_CP_PROTECT_RADIUS)) {
@@ -294,7 +294,7 @@ void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker)
 	}
 
 	ent = NULL;
-	while ((ent = G_Find (ent, FOFS(classname), c)) != NULL) {
+	while ((ent = G_Find (ent, offsetof(gentity_t, classname), c)) != NULL) {
 		if (ent->flags & FL_DROPPED_ITEM)
 			G_FreeEntity(ent);
 		else {
@@ -344,7 +344,7 @@ void Team_ResetFlag( gentity_t *ent )
 	}
 
 	ent = NULL;
-	while ((ent = G_Find (ent, FOFS(classname), c)) != NULL) {
+	while ((ent = G_Find (ent, offsetof(gentity_t, classname), c)) != NULL) {
 		G_FreeEntity(ent);
 	}
 
@@ -358,12 +358,12 @@ void Team_ResetFlags(void)
 	gentity_t	*ent;
 
 	ent = NULL;
-	while ((ent = G_Find (ent, FOFS(classname), "team_CTF_redflag")) != NULL) {
+	while ((ent = G_Find (ent, offsetof(gentity_t, classname), "team_CTF_redflag")) != NULL) {
 		Team_ResetFlag( ent );
 	}
 
 	ent = NULL;
-	while ((ent = G_Find (ent, FOFS(classname), "team_CTF_blueflag")) != NULL) {
+	while ((ent = G_Find (ent, offsetof(gentity_t, classname), "team_CTF_blueflag")) != NULL) {
 		Team_ResetFlag( ent );
 	}
 }
@@ -705,7 +705,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 
 	spot = NULL;
 
-	while ((spot = G_Find (spot, FOFS(classname), classname)) != NULL) {
+	while ((spot = G_Find (spot, offsetof(gentity_t, classname), classname)) != NULL) {
 		if ( SpotWouldTelefrag( spot ) ) {
 			continue;
 		}
@@ -728,7 +728,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 
 	if ( !count ) {	// no spots that won't telefrag
 		spot = NULL;
-		while( (spot = G_Find( spot, FOFS(classname), classname) ) != NULL ) {
+		while( (spot = G_Find( spot, offsetof(gentity_t, classname), classname) ) != NULL ) {
 			// Arnout - modified to allow initial spawnpoints to be disabled at gamestart
 			if( !(spot->spawnflags & 2) ) {
 				continue;
@@ -742,7 +742,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 			return spot;
 		}
 
-		return G_Find( NULL, FOFS(classname), classname);
+		return G_Find( NULL, offsetof(gentity_t, classname), classname);
 	}
 
 	if((!level.numspawntargets)) {

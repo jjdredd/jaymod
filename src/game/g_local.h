@@ -12,6 +12,8 @@
 
 #include <ui/menudef.h>
 
+#include <cstddef>
+
 //==================================================================
 
 // the "gameversion" client command will print this plus compile date
@@ -1790,7 +1792,7 @@ extern	gentity_t		g_entities[];
 extern	gclient_t		g_clients[];
 extern g_campaignInfo_t g_campaigns[];
 
-#define	FOFS(x) ((int)&(((gentity_t *)0)->x))
+#define	FOFS(x) (offsetof(gentity_t, x))
 
 extern	vmCvar_t	g_OmniBotPath;
 extern	vmCvar_t	g_OmniBotEnable;

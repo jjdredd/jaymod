@@ -91,14 +91,14 @@ typedef struct
 } field_t;
 
 field_t fields[] = {
-	{"classname",	FOFS(classname),	F_LSTRING},
+	{"classname",	offsetof(gentity_t, classname),	F_LSTRING},
 	{"origin",		FOFS(s.origin),		F_VECTOR},
 	{"model",		FOFS(model),		F_LSTRING},
 	{"model2",		FOFS(model2),		F_LSTRING},
 	{"spawnflags",	FOFS(spawnflags),	F_INT},
 
 	// Jaybird - etpro additions
-	{"classname_nospawn",FOFS(classname),F_LSTRING},
+	{"classname_nospawn",offsetof(gentity_t, classname),F_LSTRING},
 	{"contents",	FOFS(r.contents),	F_INT},
 	{"eflags",		FOFS(s.eFlags),		F_INT},
 	{"svflags",		FOFS(r.svFlags),	F_INT},

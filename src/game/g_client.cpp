@@ -123,7 +123,7 @@ gentity_t *SelectNearestDeathmatchSpawnPoint( const vec3_t from ) {
 	nearestSpot = NULL;
 	spot = NULL;
 
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+	while ((spot = G_Find (spot, offsetof(gentity_t, classname), "info_player_deathmatch")) != NULL) {
 
 		VectorSubtract( spot->r.currentOrigin, from, delta );
 		dist = VectorLength( delta );
@@ -154,7 +154,7 @@ gentity_t *SelectRandomDeathmatchSpawnPoint( void ) {
 	count = 0;
 	spot = NULL;
 
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+	while ((spot = G_Find (spot, offsetof(gentity_t, classname), "info_player_deathmatch")) != NULL) {
 		if ( SpotWouldTelefrag( spot ) ) {
 			continue;
 		}
@@ -163,7 +163,7 @@ gentity_t *SelectRandomDeathmatchSpawnPoint( void ) {
 	}
 
 	if ( !count ) {	// no spots that won't telefrag
-		return G_Find( NULL, FOFS(classname), "info_player_deathmatch");
+		return G_Find( NULL, offsetof(gentity_t, classname), "info_player_deathmatch");
 	}
 
 	selection = rand() % count;
@@ -218,7 +218,7 @@ use normal spawn selection.
 	gentity_t	*spot;
 
 	spot = NULL;
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+	while ((spot = G_Find (spot, offsetof(gentity_t, classname), "info_player_deathmatch")) != NULL) {
 		if ( spot->spawnflags & 1 ) {
 			break;
 		}

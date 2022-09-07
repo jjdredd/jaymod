@@ -176,7 +176,7 @@ void GetMG42s()
 		gentity_t *trav = NULL;
 		char *name;
 
-		while ((trav = G_Find(trav, FOFS(classname), "misc_mg42")))
+		while ((trav = G_Find(trav, offsetof(gentity_t, classname), "misc_mg42")))
 		{
 			name = (char *)_GetEntityName( trav );
 			mg42s[ numofmg42s ].ent = trav;
@@ -2269,7 +2269,7 @@ public:
 			float fSqRad = _radius * _radius;
 			vec3_t toent;
 
-			while((pStartEnt = G_Find(pStartEnt, FOFS(classname), pClassName)) != NULL)
+			while((pStartEnt = G_Find(pStartEnt, offsetof(gentity_t, classname), pClassName)) != NULL)
 			{
 				if(iPlayerClass && pStartEnt->client &&
 					pStartEnt->client->sess.sessionTeam != iPlayerClass)

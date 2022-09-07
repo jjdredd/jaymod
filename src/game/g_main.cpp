@@ -2596,9 +2596,9 @@ void FindIntermissionPoint( void ) {
 	// NERVE - SMF - if the match hasn't ended yet, and we're just a spectator
 	if( !level.intermissiontime ) {
 		// try to find the intermission spawnpoint with no team flags set
-		ent = G_Find( NULL, FOFS(classname), "info_player_intermission" );
+		ent = G_Find( NULL, offsetof(gentity_t, classname), "info_player_intermission" );
 
-		for( ; ent; ent = G_Find (ent, FOFS(classname), "info_player_intermission") ) {
+		for( ; ent; ent = G_Find (ent, offsetof(gentity_t, classname), "info_player_intermission") ) {
 			if( !ent->spawnflags )
 				break;
 		}
@@ -2617,13 +2617,13 @@ void FindIntermissionPoint( void ) {
 
 
 	if( !ent ) {
-		ent = G_Find( NULL, FOFS(classname), "info_player_intermission" );
+		ent = G_Find( NULL, offsetof(gentity_t, classname), "info_player_intermission" );
 		while( ent ) {
 			if( ent->spawnflags & winner ) {
 				break;
 			}
 
-			ent = G_Find( ent, FOFS(classname), "info_player_intermission" );
+			ent = G_Find( ent, offsetof(gentity_t, classname), "info_player_intermission" );
 		}
 	}
 
