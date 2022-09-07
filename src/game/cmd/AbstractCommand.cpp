@@ -317,7 +317,8 @@ AbstractCommand::lookupPLAYER( const string& name, Context& txt, Client*& out, s
 
     if (clients.size() > 1) {
         const string mword = (clients.size() == 1 ? "match" : "matches");
-        txt._ebuf << xvalue( argName ) << " is ambiguous (" << xvalue( clients.size() ) << ' ' << mword << ").";
+        txt._ebuf << xvalue( argName ) << " is ambiguous ("
+		  << xvalue( static_cast<uint64>(clients.size()) ) << ' ' << mword << ").";
         return true;
     }
 

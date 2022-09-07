@@ -566,7 +566,8 @@ AbstractHitModel::tracePlayerBegin( TraceContext& trx )
             << "\n" << colA( "trx.time" )    << colB( trx.time )
                     << " (" << xvalue( level.time - trx.time ) << " delta" << ")"
             << "\n" << colA( "client.slot" ) << colB( client.slot )
-                    << " (" << xvalue(_snapshots.size()) << " frames" << ")"
+		  << " (" << xvalue(static_cast<uint64>(_snapshots.size()))
+		  << " frames" << ")"
             << "\n" << colA( "level.time" )  << colB( level.time );
     }
 

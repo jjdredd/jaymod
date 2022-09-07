@@ -163,8 +163,9 @@ etTruncate( string& value, const string::size_type len )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+template<typename T>
 string
-toHexString( uint32 value )
+toHexString( T value )
 {
     string result;
     return toHexString( value, result );
@@ -172,8 +173,9 @@ toHexString( uint32 value )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+template<typename T>
 string&
-toHexString( uint32 value, string& out )
+toHexString( T value, string& out )
 {
     ostringstream oss;
     oss << "0x" << hex << setw(8) << setfill('0') << value;
@@ -322,7 +324,7 @@ string
 toString( const void* ptr )
 {
     string result;
-    return toHexString( (uint32)ptr, result );
+    return toHexString( ptr, result );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -330,7 +332,7 @@ toString( const void* ptr )
 string&
 toString( const void* ptr, string& out )
 {
-    return toHexString( (uint32)ptr, out );
+    return toHexString( ptr, out );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
