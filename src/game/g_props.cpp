@@ -1746,7 +1746,7 @@ void Use_Props_Shard_Generator (gentity_t *ent, gentity_t *other, gentity_t *act
 	type = ent->count;
 	quantity = int( ent->wait );
 
-	inflictor = G_Find (NULL, FOFS (targetname), ent->target);
+	inflictor = G_Find (NULL, offsetof(gentity_t, targetname), ent->target);
 
 	if (inflictor)
 		Spawn_Shard (ent, inflictor, quantity, type);
@@ -2834,7 +2834,7 @@ void SP_props_snowGenerator (gentity_t *ent)
 	}
 	else
 	{
-		target = G_Find (target, FOFS (targetname), ent->target);
+		target = G_Find (target, offsetof(gentity_t, targetname), ent->target);
 		if (!target)
 		{
 			G_Printf ("error snowGenerator at loc %s does cant find target %s\n", vtos (center), ent->target);
@@ -2967,7 +2967,7 @@ assign a model
 
 	if (ent->target)
 	{
-		target = G_Find (NULL, FOFS (targetname), ent->target);	
+		target = G_Find (NULL, offsetof(gentity_t, targetname), ent->target);	
 		VectorSubtract (target->s.origin, ent->s.origin, vec);
 		vectoangles (vec, angles);
 		G_SetAngle (ent, angles);
@@ -3056,7 +3056,7 @@ for stone:
 
 	if (ent->target)
 	{
-		target = G_Find (NULL, FOFS (targetname), ent->target);	
+		target = G_Find (NULL, offsetof(gentity_t, targetname), ent->target);	
 		VectorSubtract (target->s.origin, ent->s.origin, vec);
 		vectoangles (vec, angles);
 		G_SetAngle (ent, angles);

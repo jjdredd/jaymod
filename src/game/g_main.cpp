@@ -614,7 +614,12 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .q3vm file
 ================
 */
-extern "C" LF_PUBLIC int
+#if _WIN64 || __x86_64__
+using vmmain_t = intptr_t;
+#else
+using vmmain_t int;
+#endif
+extern "C" LF_PUBLIC vmmain_t
 vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
 	switch ( command ) {
 	case GAME_INIT:
@@ -632,7 +637,7 @@ vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5,
 		{
 			static string msg;
 			if (ClientConnect( msg, arg0, (qboolean)arg1, (qboolean)arg2 ))
-				return (int)msg.c_str();
+				return (vmmain_t) (msg.c_str());
 			else
 				return 0;
 		}
@@ -656,15 +661,15 @@ vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5,
 		Bot_Interface_Update();
 		return 0;
 	case GAME_CONSOLE_COMMAND:
- 		return ConsoleCommand();
+ 		return (vmmain_t)(ConsoleCommand());
 	case BOTAI_START_FRAME:
-		return qfalse;
+		return (vmmain_t) (qfalse);
 	case BOT_VISIBLEFROMPOS:
-		return qfalse;
+		return (vmmain_t)(qfalse);
 	case BOT_CHECKATTACKATPOS:
-		return qfalse;
+		return (vmmain_t)(qfalse);
 	case GAME_SNAPSHOT_CALLBACK:
-		return G_SnapshotCallback( arg0, arg1 );
+		return (vmmain_t)(G_SnapshotCallback( arg0, arg1 ));
 	case GAME_MESSAGERECEIVED:
 		return -1;
 	}

@@ -3,8 +3,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-string  toHexString ( uint32 );
-string& toHexString ( uint32, string& );
+template<typename T> string  toHexString ( T );
+template<typename T> string& toHexString ( T, string& );
 
 string  toString ( const vec3_t& );
 string& toString ( const vec3_t&, string& );

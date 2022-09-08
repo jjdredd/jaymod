@@ -876,7 +876,7 @@ static void HandleEntsThatBlockConstructible( gentity_t *constructor, gentity_t 
 		check = NULL;
 
 		while(1) {
-			check = G_Find( check, FOFS(track), constructible->track );
+			check = G_Find( check, offsetof(gentity_t, track), constructible->track );
 
 			if( check == constructible )
 				continue;
@@ -1281,7 +1281,7 @@ static qboolean TryConstructing( gentity_t *ent ) {
 				e->s.pos.trType = TR_STATIONARY;
 				e->s.eType = ET_EXPLOSIVE_INDICATOR;
 
-				while((tent = G_Find (tent, FOFS(target), constructible->targetname)) != NULL) {
+				while((tent = G_Find (tent, offsetof(gentity_t, target), constructible->targetname)) != NULL) {
 					if(tent->s.eType == ET_OID_TRIGGER) {
 						if(tent->spawnflags & 8) {
 							e->s.eType = ET_TANK_INDICATOR;
@@ -1292,7 +1292,7 @@ static qboolean TryConstructing( gentity_t *ent ) {
 				// Find the trigger_objective_info that targets us (if not set before)
 				{
 					gentity_t* tent = NULL;
-					while((tent = G_Find (tent, FOFS(target), constructible->targetname)) != NULL) {
+					while((tent = G_Find (tent, offsetof(gentity_t, target), constructible->targetname)) != NULL) {
 						if((tent->s.eType == ET_OID_TRIGGER)) {
 							e->parent = tent;
 						}
@@ -1471,7 +1471,7 @@ void AutoBuildConstruction( gentity_t* constructible ) {
 			e->s.pos.trType = TR_STATIONARY;
 			e->s.eType = ET_EXPLOSIVE_INDICATOR;
 
-			while((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
+			while((tent = G_Find(tent, offsetof(gentity_t, target), constructible->targetname)) != NULL) {
 				if((tent->s.eType == ET_OID_TRIGGER)) {
 					if(tent->spawnflags & 8) {
 						e->s.eType = ET_TANK_INDICATOR;
@@ -1482,7 +1482,7 @@ void AutoBuildConstruction( gentity_t* constructible ) {
 			// Find the trigger_objective_info that targets us (if not set before)
 			{
 				gentity_t* tent = NULL;
-				while((tent = G_Find (tent, FOFS(target), constructible->targetname)) != NULL) {
+				while((tent = G_Find (tent, offsetof(gentity_t, target), constructible->targetname)) != NULL) {
 					if((tent->s.eType == ET_OID_TRIGGER)) {
 						e->parent = tent;
 					}

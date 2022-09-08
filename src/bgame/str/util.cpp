@@ -164,16 +164,6 @@ etTruncate( string& value, const string::size_type len )
 ///////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-string
-toHexString( T value )
-{
-    string result;
-    return toHexString( value, result );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-template<typename T>
 string&
 toHexString( T value, string& out )
 {
@@ -183,7 +173,22 @@ toHexString( T value, string& out )
     return out;
 }
 
+template string & toHexString<unsigned>(unsigned, string &);
+
 ///////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+string
+toHexString( T value )
+{
+    string result;
+    return toHexString<T>( value, result );
+}
+
+template string toHexString<unsigned>(unsigned);
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 int
 toSeconds( const string& value, bool ms )

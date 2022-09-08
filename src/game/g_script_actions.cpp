@@ -119,7 +119,7 @@ qboolean G_ScriptAction_SetAutoSpawn( gentity_t* ent, char *params ) {
 	team = (team_t)atoi(token);
 	pTeamAutoSpawn = team == 0 ? &(level.axisAutoSpawn) : &(level.alliesAutoSpawn);
 
-	tent = G_Find( NULL, FOFS(message), spawnname );
+	tent = G_Find( NULL, offsetof(gentity_t, message), spawnname );
 	if(!tent) {
 		G_Error( "G_Scripting: setautospawn, couldn't find target\n" );
 	}
@@ -1406,7 +1406,7 @@ qboolean G_ScriptAction_Trigger( gentity_t *ent, char *params )
 		found = qfalse;
 		// for all entities/bots with this scriptName
 		trent = NULL;
-		while ((trent = G_Find( trent, FOFS(scriptName), name ))) {
+		while ((trent = G_Find( trent, offsetof(gentity_t, scriptName), name ))) {
 			found = qtrue;
 			if (!(trent->r.svFlags & SVF_BOT)) {
 				oldId = trent->scriptStatus.scriptId;
@@ -2069,7 +2069,7 @@ qboolean G_ScriptAction_Accum( gentity_t *ent, char *params )
 			found = qfalse;
 			// for all entities/bots with this scriptName
 			trent = NULL;
-			while ((trent = G_Find( trent, FOFS(scriptName), lastToken ))) {
+			while ((trent = G_Find( trent, offsetof(gentity_t, scriptName), lastToken ))) {
 				found = qtrue;
 				oldId = trent->scriptStatus.scriptId;
 				G_Script_ScriptEvent( trent, "trigger", name );
@@ -2280,7 +2280,7 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params )
 			found = qfalse;
 			// for all entities/bots with this scriptName
 			trent = NULL;
-			while ((trent = G_Find( trent, FOFS(scriptName), lastToken ))) {
+			while ((trent = G_Find( trent, offsetof(gentity_t, scriptName), lastToken ))) {
 				found = qtrue;
 				oldId = trent->scriptStatus.scriptId;
 				G_Script_ScriptEvent( trent, "trigger", name );
@@ -2504,7 +2504,7 @@ qboolean G_ScriptAction_TagConnect( gentity_t *ent, char *params )
 
 	parent = G_FindByTargetname( NULL, token );
 	if (!parent) {
-		parent = G_Find( NULL, FOFS(scriptName), token );
+		parent = G_Find( NULL, offsetof(gentity_t, scriptName), token );
 		if (!parent) {
 			G_Error( "G_ScriptAction_TagConnect: unable to find entity with targetname \"%s\"", token );
 		}
@@ -4162,7 +4162,7 @@ qboolean G_ScriptAction_Cvar( gentity_t *ent, char *params )
 			found = qfalse;
 			// for all entities/bots with this scriptName
 			trent = NULL;
-			while ((trent = G_Find( trent, FOFS(scriptName), lastToken ))) {
+			while ((trent = G_Find( trent, offsetof(gentity_t, scriptName), lastToken ))) {
 				found = qtrue;
 				oldId = trent->scriptStatus.scriptId;
 				G_Script_ScriptEvent( trent, "trigger", name );
@@ -4432,7 +4432,7 @@ qboolean etpro_ScriptAction_DeleteEntity( gentity_t *ent, char *params )
 
 			if (!Q_stricmp(key, "scriptname")) {
 				e = NULL;
-				while ((matches[numMatches] = e = G_Find(e, FOFS(scriptName), value)) != NULL)
+				while ((matches[numMatches] = e = G_Find(e, offsetof(gentity_t, scriptName), value)) != NULL)
 					numMatches++;
 			} else if (!Q_stricmp(key, "classname"))  {
 				while ((matches[numMatches] = e = G_Find(e, offsetof(gentity_t, classname), value)) != NULL)

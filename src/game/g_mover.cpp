@@ -1969,7 +1969,7 @@ qboolean findNonAIBrushTargeter(gentity_t *ent)
 	if(!(ent->targetname))
 		return qfalse;
 
-	while ((targeter = G_Find (targeter, FOFS(target), ent->targetname)) != NULL)
+	while ((targeter = G_Find (targeter, offsetof(gentity_t, target), ent->targetname)) != NULL)
 	{
 		if (strcmp(targeter->classname,"trigger_aidoor") && 
 			Q_stricmp (targeter->classname, "func_invisible_user") )
@@ -5013,7 +5013,7 @@ void func_constructiblespawn( gentity_t *ent ) {
 					gentity_t* tent = NULL;
 					e->s.eType = ET_EXPLOSIVE_INDICATOR;
 
-					while((tent = G_Find (tent, FOFS(target), ent->targetname)) != NULL) {
+					while((tent = G_Find (tent, offsetof(gentity_t, target), ent->targetname)) != NULL) {
 						if((tent->s.eType == ET_OID_TRIGGER)) {
 							if(tent->spawnflags & 8) {
 								e->s.eType = ET_TANK_INDICATOR;
@@ -5032,7 +5032,7 @@ void func_constructiblespawn( gentity_t *ent ) {
 				// Find the trigger_objective_info that targets us (if not set before)
 				if( !ent->parent ) {
 					gentity_t* tent = NULL;
-					while((tent = G_Find (tent, FOFS(target), ent->targetname)) != NULL) {
+					while((tent = G_Find (tent, offsetof(gentity_t, target), ent->targetname)) != NULL) {
 						if((tent->s.eType == ET_OID_TRIGGER)) {
 							ent->parent = tent;
 							e->parent = tent;

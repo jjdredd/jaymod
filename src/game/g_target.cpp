@@ -763,7 +763,7 @@ void Use_Target_Lock( gentity_t *ent, gentity_t *other, gentity_t *activator )
 {
 	gentity_t	*t = 0;
 
-	while ( (t = G_Find (t, FOFS(targetname), ent->target)) != NULL )
+	while ( (t = G_Find (t, offsetof(gentity_t, targetname), ent->target)) != NULL )
 	{
 //		G_Printf("target_lock locking entity with key: %d\n", ent->count);
 		t->key = ent->key;
@@ -962,7 +962,7 @@ void smoke_init (gentity_t *ent)
 
 	if (ent->target)
 	{
-		target = G_Find (NULL, FOFS (targetname), ent->target);	
+		target = G_Find (NULL, offsetof(gentity_t, targetname), ent->target);	
 		if (target)
 		{
 			VectorSubtract (target->s.origin, ent->s.origin, vec);
@@ -1065,7 +1065,7 @@ void target_script_trigger_use (gentity_t *ent, gentity_t *other, gentity_t *act
 	if (ent->aiName)
 	{
 		// Find the first entity with this name
-		trent = G_Find( trent, FOFS(scriptName), ent->aiName );
+		trent = G_Find( trent, offsetof(gentity_t, scriptName), ent->aiName );
 
 		// Was there one?
 		if (trent)

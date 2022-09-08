@@ -92,99 +92,99 @@ typedef struct
 
 field_t fields[] = {
 	{"classname",	offsetof(gentity_t, classname),	F_LSTRING},
-	{"origin",		FOFS(s.origin),		F_VECTOR},
-	{"model",		FOFS(model),		F_LSTRING},
-	{"model2",		FOFS(model2),		F_LSTRING},
-	{"spawnflags",	FOFS(spawnflags),	F_INT},
+	{"origin",		offsetof(gentity_t, s.origin),		F_VECTOR},
+	{"model",		offsetof(gentity_t, model),		F_LSTRING},
+	{"model2",		offsetof(gentity_t, model2),		F_LSTRING},
+	{"spawnflags",	offsetof(gentity_t, spawnflags),	F_INT},
 
 	// Jaybird - etpro additions
 	{"classname_nospawn",offsetof(gentity_t, classname),F_LSTRING},
-	{"contents",	FOFS(r.contents),	F_INT},
-	{"eflags",		FOFS(s.eFlags),		F_INT},
-	{"svflags",		FOFS(r.svFlags),	F_INT},
-	{"maxs",		FOFS(r.maxs),		F_VECTOR},
-	{"mins",		FOFS(r.mins),		F_VECTOR},
-	{"clipmask",	FOFS(clipmask),		F_INT},
-	{"count2",		FOFS(count2),		F_INT},
-	{"pos_trType",	FOFS(s.pos.trType),	F_INT},
-	{"pos_trDelta",	FOFS(s.pos.trDelta),F_VECTOR},
-	{"apos_trType",	FOFS(s.apos.trType),F_INT},
-	{"pos_trDelta",	FOFS(s.apos.trDelta),F_VECTOR},
-	{"allowteams",	FOFS(allowteams),	F_INT},
+	{"contents",	offsetof(gentity_t, r.contents),	F_INT},
+	{"eflags",		offsetof(gentity_t, s.eFlags),		F_INT},
+	{"svflags",		offsetof(gentity_t, r.svFlags),	F_INT},
+	{"maxs",		offsetof(gentity_t, r.maxs),		F_VECTOR},
+	{"mins",		offsetof(gentity_t, r.mins),		F_VECTOR},
+	{"clipmask",	offsetof(gentity_t, clipmask),		F_INT},
+	{"count2",		offsetof(gentity_t, count2),		F_INT},
+	{"pos_trType",	offsetof(gentity_t, s.pos.trType),	F_INT},
+	{"pos_trDelta",	offsetof(gentity_t, s.pos.trDelta),F_VECTOR},
+	{"apos_trType",	offsetof(gentity_t, s.apos.trType),F_INT},
+	{"pos_trDelta",	offsetof(gentity_t, s.apos.trDelta),F_VECTOR},
+	{"allowteams",	offsetof(gentity_t, allowteams),	F_INT},
 
-	{"speed",		FOFS(speed),		F_FLOAT},
-	{"closespeed",	FOFS(closespeed),	F_FLOAT},	//----(SA)	added
-	{"target",		FOFS(target),		F_LSTRING},
-	{"targetname",	FOFS(targetname),	F_LSTRING},
-	{"message",		FOFS(message),		F_LSTRING},
-	{"popup",		FOFS(message),		F_LSTRING},	// (SA) mutually exclusive from 'message', but makes the ent more logical for the level designer
-	{"book",		FOFS(message),		F_LSTRING},	// (SA) mutually exclusive from 'message', but makes the ent more logical for the level designer
-	{"team",		FOFS(team),			F_LSTRING},
-	{"wait",		FOFS(wait),			F_FLOAT},
-	{"random",		FOFS(random),		F_FLOAT},
-	{"count",		FOFS(count),		F_INT},
-	{"health",		FOFS(health),		F_INT},
+	{"speed",		offsetof(gentity_t, speed),		F_FLOAT},
+	{"closespeed",	offsetof(gentity_t, closespeed),	F_FLOAT},	//----(SA)	added
+	{"target",		offsetof(gentity_t, target),		F_LSTRING},
+	{"targetname",	offsetof(gentity_t, targetname),	F_LSTRING},
+	{"message",		offsetof(gentity_t, message),		F_LSTRING},
+	{"popup",		offsetof(gentity_t, message),		F_LSTRING},	// (SA) mutually exclusive from 'message', but makes the ent more logical for the level designer
+	{"book",		offsetof(gentity_t, message),		F_LSTRING},	// (SA) mutually exclusive from 'message', but makes the ent more logical for the level designer
+	{"team",		offsetof(gentity_t, team),			F_LSTRING},
+	{"wait",		offsetof(gentity_t, wait),			F_FLOAT},
+	{"random",		offsetof(gentity_t, random),		F_FLOAT},
+	{"count",		offsetof(gentity_t, count),		F_INT},
+	{"health",		offsetof(gentity_t, health),		F_INT},
 	{"light",		0,					F_IGNORE},
-	{"dmg",			FOFS(damage),		F_INT},
-	{"angles",		FOFS(s.angles),		F_VECTOR},
-	{"angle",		FOFS(s.angles),		F_ANGLEHACK},
+	{"dmg",			offsetof(gentity_t, damage),		F_INT},
+	{"angles",		offsetof(gentity_t, s.angles),		F_VECTOR},
+	{"angle",		offsetof(gentity_t, s.angles),		F_ANGLEHACK},
 	// JOSEPH 9-27-99
-	{"duration",	FOFS(duration),		F_FLOAT},	
-	{"rotate",		FOFS(rotate),		F_VECTOR},	
+	{"duration",	offsetof(gentity_t, duration),		F_FLOAT},	
+	{"rotate",		offsetof(gentity_t, rotate),		F_VECTOR},	
 	// END JOSEPH
-	{"degrees",		FOFS(angle),		F_FLOAT},
-	{"time",		FOFS(speed),		F_FLOAT},
+	{"degrees",		offsetof(gentity_t, angle),		F_FLOAT},
+	{"time",		offsetof(gentity_t, speed),		F_FLOAT},
 
 	//----(SA) additional ai field
-	{"skin",		FOFS(aiSkin),		F_LSTRING},
+	{"skin",		offsetof(gentity_t, aiSkin),		F_LSTRING},
 	
 	//----(SA) done
 
 	// (SA) dlight lightstyles (made all these unique variables for testing)
-	{"_color",		FOFS(dl_color),		F_VECTOR},		// color of the light	(the underscore is inserted by the color picker in QER)
-	{"color",		FOFS(dl_color),		F_VECTOR},		// color of the light
-	{"stylestring",	FOFS(dl_stylestring), F_LSTRING},	// user defined stylestring "fffndlsfaaaaaa" for example
+	{"_color",		offsetof(gentity_t, dl_color),		F_VECTOR},		// color of the light	(the underscore is inserted by the color picker in QER)
+	{"color",		offsetof(gentity_t, dl_color),		F_VECTOR},		// color of the light
+	{"stylestring",	offsetof(gentity_t, dl_stylestring), F_LSTRING},	// user defined stylestring "fffndlsfaaaaaa" for example
 	// done
 
 	//----(SA)	
-	{"shader",		FOFS(dl_shader), F_LSTRING},	// shader to use for a target_effect or dlight
+	{"shader",		offsetof(gentity_t, dl_shader), F_LSTRING},	// shader to use for a target_effect or dlight
 
 	// (SA) for target_unlock
-	{"key",			FOFS(key),		F_INT},
+	{"key",			offsetof(gentity_t, key),		F_INT},
 	// done
 
 	// Rafael - mg42
-	{"harc",		FOFS(harc),			F_FLOAT},
-	{"varc",		FOFS(varc),			F_FLOAT},
+	{"harc",		offsetof(gentity_t, harc),			F_FLOAT},
+	{"varc",		offsetof(gentity_t, varc),			F_FLOAT},
 	// done.
 
 	// Rafael - sniper
-	{"delay",	FOFS(delay),		F_FLOAT},
-	{"radius",	FOFS(radius),		F_INT},
+	{"delay",	offsetof(gentity_t, delay),		F_FLOAT},
+	{"radius",	offsetof(gentity_t, radius),		F_INT},
 
 	// Ridah, for reloading savegames at correct mission spot
-	{"missionlevel",	FOFS(missionLevel),	F_INT},
+	{"missionlevel",	offsetof(gentity_t, missionLevel),	F_INT},
 
 	// Rafel
-	{"start_size", FOFS (start_size), F_INT},
-	{"end_size", FOFS (end_size), F_INT},
+	{"start_size", offsetof(gentity_t, start_size), F_INT},
+	{"end_size", offsetof(gentity_t, end_size), F_INT},
 
-	{"shard", FOFS (count), F_INT},
+	{"shard", offsetof(gentity_t, count), F_INT},
 
 	// Rafael
-	{"spawnitem",		FOFS(spawnitem),			F_LSTRING},
+	{"spawnitem",		offsetof(gentity_t, spawnitem),			F_LSTRING},
 
-	{"track",			FOFS(track),				F_LSTRING},
+	{"track",			offsetof(gentity_t, track),				F_LSTRING},
 
-	{"scriptName",		FOFS(scriptName),			F_LSTRING},
+	{"scriptName",		offsetof(gentity_t, scriptName),			F_LSTRING},
 
-	{"shortname",		FOFS(message),				F_LSTRING},
-	{"constages",		FOFS(constages),			F_LSTRING},
-	{"desstages",		FOFS(desstages),			F_LSTRING},
-	{"partofstage",		FOFS(partofstage),			F_INT},
-	{"override",		FOFS(spawnitem),			F_LSTRING},
+	{"shortname",		offsetof(gentity_t, message),				F_LSTRING},
+	{"constages",		offsetof(gentity_t, constages),			F_LSTRING},
+	{"desstages",		offsetof(gentity_t, desstages),			F_LSTRING},
+	{"partofstage",		offsetof(gentity_t, partofstage),			F_INT},
+	{"override",		offsetof(gentity_t, spawnitem),			F_LSTRING},
 
-	{"damageparent",	FOFS(damageparent),			F_LSTRING},
+	{"damageparent",	offsetof(gentity_t, damageparent),			F_LSTRING},
 
 	{NULL}
 };
